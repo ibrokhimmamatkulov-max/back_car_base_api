@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\Api\Admin\ApplicationStatusController;
-use App\Http\Controllers\Api\Admin\CityController;
-use App\Http\Controllers\Api\Admin\GearboxController;
-use App\Http\Controllers\Api\Admin\PerformerTransportPhotoController;
-use App\Http\Controllers\Api\Admin\RentalApplicationController;
-use App\Http\Controllers\Api\Admin\RentalController;
-use App\Http\Controllers\Api\Admin\RentalStatusController;
-use App\Http\Controllers\Api\Admin\RentalTariffController;
+use App\Http\Controllers\Api\ApplicationStatusController;
 use App\Http\Controllers\Api\CarController;
+use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\GearboxController;
+use App\Http\Controllers\Api\PerformerTransportPhotoController;
+use App\Http\Controllers\Api\RentalApplicationController;
+use App\Http\Controllers\Api\RentalController;
+use App\Http\Controllers\Api\RentalStatusController;
+use App\Http\Controllers\Api\RentalTariffController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

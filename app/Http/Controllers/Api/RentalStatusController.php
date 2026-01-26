@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Gearbox;
+use App\Models\RentalStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class GearboxController extends Controller
+class RentalStatusController extends Controller
 {
     public function index()
     {
-        $gearbox= Gearbox::orderBy('id')->get();
-        return response()->json(['data'=>$gearbox]);
+        $rental_status= RentalStatus::orderBy('id')->get();
+        return response()->json(['data'=>$rental_status]);
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:gearboxes,code',
+            'code' => 'required|string|max:50|unique:rental_statuses,code',
             'name' => 'required|string|max:255',
         ]);
         if ($validator->fails()) {
@@ -27,51 +27,50 @@ class GearboxController extends Controller
             ], 400);
         }
 
-        $gearbox= Gearbox::create($validator);
-
-        return response()->json(['data'=>$gearbox]);
+        $rental_status= RentalStatus::create($validator->validated());
+        return response()->json(['data'=>$rental_status]);
 
     }
 
     public function show($id)
     {
-        $gearbox= Gearbox::find($id);
-        if(!$gearbox){
+        $rental_status= RentalStatus::find($id);
+        if(!$rental_status){
             return response()->json(['message'=>'Not found']);
         }
-        return response()->json(['data'=>$gearbox]);
+        return response()->json(['data'=>$rental_status]);
     }
 
     public function update(Request $request, $id)
     {
-        $gearbox = Gearbox::find($id);
-        if(!$gearbox){
+        $rental_status = RentalStatus::find($id);
+        if(!$rental_status){
             return response()->json(['message'=>'Not found']);
         }
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:gearboxes,code,' . $gearbox->id,
+            'code' => 'required|string|max:50|unique:rental_statuses,code,' . $rental_status->id,
             'name' => 'required|string|max:255',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors()
             ], 400);
         }
-        $gearbox->update($validator->validated());
+        $rental_status->update($validator->validated());
 
-        return response()->json(['data'=>$gearbox]);
+        return response()->json(['data'=>$rental_status]);
     }
 
     public function destroy($id)
     {
-        $gearbox= Gearbox::find($id);
-        if(!$gearbox){
+        $rental_status = RentalStatus::find($id);
+        if(!$rental_status){
             return response()->json(['message'=>'Not found']);
         }
-        $gearbox->delete();
+        $rental_status->delete();
+
         return response()->json([
-            'message' => 'Коробка передач удалена'
+            'message' => 'Статус аренды удалён'
         ]);
     }
 }
