@@ -1,0 +1,2141 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Avto Baza API",
+        "description": "API документация для проекта Avto Baza",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/application-statuses": {
+            "get": {
+                "tags": [
+                    "Application Statuses"
+                ],
+                "summary": "Список статусов заявок",
+                "operationId": "0925e5480ba62ef2ad3ea04f73368011",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Application Statuses"
+                ],
+                "summary": "Создать статус заявки",
+                "operationId": "897ffbbac361d534f447c6ddba43f84d",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Код статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/api/application-statuses/{id}": {
+            "get": {
+                "tags": [
+                    "Application Statuses"
+                ],
+                "summary": "Получить статус заявки",
+                "operationId": "e022438cf2591bc321dfe931890a6c3e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Application Statuses"
+                ],
+                "summary": "Обновить статус заявки",
+                "operationId": "2ede52714a818b7705f6c099b77a6c47",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Код статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Application Statuses"
+                ],
+                "summary": "Удалить статус заявки",
+                "operationId": "eb2bec30adf273088d9d6e509296fa03",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                }
+            }
+        },
+        "/api/cars": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Car List",
+                "operationId": "18e082abef4788ea48b6034c7c44ac0e",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Лимит",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "description": "Филтр по id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_division_id",
+                        "in": "query",
+                        "description": "Филтр по Подразделения",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_division_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Подразделения",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_color_id",
+                        "in": "query",
+                        "description": "Филтр по Цвета авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_color_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Цвету авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_year_of_issue",
+                        "in": "query",
+                        "description": "Филтр по Год выпуска",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_year_of_issue_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Год выпуска",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_body_type_id",
+                        "in": "query",
+                        "description": "Филтр по Тип кузова",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_body_type_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Тип кузова",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_status",
+                        "in": "query",
+                        "description": "Филтра по Статусу",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_car_class_id",
+                        "in": "query",
+                        "description": "Филтра по Класс авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_class_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтр по Класс авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_model_id",
+                        "in": "query",
+                        "description": "Филтра по Моделу авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_model_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтр по Моделу авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_fuel_type_name",
+                        "in": "query",
+                        "description": "Филтра по Тип Топлива",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_fuel_type_name_condition",
+                        "in": "query",
+                        "description": "Условия Филтр по Тип Топлива",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_brand_id",
+                        "in": "query",
+                        "description": "Филтра по Бренду авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_brand_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтр по Бренду авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_option_id",
+                        "in": "query",
+                        "description": "Филтра по Доп. параметры",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_option_id_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Доп. параметры",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_carrying_capacity",
+                        "in": "query",
+                        "description": "Филтр по Грузоподъемносты авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_carrying_capacity_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Грузоподъемносты авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_length",
+                        "in": "query",
+                        "description": "Филтр по Длину авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_length_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Длину авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_height",
+                        "in": "query",
+                        "description": "Филтр по Высоту авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_tarif_id",
+                        "in": "query",
+                        "description": "Филтр по таьриф id",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_height_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Высоту авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_width",
+                        "in": "query",
+                        "description": "Филтр по Ширины авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_width_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Ширины авто",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_number",
+                        "in": "query",
+                        "description": "Филтр по Гос.номеру авто.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_number_condition",
+                        "in": "query",
+                        "description": "Условия для Филтра гос.номер авто.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at",
+                        "in": "query",
+                        "description": "Филтр по Дата приема от",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Дата приема от",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at",
+                        "in": "query",
+                        "description": "Филтр по Дата приема до",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Дата приема до",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_city_id",
+                        "in": "query",
+                        "description": "Фильтр по городу",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_gearbox_id",
+                        "in": "query",
+                        "description": "Фильтр по коробке передач",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_min_rent_days",
+                        "in": "query",
+                        "description": "Фильтр по минимальному сроку аренды",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_count_seat",
+                        "in": "query",
+                        "description": "Филтр по Количество мест",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_count_seat_condition",
+                        "in": "query",
+                        "description": "Условия Филтра по Количество мест",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_car_park_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_promo_code_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_journal_car",
+                        "in": "query",
+                        "description": "Фильтр журнал автомобилей",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ALL_LIST",
+                                "ACTIVE",
+                                "DISMISSED",
+                                "CREATED_BY_ME",
+                                "INSPECTION_IN_THE_OFFICE",
+                                "DOUBLES"
+                            ],
+                            "default": "ALL_LIST"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Create car",
+                "operationId": "5d56e8c0623cef67065bef3079d5e3ae",
+                "parameters": [
+                    {
+                        "name": "division_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "model_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "body_type_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "color_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "condition_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "year_of_issue",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "car_number",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "count_seat",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "city_id",
+                        "in": "query",
+                        "description": "Город",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "Адрес автомобиля",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gearbox_id",
+                        "in": "query",
+                        "description": "Коробка передач",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "min_rent_days",
+                        "in": "query",
+                        "description": "Минимальный срок аренды (дни)",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "fuel_type_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cargo_properties",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dop_info",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dop_options",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "car_park_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/{car_id}": {
+            "patch": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Update car",
+                "operationId": "fb4681da69956a2526df6da5670c7de7",
+                "parameters": [
+                    {
+                        "name": "car_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "division_id",
+                                    "category_car_id",
+                                    "model_car_id",
+                                    "color_id",
+                                    "condition_id",
+                                    "year_of_issue",
+                                    "car_number",
+                                    "count_seat"
+                                ],
+                                "properties": {
+                                    "division_id": {
+                                        "type": "integer"
+                                    },
+                                    "category_car_id": {
+                                        "type": "integer"
+                                    },
+                                    "model_car_id": {
+                                        "type": "integer"
+                                    },
+                                    "body_type_id": {
+                                        "type": "integer"
+                                    },
+                                    "color_id": {
+                                        "type": "integer"
+                                    },
+                                    "condition_id": {
+                                        "type": "integer"
+                                    },
+                                    "fuel_type_id": {
+                                        "type": "integer"
+                                    },
+                                    "year_of_issue": {
+                                        "type": "integer"
+                                    },
+                                    "car_number": {
+                                        "type": "string"
+                                    },
+                                    "city_id": {
+                                        "type": "integer"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "gearbox_id": {
+                                        "type": "integer"
+                                    },
+                                    "min_rent_days": {
+                                        "type": "integer"
+                                    },
+                                    "count_seat": {
+                                        "type": "integer"
+                                    },
+                                    "cargo_properties": {
+                                        "type": "string"
+                                    },
+                                    "dop_info": {
+                                        "type": "string"
+                                    },
+                                    "car_park_id": {
+                                        "type": "integer"
+                                    },
+                                    "dop_options": {
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "car_option_id"
+                                            ],
+                                            "properties": {
+                                                "car_option_id": {
+                                                    "type": "integer"
+                                                },
+                                                "is_check": {
+                                                    "type": "boolean"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/{car_id}/show": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get car info by id",
+                "operationId": "66188df1d82860b5834d1d8041a34723",
+                "parameters": [
+                    {
+                        "name": "car_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of clients."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/fuel-types": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Car fuel type list",
+                "operationId": "c19d80da8f81af504e11debf512b32a1",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cars/dop-options": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get car dop options",
+                "operationId": "31f44f5a58298e46227e7fa81317597f",
+                "parameters": [
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cities": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Список городов",
+                "operationId": "e41a5b20552aede0752b52d3937b4036",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Создать город",
+                "operationId": "42cd6bd8b7fa3fad04e590ebea23335f",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название города",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Душанбе"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Описание",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Столица"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/api/cities/{id}": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Получить город",
+                "operationId": "699cfd45fc8cf5b6af738a8555f1af2e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID города",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Обновить город",
+                "operationId": "307735e31a8c193a3d005a75489423d5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID города",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название города",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Хуҷанд"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Описание",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Удалить город",
+                "operationId": "80ffeeb60080cfa6de5400202ce0513e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID города",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                }
+            }
+        },
+        "/api/gearboxes": {
+            "get": {
+                "tags": [
+                    "Gearboxes"
+                ],
+                "summary": "Список коробок передач",
+                "operationId": "de55ca429fa665bef3a4df11a5189ccb",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Gearboxes"
+                ],
+                "summary": "Создать коробку передач",
+                "operationId": "228dec9911f44db0a6524d6c0a52f5b1",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Код (manual, automatic)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "automatic"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Автомат"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/api/gearboxes/{id}": {
+            "get": {
+                "tags": [
+                    "Gearboxes"
+                ],
+                "summary": "Получить коробку передач",
+                "operationId": "3756b1e77927bae9f28a350a48269729",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID коробки передач",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Gearboxes"
+                ],
+                "summary": "Обновить коробку передач",
+                "operationId": "f4e9d19600478d4620cd82497ac66cb0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID коробки передач",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Код",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "manual"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Механика"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Gearboxes"
+                ],
+                "summary": "Удалить коробку передач",
+                "operationId": "f1f532ea232e7af2dfac272f2c108d60",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID коробки передач",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                }
+            }
+        },
+        "/api/car-photos/{car_id}": {
+            "get": {
+                "tags": [
+                    "Car Photos"
+                ],
+                "summary": "Список фотографий автомобиля",
+                "operationId": "c764bbbb1c0acd6a6b96da6d93b6949a",
+                "parameters": [
+                    {
+                        "name": "car_id",
+                        "in": "path",
+                        "description": "ID автомобиля",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-photos": {
+            "post": {
+                "tags": [
+                    "Car Photos"
+                ],
+                "summary": "Загрузить фото автомобиля",
+                "operationId": "b71629ea2bda840482aaf463345faf4a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "performer_transport_id",
+                                    "photo"
+                                ],
+                                "properties": {
+                                    "performer_transport_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "photo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-photos/{id}": {
+            "delete": {
+                "tags": [
+                    "Car Photos"
+                ],
+                "summary": "Удалить фото",
+                "operationId": "23f6d242424e905fecedff1565b47780",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID фотографии",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rental-applications": {
+            "get": {
+                "tags": [
+                    "Rental Applications"
+                ],
+                "summary": "Список заявок",
+                "operationId": "45257eba08aa84368015f12260bf8163",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Rental Applications"
+                ],
+                "summary": "Создать заявку",
+                "operationId": "5b069ea08cecbfdf87de18e244d0daa8",
+                "parameters": [
+                    {
+                        "name": "performer_transport_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "rental_tariff_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "city_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "promo_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rental-applications/{id}": {
+            "get": {
+                "tags": [
+                    "Rental Applications"
+                ],
+                "summary": "Получить заявку",
+                "operationId": "c552f73d75788c35ae42da7fe05fd813",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Rental Applications"
+                ],
+                "summary": "Обновить заявку",
+                "operationId": "1ec131bdacba8fe5f7a578345e5c1338",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "promo_code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Rental Applications"
+                ],
+                "summary": "Удалить заявку",
+                "operationId": "66894e5fe36c49efca8f60654abf1155",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rental-statuses": {
+            "get": {
+                "tags": [
+                    "Rental Statuses"
+                ],
+                "summary": "Список статусов аренды",
+                "operationId": "65e5770464ebfc8609f553dee18ef4cf",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Rental Statuses"
+                ],
+                "summary": "Создать статус аренды",
+                "operationId": "77017f27513e884de681b2f0699b91bf",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Код статуса (active, overdue, waiting_return)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "active"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Активна"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rental-statuses/{id}": {
+            "get": {
+                "tags": [
+                    "Rental Statuses"
+                ],
+                "summary": "Получить статус аренды",
+                "operationId": "5572fb1cc782ada189a1a5403ec2aaf8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Rental Statuses"
+                ],
+                "summary": "Обновить статус аренды",
+                "operationId": "b18dfe1cd626675fd66617721ef854d6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "description": "Код статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "overdue"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Просрочена"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Rental Statuses"
+                ],
+                "summary": "Удалить статус аренды",
+                "operationId": "fc79436e9d65acc330d747df1c7fbbb8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID статуса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rentals": {
+            "get": {
+                "tags": [
+                    "Rentals"
+                ],
+                "summary": "Список аренд",
+                "operationId": "18b2c9145ff0acb509bb9234c91d81b9",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Rentals"
+                ],
+                "summary": "Создать аренду",
+                "operationId": "a11201cc83a8e7b9327d7bbaebc13a48",
+                "parameters": [
+                    {
+                        "name": "performer_transport_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "manager_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start_datetime",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "2026-01-20 10:00:00"
+                        }
+                    },
+                    {
+                        "name": "end_datetime",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "2026-01-27 10:00:00"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rentals/{id}": {
+            "get": {
+                "tags": [
+                    "Rentals"
+                ],
+                "summary": "Получить аренду",
+                "operationId": "c9eb56ea2e8be9171c16c53dd4256492",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Rentals"
+                ],
+                "summary": "Обновить аренду",
+                "operationId": "6d4d962e9ab6f6b6ac7bf4971225a16b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "end_datetime",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Rentals"
+                ],
+                "summary": "Удалить аренду",
+                "operationId": "3a588e5ea31137a94103cf9be9e06b01",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/rental-tariffs": {
+            "get": {
+                "tags": [
+                    "Rental Tariffs"
+                ],
+                "summary": "Список тарифов",
+                "operationId": "a3db76452c1d980a35b2af506d0b19f9",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Rental Tariffs"
+                ],
+                "summary": "Создать тариф",
+                "operationId": "0e3fece6698737485dbd9566bccb482c",
+                "parameters": [
+                    {
+                        "name": "performer_transport_id",
+                        "in": "query",
+                        "description": "ID автомобиля",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 12
+                        }
+                    },
+                    {
+                        "name": "duration_days",
+                        "in": "query",
+                        "description": "Количество дней",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 7
+                        }
+                    },
+                    {
+                        "name": "price",
+                        "in": "query",
+                        "description": "Цена",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": 500000
+                        }
+                    },
+                    {
+                        "name": "free_weekend_day",
+                        "in": "query",
+                        "description": "Бесплатный выходной",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/api/rental-tariffs/{id}": {
+            "get": {
+                "tags": [
+                    "Rental Tariffs"
+                ],
+                "summary": "Получить тариф",
+                "operationId": "d2a6837d4d4b0b90b59435593276f4ef",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID тарифа",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Rental Tariffs"
+                ],
+                "summary": "Обновить тариф",
+                "operationId": "9c444b0ff9b89fc0c4e23dcbbd25a47d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID тарифа",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "duration_days",
+                        "in": "query",
+                        "description": "Количество дней",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "price",
+                        "in": "query",
+                        "description": "Цена",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "example": 700000
+                        }
+                    },
+                    {
+                        "name": "free_weekend_day",
+                        "in": "query",
+                        "description": "Бесплатный выходной",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Rental Tariffs"
+                ],
+                "summary": "Удалить тариф",
+                "operationId": "b6aac728cf36edb2339d694c48f5022c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID тарифа",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Application Statuses",
+            "description": "Application Statuses"
+        },
+        {
+            "name": "Car",
+            "description": "Car"
+        },
+        {
+            "name": "Cities",
+            "description": "Cities"
+        },
+        {
+            "name": "Gearboxes",
+            "description": "Gearboxes"
+        },
+        {
+            "name": "Car Photos",
+            "description": "Car Photos"
+        },
+        {
+            "name": "Rental Applications",
+            "description": "Rental Applications"
+        },
+        {
+            "name": "Rental Statuses",
+            "description": "Rental Statuses"
+        },
+        {
+            "name": "Rentals",
+            "description": "Rentals"
+        },
+        {
+            "name": "Rental Tariffs",
+            "description": "Rental Tariffs"
+        }
+    ]
+}
