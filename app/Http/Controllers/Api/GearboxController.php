@@ -27,7 +27,7 @@ class GearboxController extends Controller
             ], 400);
         }
 
-        $gearbox= Gearbox::create($validator);
+        $gearbox= Gearbox::create($validator->validated());
 
         return response()->json(['data'=>$gearbox]);
 

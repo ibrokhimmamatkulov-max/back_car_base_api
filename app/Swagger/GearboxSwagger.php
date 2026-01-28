@@ -9,10 +9,10 @@ class GearboxSwagger
      *     path="/api/gearboxes",
      *     tags={"Gearboxes"},
      *     summary="Список коробок передач",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function index(){}
 
     /**
@@ -20,7 +20,7 @@ class GearboxSwagger
      *     path="/api/gearboxes",
      *     tags={"Gearboxes"},
      *     summary="Создать коробку передач",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="code",
      *         in="query",
@@ -39,7 +39,6 @@ class GearboxSwagger
      *     @OA\Response(response=201, description="Created")
      * )
      */
-
     public function store(){}
 
     /**
@@ -47,7 +46,7 @@ class GearboxSwagger
      *     path="/api/gearboxes/{id}",
      *     tags={"Gearboxes"},
      *     summary="Получить коробку передач",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -59,7 +58,6 @@ class GearboxSwagger
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function show(){}
 
     /**
@@ -67,7 +65,7 @@ class GearboxSwagger
      *     path="/api/gearboxes/{id}",
      *     tags={"Gearboxes"},
      *     summary="Обновить коробку передач",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -93,7 +91,6 @@ class GearboxSwagger
      *     @OA\Response(response=200, description="Updated")
      * )
      */
-
     public function update(){}
 
     /**
@@ -101,7 +98,7 @@ class GearboxSwagger
      *     path="/api/gearboxes/{id}",
      *     tags={"Gearboxes"},
      *     summary="Удалить коробку передач",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -113,6 +110,5 @@ class GearboxSwagger
      *     @OA\Response(response=200, description="Deleted")
      * )
      */
-
     public function destroy(){}
 }

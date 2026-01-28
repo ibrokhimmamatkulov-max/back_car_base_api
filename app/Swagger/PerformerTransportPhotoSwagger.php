@@ -57,7 +57,6 @@ class PerformerTransportPhotoSwagger
      *     )
      * )
      */
-
     public function store(){}
 
     /**
@@ -78,6 +77,5 @@ class PerformerTransportPhotoSwagger
      *     @OA\Response(response=200, description="Deleted")
      * )
      */
-
     public function destroy(){}
 }

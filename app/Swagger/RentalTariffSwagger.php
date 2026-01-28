@@ -9,10 +9,10 @@ class RentalTariffSwagger
      *     path="/api/rental-tariffs",
      *     tags={"Rental Tariffs"},
      *     summary="Список тарифов",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function index(){}
 
     /**
@@ -20,7 +20,7 @@ class RentalTariffSwagger
      *     path="/api/rental-tariffs",
      *     tags={"Rental Tariffs"},
      *     summary="Создать тариф",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="performer_transport_id",
      *         in="query",
@@ -53,7 +53,6 @@ class RentalTariffSwagger
      *     @OA\Response(response=201, description="Created")
      * )
      */
-
     public function store(){}
 
     /**
@@ -61,7 +60,7 @@ class RentalTariffSwagger
      *     path="/api/rental-tariffs/{id}",
      *     tags={"Rental Tariffs"},
      *     summary="Получить тариф",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -73,7 +72,6 @@ class RentalTariffSwagger
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function show(){}
 
     /**
@@ -81,7 +79,7 @@ class RentalTariffSwagger
      *     path="/api/rental-tariffs/{id}",
      *     tags={"Rental Tariffs"},
      *     summary="Обновить тариф",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -114,7 +112,6 @@ class RentalTariffSwagger
      *     @OA\Response(response=200, description="Updated")
      * )
      */
-
     public function update(){}
 
     /**
@@ -122,7 +119,7 @@ class RentalTariffSwagger
      *     path="/api/rental-tariffs/{id}",
      *     tags={"Rental Tariffs"},
      *     summary="Удалить тариф",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -134,6 +131,5 @@ class RentalTariffSwagger
      *     @OA\Response(response=200, description="Deleted")
      * )
      */
-
     public function destroy(){}
 }

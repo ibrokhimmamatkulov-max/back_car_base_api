@@ -424,9 +424,7 @@ class CarSwagger
      *     @OA\Response(response=404, description="Not Found"),
      * )
      */
-
     public function index(){}
-
 
     /**
      * @OA\Post(
@@ -582,7 +580,6 @@ class CarSwagger
      *     @OA\Response(response=403,description="Forbidden")
      *)
      **/
-
      public function store(){}
 
        /**
@@ -642,7 +639,6 @@ class CarSwagger
      *   @OA\Response(response=403, description="Forbidden")
      * )
      */
-
      public function update(){}
 
     /**
@@ -664,7 +660,6 @@ class CarSwagger
      *     @OA\Response(response=404, description="Not Found")
      * )
      */
-
      public function edit(){}
 
     /**
@@ -680,7 +675,6 @@ class CarSwagger
      *     @OA\Response(response=403,description="Forbidden")
      * )
      */
-
      public function fuel_types(){}
 
     /**
@@ -702,7 +696,6 @@ class CarSwagger
      *     @OA\Response(response=403,description="Forbidden")
      * )
      */
-
      public function car_dop_options(){}
 
 
