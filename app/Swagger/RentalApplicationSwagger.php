@@ -33,7 +33,6 @@ class RentalApplicationSwagger
      *     @OA\Response(response=201, description="Created")
      * )
      */
-
     public function store(){}
 
     /**
@@ -48,7 +47,6 @@ class RentalApplicationSwagger
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function show(){}
 
     /**
@@ -65,7 +63,6 @@ class RentalApplicationSwagger
      *     @OA\Response(response=200, description="Updated")
      * )
      */
-
     public function update(){}
 
     /**
@@ -80,6 +77,5 @@ class RentalApplicationSwagger
      *     @OA\Response(response=200, description="Deleted")
      * )
      */
-
     public function destroy(){}
 }

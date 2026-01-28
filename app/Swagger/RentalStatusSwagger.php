@@ -13,7 +13,6 @@ class RentalStatusSwagger
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function index(){}
 
     /**
@@ -41,7 +40,6 @@ class RentalStatusSwagger
      *     @OA\Response(response=201, description="Created")
      * )
      */
-
     public function store(){}
 
     /**
@@ -62,7 +60,6 @@ class RentalStatusSwagger
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function show(){}
 
     /**
@@ -97,7 +94,6 @@ class RentalStatusSwagger
      *     @OA\Response(response=200, description="Updated")
      * )
      */
-
     public function update(){}
 
     /**
@@ -118,6 +114,5 @@ class RentalStatusSwagger
      *     @OA\Response(response=200, description="Deleted")
      * )
      */
-
     public function destroy(){}
 }

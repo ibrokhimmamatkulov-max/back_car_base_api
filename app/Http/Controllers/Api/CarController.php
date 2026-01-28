@@ -76,12 +76,13 @@ class CarController extends Controller
             'tariffs',
             'city',
             'gearbox'
-        ])->whereIn('division_id', [1])
-            // ->when(!empty($availableCarParkIds), function ($query) use ($availableCarParkIds) {
-            //     $query->whereIn('car_park_id', $availableCarParkIds);
-            // })
-            ;
-
+        ])->when($request->division_id, fn($q) =>
+            $q->where('division_id', $request->division_id)
+        );
+    // ->whereIn('division_id', OrderService::getDivisions($request))
+    // ->when(!empty($availableCarParkIds), function ($query) use ($availableCarParkIds) {
+    //     $query->whereIn('car_park_id', $availableCarParkIds);
+    // });
        $cars=CarFilterService::applyFilters($cars,$request);
 
         return new CarResourceCollection($cars->orderByDesc('id')->limit($limit)->get());

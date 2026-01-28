@@ -25,6 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('performer_transports', function (Blueprint $table) {
+            $table->dropForeign(['gearbox_id']);
+            $table->dropForeign(['city_id']);
             $table->dropColumn(['gearbox_id','min_rent_days','city_id','address']);
         });
     }

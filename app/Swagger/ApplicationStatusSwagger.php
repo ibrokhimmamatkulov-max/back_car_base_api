@@ -9,10 +9,10 @@ class ApplicationStatusSwagger
      *     path="/api/application-statuses",
      *     tags={"Application Statuses"},
      *     summary="Список статусов заявок",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Response(response=200, description="OK")
      * )
      */
-
     public function index(){}
 
     /**
@@ -20,7 +20,7 @@ class ApplicationStatusSwagger
      *     path="/api/application-statuses",
      *     tags={"Application Statuses"},
      *     summary="Создать статус заявки",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="code",
      *         in="query",
@@ -39,7 +39,6 @@ class ApplicationStatusSwagger
      *     @OA\Response(response=201, description="Created")
      * )
      */
-
     public function store(){}
 
     /**
@@ -47,7 +46,7 @@ class ApplicationStatusSwagger
      *     path="/api/application-statuses/{id}",
      *     tags={"Application Statuses"},
      *     summary="Получить статус заявки",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -66,6 +65,7 @@ class ApplicationStatusSwagger
      *     path="/api/application-statuses/{id}",
      *     tags={"Application Statuses"},
      *     summary="Обновить статус заявки",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -91,7 +91,6 @@ class ApplicationStatusSwagger
      *     @OA\Response(response=200, description="Updated")
      * )
      */
-
     public function update(){}
 
     /**
@@ -99,7 +98,7 @@ class ApplicationStatusSwagger
      *     path="/api/application-statuses/{id}",
      *     tags={"Application Statuses"},
      *     summary="Удалить статус заявки",
-     *
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -111,7 +110,6 @@ class ApplicationStatusSwagger
      *     @OA\Response(response=200, description="Deleted")
      * )
      */
-
     public function destroy(){}
 
 }

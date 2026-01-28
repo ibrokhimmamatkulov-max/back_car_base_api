@@ -17,7 +17,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -49,7 +54,12 @@
                     "201": {
                         "description": "Created"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/application-statuses/{id}": {
@@ -74,7 +84,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -115,7 +130,12 @@
                     "200": {
                         "description": "Updated"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
@@ -138,7 +158,136 @@
                     "200": {
                         "description": "Deleted"
                     }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Регистрация пользователя",
+                "operationId": "5e9dd82c858753ad481f146678e34951",
+                "parameters": [
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "description": "Имя пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "description": "Фамилия пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "patronymic",
+                        "in": "query",
+                        "description": "Отчество пользователя",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Пароль пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "Роль пользователя (Admin, Manager, Driver и т.д.)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Admin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно зарегистрирован"
+                    },
+                    "422": {
+                        "description": "Ошибка валидации данных"
+                    }
                 }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Авторизация пользователя",
+                "operationId": "fd38eab35a3cc28d00ada587f6955506",
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "query",
+                        "description": "Логин пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Пароль пользователя",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешная авторизация"
+                    },
+                    "401": {
+                        "description": "Неверный email или пароль"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Выход пользователя из системы",
+                "operationId": "d2f0239468d539b07f33e62fab239518",
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно вышел из системы"
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/cars": {
@@ -1017,7 +1166,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -1051,7 +1205,12 @@
                     "201": {
                         "description": "Created"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/cities/{id}": {
@@ -1076,7 +1235,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -1118,7 +1282,12 @@
                     "200": {
                         "description": "Updated"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
@@ -1141,7 +1310,12 @@
                     "200": {
                         "description": "Deleted"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/gearboxes": {
@@ -1155,7 +1329,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -1189,7 +1368,12 @@
                     "201": {
                         "description": "Created"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/gearboxes/{id}": {
@@ -1214,7 +1398,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -1257,7 +1446,12 @@
                     "200": {
                         "description": "Updated"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
@@ -1280,7 +1474,12 @@
                     "200": {
                         "description": "Deleted"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/car-photos/{car_id}": {
@@ -1941,7 +2140,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -1995,7 +2199,12 @@
                     "201": {
                         "description": "Created"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/rental-tariffs/{id}": {
@@ -2020,7 +2229,12 @@
                     "200": {
                         "description": "OK"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -2073,7 +2287,12 @@
                     "200": {
                         "description": "Updated"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
@@ -2096,7 +2315,207 @@
                     "200": {
                         "description": "Deleted"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/roles": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Список ролей",
+                "operationId": "caa06108389e69200a06b0aa2c5e8c46",
+                "responses": {
+                    "200": {
+                        "description": "Список ролей"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Создать роль",
+                "operationId": "48fecef54dde58409fe876967bd893cf",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название роли",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Manager"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Описание роли",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Менеджер системы"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Роль успешно создана"
+                    },
+                    "400": {
+                        "description": "Ошибка валидации"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/roles/{id}": {
+            "get": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Получить роль по ID",
+                "operationId": "6265ea9ae7b9935893a1322543397d9f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID роли",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Данные роли"
+                    },
+                    "404": {
+                        "description": "Роль не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Удалить роль",
+                "operationId": "ac56590c731f2ff42df4d33be5b07093",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID роли",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Роль успешно удалена"
+                    },
+                    "404": {
+                        "description": "Роль не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Обновить роль",
+                "operationId": "2df738c67cae44ed429293c7ce9f4a48",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID роли",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Название роли",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Admin"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Описание роли",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Системный администратор"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Роль успешно обновлена"
+                    },
+                    "404": {
+                        "description": "Роль не найдена"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "Bearer"
             }
         }
     },
@@ -2104,6 +2523,10 @@
         {
             "name": "Application Statuses",
             "description": "Application Statuses"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
         },
         {
             "name": "Car",
@@ -2136,6 +2559,10 @@
         {
             "name": "Rental Tariffs",
             "description": "Rental Tariffs"
+        },
+        {
+            "name": "Role",
+            "description": "Role"
         }
     ]
 }
