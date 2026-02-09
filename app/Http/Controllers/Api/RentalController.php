@@ -28,8 +28,8 @@ class RentalController extends Controller
             'user_id' => 'nullable|exists:users,id',
             'manager_id' => 'required|exists:users,id',
             'status_id' => 'required|exists:rental_statuses,id',
-            'start_datetime' => 'required|date_format:Y-m-d H:i:s',
-            'end_datetime' => 'required|date_format:Y-m-d H:i:s',
+            'start_datetime' => 'required|date_format:Y-m-d|after_or_equal:today',
+            'end_datetime' => 'required|date_format:Y-m-d',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -37,8 +37,8 @@ class RentalController extends Controller
             ], 400);
         }
         $validated = $validator->validated();
-        $start = Carbon::createFromFormat('Y-m-d H:i:s', $validated['start_datetime']);
-        $end   = Carbon::createFromFormat('Y-m-d H:i:s', $validated['end_datetime']);
+        $start = Carbon::createFromFormat('Y-m-d', $validated['start_datetime']);
+        $end   = Carbon::createFromFormat('Y-m-d', $validated['end_datetime']);
     
         if ($end->lte($start)) {
             return response()->json([
@@ -80,8 +80,8 @@ class RentalController extends Controller
             return response()->json(['message'=>'Not found']);
         }
         $validator = Validator::make($request->all(), [
-            'status_id' => 'required|exists:rental_statuses,id',
-            'end_datetime' => 'required|date_format:Y-m-d H:i:s',
+            'status_id' => 'sometimes|exists:rental_statuses,id',
+            'end_datetime' => 'sometimes|date_format:Y-m-d|after_or_equal:today',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -90,18 +90,17 @@ class RentalController extends Controller
         }
         $validated = $validator->validated();
 
-        if (Carbon::parse($validated['end_datetime'])->lte($rental->start_datetime)) {
-            return response()->json([
-                'errors' => [
-                    'end_datetime' => ['The end_datetime must be later than the start_datetime.']
-                ]
-            ], 422);
+        if (isset($validated['end_datetime'])) {
+            if (Carbon::parse($validated['end_datetime'])->lte($rental->start_datetime)) {
+                return response()->json([
+                    'errors' => [
+                        'end_datetime' => ['The end_datetime must be later than the start_datetime.']
+                    ]
+                ], 422);
+            }
         }
 
-        $rental->update([
-            'status_id' => $validated['status_id'],
-            'end_datetime' => $validated['end_datetime'],
-        ]);
+        $rental->update($validated);
 
         return response()->json(['data'=>$rental]);
     }

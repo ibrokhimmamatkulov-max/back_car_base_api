@@ -16,9 +16,5 @@ class CarPark extends Model
         'update_by'
     ];
 
-    // public function organization()
-    // {
-    //     return $this->belongsTo(Organization::class);
-    // }
 }
 

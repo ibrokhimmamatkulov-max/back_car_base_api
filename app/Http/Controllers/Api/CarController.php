@@ -7,7 +7,6 @@ use App\Http\Resources\Cars\CarResourceCollection;
 use App\Models\CarOption;
 use App\Models\CategoryCar;
 use App\Models\ColorCar;
-use App\Models\Division;
 use App\Models\PerformerTransportOption;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +15,6 @@ use App\Models\PerformerTransport;
 use App\Http\Controllers\Controller;
 use App\Models\BodyType;
 use App\Models\CarCondition;
-use App\Models\CarPark;
 use App\Models\Marka;
 use App\Services\CarFilterService;
 use Illuminate\Support\Facades\Log;
@@ -46,8 +44,6 @@ class CarController extends Controller
 
     public function index(Request $request)
     {
-        // $availableCarParkIds = auth()->user()?->employee->taxiParks->pluck('id')->toArray();
-
         // Filter limit
         $limit = $request->has('limit') ? $request->limit : config('sip-gram.limit_data');
         if ($limit > config('sip-gram.max_limit_data')) {
@@ -55,7 +51,6 @@ class CarController extends Controller
         }
 
         $cars = PerformerTransport::query()->with([
-            'division',
             'model_car',
             'car_connection',
             'model_car.brand',
@@ -64,25 +59,16 @@ class CarController extends Controller
             'body_type',
             'color',
             'condition',
-            // 'car_drivers',
-            // 'created_user.employee',
             'updated_user',
             'dopOptions',
             'dopOptions.car_option',
-            // 'histories',
             'fuel_type',
-            'carPark',
             'photos',
             'tariffs',
             'city',
             'gearbox'
-        ])->when($request->division_id, fn($q) =>
-            $q->where('division_id', $request->division_id)
-        );
-    // ->whereIn('division_id', OrderService::getDivisions($request))
-    // ->when(!empty($availableCarParkIds), function ($query) use ($availableCarParkIds) {
-    //     $query->whereIn('car_park_id', $availableCarParkIds);
-    // });
+        ]);
+
        $cars=CarFilterService::applyFilters($cars,$request);
 
         return new CarResourceCollection($cars->orderByDesc('id')->limit($limit)->get());
@@ -131,7 +117,6 @@ class CarController extends Controller
             $rule .= '|between:' . $min_seat . ',' . $max_seat;
         }
         $validator = Validator::make($request->all(), [
-            'division_id'      => ['required', Rule::exists(Division::class, 'id')],
             'category_car_id'  => ['required', Rule::exists(CategoryCar::class, 'id')],
             'model_car_id'     => ['required', Rule::exists(Marka::class, 'id')->where('category_car_id', $request->category_car_id)],
             'body_type_id'     => ['required', Rule::exists(BodyType::class, 'id')->where('category_car_id', $request->category_car_id)],
@@ -151,10 +136,6 @@ class CarController extends Controller
             'dop_info'         => 'nullable|string',
             'dop_options'      => 'nullable|array',
             'dop_options.*.car_option_id' => ['required', Rule::exists(CarOption::class, 'id')],
-            'car_park_id' => [
-                Rule::requiredIf($request->division_id == 6),
-                Rule::exists(CarPark::class, 'id'),
-            ],
             'city_id'        => ['required', Rule::exists('cities', 'id')],
             'gearbox_id'     => ['required', Rule::exists('gearboxes', 'id')],
             'min_rent_days'  => ['required', 'integer', 'min:1'],
@@ -221,7 +202,6 @@ class CarController extends Controller
         }
         $user_id = auth()->id();
         $car = new PerformerTransport;
-        $car->division_id = $request->division_id;
         $car->car_model_id = $request->model_car_id;
         $car->color_id = $request->color_id;
         $car->body_type_id = $request->body_type_id ?? null;
@@ -233,7 +213,6 @@ class CarController extends Controller
         $car->cargo_properties = isset($cargo_properties) ? json_encode($cargo_properties) : null;
         $car->connected_id = PerformerTransport::WAITING_CONNECTION;
         $car->created_user_id = $user_id;
-        $car->car_park_id = $request->car_park_id;
         $car->city_id = $request->city_id;
         $car->gearbox_id = $request->gearbox_id;
         $car->min_rent_days = $request->min_rent_days;
@@ -296,7 +275,6 @@ class CarController extends Controller
                 $rule .= '|between:' . $min_seat . ',' . $max_seat;
             }
             $validator = Validator::make($request->all(), [
-                'division_id'      => ['required', Rule::exists(Division::class, 'id')],
                 'category_car_id'  => ['required', Rule::exists(CategoryCar::class, 'id')],
                 'model_car_id'     => ['required', Rule::exists(Marka::class, 'id')->where('category_car_id', $request->category_car_id)],
                 'body_type_id'     => ['nullable', Rule::exists(BodyType::class, 'id')->where('category_car_id', $request->category_car_id)],
@@ -310,10 +288,6 @@ class CarController extends Controller
                 'dop_info'         => 'nullable|string',
                 'dop_options' => 'nullable|array',
                 'dop_options.*.car_option_id' => ['required', Rule::exists(CarOption::class, 'id')],
-                'car_park_id' => [
-                    Rule::requiredIf($request->division_id == 6),
-                    Rule::exists(CarPark::class, 'id'),
-                ],
                 'city_id'        => ['required', Rule::exists('cities', 'id')],
                 'gearbox_id'     => ['required', Rule::exists('gearboxes', 'id')],
                 'min_rent_days'  => ['required', 'integer', 'min:1'],
@@ -383,22 +357,6 @@ class CarController extends Controller
             }
 
             $user_id = auth()->id();
-            //  $user = User::findOrFail($user_id);
-
-            // $history_service = new PerformerTransportHistoryService();
-            // $history_performer_transport = $history_service->forUpdate($car, 'users', $user_id);
-            //            $dop_info = $car->dop_info;
-            //            if ($request->has('dop_info')) {
-            //                $dop_info .= $request->dop_info;
-            //            }
-            //
-            //            if(strlen($dop_info) > 500) {
-            //                $dop_info = substr($dop_info, strpos($dop_info, "\n\r",300)+5, strlen($dop_info)-1);
-            //            }
-            //
-            //            $dop_info .= Carbon::now().' ID:'.$user_id.' Name:'.$user->first_name.' '.$user->last_name.'\n\r';
-
-            $car->division_id = $request->division_id;
             $car->car_model_id = $request->model_car_id;
             $car->body_type_id = $request->body_type_id ?? null;
             $car->count_seat = $request->count_seat;
@@ -409,8 +367,6 @@ class CarController extends Controller
             $car->cargo_properties = $cargo;
             $car->dop_info = $request->dop_info;
             $car->updated_user_id = $user_id;
-            //$car->created_user_id = $car->created_user_id;
-            $car->car_park_id = $request->car_park_id;
             $car->city_id = $request->city_id;
             $car->gearbox_id = $request->gearbox_id;
             $car->min_rent_days = $request->min_rent_days;

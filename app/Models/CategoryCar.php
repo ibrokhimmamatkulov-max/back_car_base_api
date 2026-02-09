@@ -20,15 +20,7 @@ class CategoryCar extends BasicModel
         return $this->hasMany(Marka::class, 'category_car_id', 'id');
     }
 
-    // public function car_options(){
-    //     return $this->hasMany(CarOption::class, 'category_car_id', 'id');
-    // }
-
     public function class_cars() {
         return $this->hasMany(ClassCar::class, 'category_car_id', 'id');
     }
-
-    // public function body_types(){
-    //     return $this->hasMany(BodyType::class, 'category_car_id', 'id');
-    // }
 }

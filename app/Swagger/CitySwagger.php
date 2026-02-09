@@ -76,7 +76,7 @@ class CitySwagger
      *     @OA\Parameter(
      *         name="name",
      *         in="query",
-     *         required=true,
+     *         required=false,
      *         description="Название города",
      *         @OA\Schema(type="string", example="Хуҷанд")
      *     ),

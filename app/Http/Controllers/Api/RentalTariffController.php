@@ -49,9 +49,9 @@ class RentalTariffController extends Controller
             return response()->json(['message'=>'Not found']);
         }
         $validator = Validator::make($request->all(), [
-            'duration_days' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0',
-            'free_weekend_day' => 'boolean',
+            'duration_days' => 'sometimes|integer|min:1',
+            'price' => 'sometimes|numeric|min:0',
+            'free_weekend_day' => 'sometimes|boolean',
         ]);
         if ($validator->fails()) {
             return response()->json([

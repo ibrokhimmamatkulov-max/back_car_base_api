@@ -2,8 +2,16 @@
 
 use App\Http\Controllers\Api\ApplicationStatusController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CarBodyTypeController;
+use App\Http\Controllers\Api\CarBrandController;
+use App\Http\Controllers\Api\CarCategoryController;
+use App\Http\Controllers\Api\CarClassController;
+use App\Http\Controllers\Api\CarConditionController;
 use App\Http\Controllers\Api\CarController;
+use App\Http\Controllers\Api\CarModelController;
+use App\Http\Controllers\Api\CarOptionController;
 use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\ColorCarController;
 use App\Http\Controllers\Api\GearboxController;
 use App\Http\Controllers\Api\PerformerTransportPhotoController;
 use App\Http\Controllers\Api\RentalApplicationController;
@@ -94,4 +102,44 @@ Route::middleware('auth:api')->group(function (){
     Route::patch('/roles/{id}', [RoleController::class, 'update']);
     Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
     
+    Route::get('/car-settings/categories', [CarCategoryController::class, 'index']);
+    Route::post('/car-settings/categories', [CarCategoryController::class, 'store']);
+    Route::get('/car-settings/categories/{category_car_id}/edit', [CarCategoryController::class, 'show']);
+    Route::patch('/car-settings/categories/{category_car_id}', [CarCategoryController::class, 'update']);
+
+    Route::get('/car-settings/model-cars', [CarModelController::class, 'index']);
+    Route::post('/car-settings/model-cars', [CarModelController::class, 'store']);
+    Route::post('/car-settings/model-cars/data', [CarModelController::class, 'data']);
+    Route::get('/car-settings/model-cars/{car_model_id}/edit', [CarModelController::class, 'edit']);
+    Route::patch('/car-settings/model-cars/{car_model_id}', [CarModelController::class, 'update']);
+
+    Route::get('/car-settings/brands', [CarBrandController::class, 'index']);
+    Route::get('/car-settings/brands/{brand_id}/edit', [CarBrandController::class, 'edit']);
+    Route::post('/car-settings/brands', [CarBrandController::class, 'store']);
+    Route::patch('/car-settings/brands/{brand_id}', [CarBrandController::class, 'update']);
+
+    Route::get('/car-settings/classes', [CarClassController::class, 'index']);
+    Route::post('/car-settings/classes', [CarClassController::class, 'store']);
+    Route::get('/car-settings/classes/{class_car_id}/edit', [CarClassController::class, 'edit']);
+    Route::patch('/car-settings/classes/{class_car_id}', [CarClassController::class, 'update']);
+
+    Route::get('/car-settings/body-types', [CarBodyTypeController::class, 'index']);
+    Route::post('/car-settings/body-types', [CarBodyTypeController::class, 'store']);
+    Route::get('/car-settings/body-types/{body_type_id}/edit', [CarBodyTypeController::class, 'edit']);
+    Route::patch('/car-settings/body-types/{body_type_id}', [CarBodyTypeController::class, 'update']);
+
+    Route::get('/car-settings/car-colors', [ColorCarController::class, 'index']);
+    Route::post('/car-settings/car-colors', [ColorCarController::class, 'store']);
+    Route::get('/car-settings/car-colors/{color_id}/edit', [ColorCarController::class, 'edit']);
+    Route::patch('/car-settings/car-colors/{color_id}', [ColorCarController::class, 'update']);
+
+    Route::get('/car-settings/car-conditions', [CarConditionController::class, 'index']);
+    Route::post('/car-settings/car-conditions', [CarConditionController::class, 'store']);
+    Route::get('/car-settings/car-conditions/{car_condition}/edit', [CarConditionController::class, 'edit']);
+    Route::patch('/car-settings/car-conditions/{car_condition}', [CarConditionController::class, 'update']);
+
+    Route::get('/car-settings/dop-options', [CarOptionController::class, 'index']);
+    Route::post('/car-settings/dop-options', [CarOptionController::class, 'store']);
+    Route::get('/car-settings/dop-options/{option_id}/edit', [CarOptionController::class, 'edit']);
+    Route::patch('/car-settings/dop-options/{option_id}', [CarOptionController::class, 'update']);
 });

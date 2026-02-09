@@ -90,14 +90,14 @@ class RentalTariffSwagger
      *     @OA\Parameter(
      *         name="duration_days",
      *         in="query",
-     *         required=true,
+     *         required=false,
      *         description="Количество дней",
      *         @OA\Schema(type="integer", example=10)
      *     ),
      *     @OA\Parameter(
      *         name="price",
      *         in="query",
-     *         required=true,
+     *         required=false,
      *         description="Цена",
      *         @OA\Schema(type="number", example=700000)
      *     ),

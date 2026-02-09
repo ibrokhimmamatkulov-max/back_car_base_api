@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Cars;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CarOptionResource extends JsonResource
@@ -15,9 +16,13 @@ class CarOptionResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "performer_transport_id" => $this->performer_transport_id,
-            "car_option_id" => $this->option_id,
-            "name" => $this?->car_option?->name,
+            "id" => $this->id,
+            "name" => $this->name,
+            "category_car_id" => $this->category_car_id,
+            "is_active" => $this->is_active,
+            "created_at" => Carbon::parse($this->created_at)->format('Y-m-d H:i'),
+            "updated_at" => Carbon::parse($this->created_at)->format('Y-m-d H:i'),
+            "model" => $this->model,
         ];
     }
 }

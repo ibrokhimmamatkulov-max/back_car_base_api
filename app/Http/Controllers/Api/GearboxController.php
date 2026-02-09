@@ -49,8 +49,8 @@ class GearboxController extends Controller
             return response()->json(['message'=>'Not found']);
         }
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:gearboxes,code,' . $gearbox->id,
-            'name' => 'required|string|max:255',
+            'code' => 'sometimes|string|max:50|unique:gearboxes,code,' . $gearbox->id,
+            'name' => 'sometimes|string|max:255',
         ]);
 
         if ($validator->fails()) {

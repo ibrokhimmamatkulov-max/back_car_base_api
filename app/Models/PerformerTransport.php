@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Histories\Performer\PerformerTransportHistory;
-use App\Traits\FiltersTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
 class PerformerTransport extends BasicModel
 {
-    // use FiltersTrait;
     use SoftDeletes;
     
     public const ACTIVE_CONNECTION = 1;
@@ -21,7 +17,6 @@ class PerformerTransport extends BasicModel
     public const CARGO = 3;
 
     protected $fillable = [
-        'division_id',
         'performer_id',
         'car_model_id',
         'body_type_id',
@@ -34,16 +29,12 @@ class PerformerTransport extends BasicModel
         'connected_id',
         'active',
         'fuel_type_id',
-        'car_park_id',
         'city_id',
         'gearbox_id',
         'min_rent_days',
         'address',
     ];
 
-    public function division(){
-        return $this->belongsTo(Division::class,'division_id', 'id');
-    }
     public function model_car() {
         return $this->belongsTo(Marka::class, 'car_model_id', 'id');
     }
@@ -68,9 +59,6 @@ class PerformerTransport extends BasicModel
         return $this->belongsTo(Performer::class, 'performer_id', 'id');
     }
 
-    // public function licensor() {
-    //     return $this->belongsTo(Licensor::class, 'licensor_id', 'id');
-    // }
     public function  created_user() {
         return $this->belongsTo(User::class,'created_user_id', 'id');
     }
@@ -92,23 +80,9 @@ class PerformerTransport extends BasicModel
                     ->with('car_option'); 
     }
 
-
-
-
-    // public function histories()
-    // {
-    //     return $this->hasMany(PerformerTransportHistory::class, 'performer_transports_id', 'id')
-    //         ->where('step', '<>', 'forUpdate');
-    // }
-
     public function fuel_type()
     {
         return $this->belongsTo(CarOption::class, 'fuel_type_id','id');
-    }
-
-    public function carPark()
-    {
-        return $this->belongsTo(CarPark::class, 'car_park_id', 'id');
     }
 
     public function city()
@@ -127,6 +101,10 @@ class PerformerTransport extends BasicModel
     
     public function tariffs() {
         return $this->hasMany(RentalTariff::class);
+    }
+
+    public function rental_aplication() {
+        return $this->belongsTo(RentalApplication::class);
     }
     
 

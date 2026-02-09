@@ -25,10 +25,6 @@ class CarResource extends JsonResource
         return [
             "id" => $this->id,
             'performer_id' => $this->performer_id??null,
-            "division_id" => $this->division_id,
-            "division" => $this->whenPivotLoadedAs('division', Division::class, function () {
-                return $this->division->name;
-            }),
             'category_car_id' => $this->whenPivotLoadedAs('model_car', Marka::class, function () {
                 return $this->model_car->category_car_id;
             }),
@@ -69,8 +65,6 @@ class CarResource extends JsonResource
             "dop_info" => $this->dop_info,
             "dop_options" => $car_options,
             'status_id' => $this->connected_id,
-            'car_park_id' => $this->car_park_id,
-            'car_park_name' => $this->carPark?->name,
             "status" => $this->whenPivotLoadedAs('car_connection', CarConnected::class, function () {
                 return $this->car_connection->name;
             }),
