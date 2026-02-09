@@ -42,7 +42,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 
 
-// Route::middleware('auth:api')->group(function (){
+Route::middleware('auth:api')->group(function (){
 
     Route::get('cars', [CarController::class, 'index'])->name('cars.index');
     Route::post('cars', [CarController::class, 'store'])->name('cars.store');
@@ -142,4 +142,4 @@ Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']
     Route::post('/car-settings/dop-options', [CarOptionController::class, 'store']);
     Route::get('/car-settings/dop-options/{option_id}/edit', [CarOptionController::class, 'edit']);
     Route::patch('/car-settings/dop-options/{option_id}', [CarOptionController::class, 'update']);
-// });
+});

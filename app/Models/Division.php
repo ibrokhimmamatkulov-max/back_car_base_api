@@ -26,21 +26,6 @@ class Division extends BasicModel
         parent::__construct($attributes);
     }
 
-    // public function city()
-    // {
-    //     return $this->belongsTo(City::class, 'city_id', 'id')->with('village')->select('*','translations->ru as name_ru');
-    // }
-
-    // public function polygon()
-    // {
-    //     return $this->belongsTo(Polygon::class, 'polygon_id', 'id');
-    // }
-
-    // public function organization()
-    // {
-    //     return $this->belongsTo(Organization::class, 'organization_id', 'id');
-    // }
-
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
@@ -50,10 +35,4 @@ class Division extends BasicModel
     {
         return $this->hasMany(Performer::class);
     }
-
-    // public function messageTemplates()
-    // {
-    //     return $this->belongsToMany(MessageTemplate::class, 'division_message_template');
-    // }
-
 }

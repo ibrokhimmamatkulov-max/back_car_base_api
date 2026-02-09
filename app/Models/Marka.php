@@ -23,17 +23,6 @@ class Marka extends Model
         'is_active'
     ];
 
-    // public function getTable()
-    // {
-    //     $table = $this->table ?? Str::snake(Str::pluralStudly(class_basename($this)));
-
-    //     return join('.', [
-    //         $this->getConnection()->getDatabaseName(),
-    //         $table
-    //     ]);
-    // }
-
-
     public function brand() {
         return $this->belongsTo(CarBrand::class,'car_brand_id', 'id');
     }

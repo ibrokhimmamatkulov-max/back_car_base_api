@@ -70,10 +70,6 @@ class CarBodyTypeController extends Controller
         try {
             $validated = $request->validated();
             $body_type = BodyType::create($validated);
-            // PerformerCarOption::create([
-            //     'model_id' => $body_type->id,
-            //     'model' => BodyType::class
-            // ]);
             DB::commit();
             return $this->jsonResponse(['message' => 'Создан тип кузова']);
         } catch (\Exception $e) {

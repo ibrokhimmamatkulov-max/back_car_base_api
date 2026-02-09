@@ -11,7 +11,6 @@ class CarCondition extends Model
     public $table = 'car_conditions';
     
     use HasFactory;
-    //  FiltersTrait; 
 
     protected $fillable = [
         'id',

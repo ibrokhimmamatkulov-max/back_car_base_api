@@ -12,7 +12,6 @@ class RentalApplicationController extends Controller
     public function index()
     {
         $rental_application= RentalApplication::with([
-            // 'car.model_car.brand',
             'car',
             'tariff',
             'user',

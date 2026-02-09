@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Histories\Performer\PerformerTransportHistory;
-use App\Traits\FiltersTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 
 class PerformerTransport extends BasicModel
 {
-    // use FiltersTrait;
     use SoftDeletes;
     
     public const ACTIVE_CONNECTION = 1;
@@ -63,9 +59,6 @@ class PerformerTransport extends BasicModel
         return $this->belongsTo(Performer::class, 'performer_id', 'id');
     }
 
-    // public function licensor() {
-    //     return $this->belongsTo(Licensor::class, 'licensor_id', 'id');
-    // }
     public function  created_user() {
         return $this->belongsTo(User::class,'created_user_id', 'id');
     }
@@ -86,15 +79,6 @@ class PerformerTransport extends BasicModel
                     })
                     ->with('car_option'); 
     }
-
-
-
-
-    // public function histories()
-    // {
-    //     return $this->hasMany(PerformerTransportHistory::class, 'performer_transports_id', 'id')
-    //         ->where('step', '<>', 'forUpdate');
-    // }
 
     public function fuel_type()
     {

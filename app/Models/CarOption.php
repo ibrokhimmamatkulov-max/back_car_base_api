@@ -24,7 +24,4 @@ class CarOption extends Model
     public function category_car() {
         return $this->belongsTo(CategoryCar::class, 'category_car_id', 'id');
     }
-    // public function allowance() {
-    //     return $this->belongsTo(Allowance::class, 'allowance_id','id');
-    // }
 }
