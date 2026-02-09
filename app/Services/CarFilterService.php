@@ -19,14 +19,6 @@ class CarFilterService
             }
             $query = $query->FilterInt('performer_transports.id', $condition, $filter_id);
         }
-        if ($request->has('filter_division_id')) {
-            $filter_division_id = $request->filter_division_id;
-            $condition = null;
-            if ($request->has('filter_division_id_condition')) {
-                $condition = $request->filter_division_id_condition;
-            }
-            $query = $query->FilterInt('performer_transports.division_id', $condition, $filter_division_id);
-        }
         if ($request->has('filter_color_id')) {
             $filter_color_id = $request->filter_color_id;
             $condition = null;
@@ -153,15 +145,6 @@ class CarFilterService
                 $condition = $request->filter_from_created_at_condition;
             }
             $query = $query->FilterString($column, $condition, $from_created_at);
-        }
-        if ($request->has('filter_car_park_id')) {
-            $column = 'car_park_id';
-            $full_name = $request->filter_car_park_id;
-            $condition = null;
-            if ($request->has('filter_car_park_id_condition')) {
-                $condition = $request->filter_car_park_id_condition;
-            }
-            $query = $query->FilterString($column, $condition, $full_name);
         }
 
         if ($request->has('filter_car_number')) {

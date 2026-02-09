@@ -26,8 +26,8 @@ class RentalSwagger
      *     @OA\Parameter(name="user_id", in="query", required=false, @OA\Schema(type="integer")),
      *     @OA\Parameter(name="manager_id", in="query", required=true, @OA\Schema(type="integer")),
      *     @OA\Parameter(name="status_id", in="query", required=true, @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="start_datetime", in="query", required=true, @OA\Schema(type="string", example="2026-01-20 10:00:00")),
-     *     @OA\Parameter(name="end_datetime", in="query", required=true, @OA\Schema(type="string", example="2026-01-27 10:00:00")),
+     *     @OA\Parameter(name="start_datetime", in="query", required=true, @OA\Schema(type="string", example="2026-01-20")),
+     *     @OA\Parameter(name="end_datetime", in="query", required=true, @OA\Schema(type="string", example="2026-01-27")),
      *
      *     @OA\Response(response=201, description="Created")
      * )
@@ -56,8 +56,8 @@ class RentalSwagger
      *     security={{"bearerAuth":{}}},
      *
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="status_id", in="query", required=true, @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="end_datetime", in="query", required=true, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="status_id", in="query", required=false, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="end_datetime", in="query", required=false, @OA\Schema(type="string", example="2026-01-27")),
      *
      *     @OA\Response(response=200, description="Updated")
      * )

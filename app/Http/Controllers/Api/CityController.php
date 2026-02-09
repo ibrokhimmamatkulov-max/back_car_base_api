@@ -41,8 +41,8 @@ class CityController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:500',
+            'name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string|max:500',
         ]);
         if ($validator->fails()) {
             return response()->json([

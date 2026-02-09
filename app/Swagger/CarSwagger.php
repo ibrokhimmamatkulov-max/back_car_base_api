@@ -38,24 +38,6 @@ class CarSwagger
      *          )
      *     ),
      *     @OA\Parameter(
-     *          name="filter_division_id",
-     *          in="query",
-     *          description="Филтр по Подразделения",
-     *          required=false,
-     *          @OA\Schema(
-     *              type="string"
-     *          )
-     *     ),
-     *     @OA\Parameter(
-     *          name="filter_division_id_condition",
-     *          in="query",
-     *          description="Условия Филтра по Подразделения",
-     *          required=false,
-     *          @OA\Schema(
-     *              type="string"
-     *          )
-     *     ),
-     *     @OA\Parameter(
      *          name="filter_color_id",
      *          in="query",
      *          description="Филтр по Цвета авто",
@@ -386,15 +368,8 @@ class CarSwagger
      *               type="string"
      *           )
      *      ),
-           *     @OA\Parameter(
-     *         name="filter_car_park_id",
-     *         in="query",
-     *         required=false,
-     *           @OA\Schema(
-     *             type="string"
-     *            )
-     *     ),
-         *     @OA\Parameter(
+
+     *     @OA\Parameter(
      *         name="filter_promo_code_condition",
      *         in="query",
      *         required=false,
@@ -432,14 +407,6 @@ class CarSwagger
      *   tags={"Car"},
      *   summary="Create car",
      *   security={{"bearerAuth":{}}},
-     *   @OA\Parameter(
-     *     name="division_id",
-     *     in="query",
-     *     required=true,
-     *     @OA\Schema(
-     *          type="integer"
-     *     )
-     *   ),
      *   @OA\Parameter(
      *     name="category_car_id",
      *     in="query",
@@ -564,14 +531,6 @@ class CarSwagger
      *          type="string"
      *     )
      *   ),
-    *   @OA\Parameter(
-     *     name="car_park_id",
-     *     in="query",
-     *     required=false,
-     *     @OA\Schema(
-     *          type="integer"
-     *     )
-     *   ),
      *
      *     @OA\Response(response=200, description="Success",@OA\MediaType(mediaType="application/json",)),
      *     @OA\Response(response=401,description="Unauthenticated"),
@@ -600,9 +559,8 @@ class CarSwagger
      *     required=true,
      *     @OA\JsonContent(
      *       required={
-     *         "division_id", "category_car_id", "model_car_id", "color_id", "condition_id", "year_of_issue", "car_number", "count_seat"
+     *         "category_car_id", "model_car_id", "color_id", "condition_id", "year_of_issue", "car_number", "count_seat"
      *       },
-     *       @OA\Property(property="division_id", type="integer"),
      *       @OA\Property(property="category_car_id", type="integer"),
      *       @OA\Property(property="model_car_id", type="integer"),
      *       @OA\Property(property="body_type_id", type="integer"),
@@ -618,7 +576,6 @@ class CarSwagger
      *       @OA\Property(property="count_seat", type="integer"),
      *       @OA\Property(property="cargo_properties", type="string"),
      *       @OA\Property(property="dop_info", type="string"),
-     *       @OA\Property(property="car_park_id", type="integer"),
      *       @OA\Property(
      *         property="dop_options",
      *         type="array",

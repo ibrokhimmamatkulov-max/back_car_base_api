@@ -21,7 +21,6 @@ class PerformerTransport extends BasicModel
     public const CARGO = 3;
 
     protected $fillable = [
-        'division_id',
         'performer_id',
         'car_model_id',
         'body_type_id',
@@ -34,16 +33,12 @@ class PerformerTransport extends BasicModel
         'connected_id',
         'active',
         'fuel_type_id',
-        'car_park_id',
         'city_id',
         'gearbox_id',
         'min_rent_days',
         'address',
     ];
 
-    public function division(){
-        return $this->belongsTo(Division::class,'division_id', 'id');
-    }
     public function model_car() {
         return $this->belongsTo(Marka::class, 'car_model_id', 'id');
     }
@@ -106,11 +101,6 @@ class PerformerTransport extends BasicModel
         return $this->belongsTo(CarOption::class, 'fuel_type_id','id');
     }
 
-    public function carPark()
-    {
-        return $this->belongsTo(CarPark::class, 'car_park_id', 'id');
-    }
-
     public function city()
     {
         return $this->belongsTo(City::class);
@@ -127,6 +117,10 @@ class PerformerTransport extends BasicModel
     
     public function tariffs() {
         return $this->hasMany(RentalTariff::class);
+    }
+
+    public function rental_aplication() {
+        return $this->belongsTo(RentalApplication::class);
     }
     
 

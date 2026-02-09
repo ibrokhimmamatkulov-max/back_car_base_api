@@ -21,7 +21,7 @@ class RentalApplication extends Model
 
     public function car()
     {
-        return $this->belongsTo(PerformerTransport::class);
+        return $this->belongsTo(PerformerTransport::class, 'performer_transport_id');
     }
 
     public function tariff()

@@ -79,16 +79,16 @@ class RentalStatusSwagger
      *     @OA\Parameter(
      *         name="code",
      *         in="query",
-     *         required=true,
+     *         required=false,
      *         description="Код статуса",
-     *         @OA\Schema(type="string", example="overdue")
+     *         @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(
      *         name="name",
      *         in="query",
-     *         required=true,
+     *         required=false,
      *         description="Название статуса",
-     *         @OA\Schema(type="string", example="Просрочена")
+     *         @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(response=200, description="Updated")

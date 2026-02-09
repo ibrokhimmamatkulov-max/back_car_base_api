@@ -263,7 +263,7 @@
                         "description": "Успешная авторизация"
                     },
                     "401": {
-                        "description": "Неверный email или пароль"
+                        "description": "Неверный логин или пароль"
                     }
                 }
             }
@@ -281,6 +281,1969 @@
                     },
                     "401": {
                         "description": "Пользователь не авторизован"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/body-types": {
+            "get": {
+                "tags": [
+                    "CarSettings/BodyTypes"
+                ],
+                "summary": "List car body types",
+                "operationId": "9d2eec5b7d7864cf118269b7b6678817",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_category_car_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarSettings/BodyTypes"
+                ],
+                "summary": "Create car body types",
+                "operationId": "2115af4442dd63c893cf951ab84fdddc",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "category_car_id",
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "category_car_id": {
+                                        "type": "integer"
+                                    },
+                                    "is_active": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/body-types/{body_type_id}/edit": {
+            "get": {
+                "tags": [
+                    "CarSettings/BodyTypes"
+                ],
+                "summary": "Get car body types by id",
+                "operationId": "/api/car-settings/body-types/{body_type_id}/edit",
+                "parameters": [
+                    {
+                        "name": "body_type_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/body-types/{body_type_id}": {
+            "patch": {
+                "tags": [
+                    "CarSettings/BodyTypes"
+                ],
+                "summary": "Update car body types",
+                "operationId": "1a5c0b4c9fba922f45e9dbbcd7ce0a40",
+                "parameters": [
+                    {
+                        "name": "body_type_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/brands": {
+            "get": {
+                "tags": [
+                    "CarSettings/Brands"
+                ],
+                "summary": "Car licensors",
+                "operationId": "6a055e9069ecae93c8744cadbabf3479",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_description_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_created_by_login",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarSettings/Brands"
+                ],
+                "summary": "Create car brand",
+                "operationId": "0ed2e3effb49ddd994d7e839d6f24e0f",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/brands/{brand_id}/edit": {
+            "get": {
+                "tags": [
+                    "CarSettings/Brands"
+                ],
+                "summary": "Get car brand by id",
+                "operationId": "/api/car-settings/brands/{brand_id}/edit",
+                "parameters": [
+                    {
+                        "name": "brand_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of clients."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/brands/{brand_id}": {
+            "patch": {
+                "tags": [
+                    "CarSettings/Brands"
+                ],
+                "summary": "Update car brand",
+                "operationId": "0c07d11eb7debe511e7d96c89bfb1612",
+                "parameters": [
+                    {
+                        "name": "brand_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/categories": {
+            "get": {
+                "tags": [
+                    "CarSettings/Categories"
+                ],
+                "summary": "Car category list",
+                "operationId": "c73533b796a9e607d2ae9e88343e535c",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_description_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarSettings/Categories"
+                ],
+                "summary": "Create car categories",
+                "operationId": "3fe4607b5b0db3933c78f9961a644d1c",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/categories/{category_car_id}/edit": {
+            "get": {
+                "tags": [
+                    "CarSettings/Categories"
+                ],
+                "summary": "Get car brand by id",
+                "operationId": "/api/car-settings/categories/{category_car_id}/edit",
+                "parameters": [
+                    {
+                        "name": "category_car_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of clients."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/categories/{category_car_id}": {
+            "patch": {
+                "tags": [
+                    "CarSettings/Categories"
+                ],
+                "summary": "Update car category",
+                "operationId": "3baad4599641d3eca514c33f6ab81cbe",
+                "parameters": [
+                    {
+                        "name": "category_car_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/classes": {
+            "get": {
+                "tags": [
+                    "CarSettings/Classes"
+                ],
+                "summary": "Car class list",
+                "operationId": "f97a6dc4bd8961552bc7573b4ec2d5f7",
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarSettings/Classes"
+                ],
+                "summary": "Create car class",
+                "operationId": "c2c946c6ee9009afeeec21bc1c3e2284",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/classes/{class_car_id}/edit": {
+            "get": {
+                "tags": [
+                    "CarSettings/Classes"
+                ],
+                "summary": "Get car brand by id",
+                "operationId": "/api/car-settings/classes/{class_car_id}/edit",
+                "parameters": [
+                    {
+                        "name": "class_car_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of clients."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/classes/{class_car_id}": {
+            "patch": {
+                "tags": [
+                    "CarSettings/Classes"
+                ],
+                "summary": "Update car class",
+                "operationId": "fbc01f4d802dd4595cab998cd3c9227f",
+                "parameters": [
+                    {
+                        "name": "class_car_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/car-conditions": {
+            "get": {
+                "tags": [
+                    "CarCondition"
+                ],
+                "summary": "GET cars",
+                "operationId": "c496fbfbcf54325f32d7b223eb16b17a",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "description": "Фильтр по id продукта",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "description": "Фильтр по условию id продукта",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name",
+                        "in": "query",
+                        "description": "Фильтр по имени продукта",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_condition",
+                        "in": "query",
+                        "description": "Фильтр по условию имени продукта",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_level",
+                        "in": "query",
+                        "description": "Фильтр по услувию level продукта",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_level_condition",
+                        "in": "query",
+                        "description": "Фильтр по level продукта",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Some name"
+                                                    },
+                                                    "level": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ресурс не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarCondition"
+                ],
+                "summary": "Create",
+                "operationId": "ed20bac731e1621c187f20fb54d2767b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Some name"
+                                    },
+                                    "level": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешный ответ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Some name"
+                                        },
+                                        "level": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в запросе",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/car-conditions/{car_condition}/edit": {
+            "get": {
+                "tags": [
+                    "CarCondition"
+                ],
+                "summary": "Get car-condition by id",
+                "operationId": "/api/car-settings/car-conditions/{car_condition}/edit",
+                "parameters": [
+                    {
+                        "name": "car_condition",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/car-conditions/{car_condition}": {
+            "patch": {
+                "tags": [
+                    "CarCondition"
+                ],
+                "summary": "Update",
+                "operationId": "ad3c0c1c0ae8795bab49c772f4300422",
+                "parameters": [
+                    {
+                        "name": "car_condition",
+                        "in": "path",
+                        "description": "ID ресурса",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Описание поля 1",
+                                        "type": "string"
+                                    },
+                                    "level": {
+                                        "description": "Описание поля 2",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешное обновление ресурса"
+                    },
+                    "404": {
+                        "description": "Ресурс не найден"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/model-cars/data": {
+            "post": {
+                "tags": [
+                    "CarSettings/ModelCars"
+                ],
+                "summary": "Car model data list",
+                "operationId": "7f1ee46083bbfb98b0117abdf300be80",
+                "parameters": [
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/model-cars": {
+            "get": {
+                "tags": [
+                    "CarSettings/ModelCars"
+                ],
+                "summary": "Car model list",
+                "operationId": "32cc584358507cc580dd5909b34287e2",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_category_car_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_car_brand_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_class_car_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_car_seat_from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_car_seat_before",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarSettings/ModelCars"
+                ],
+                "summary": "Create model car",
+                "operationId": "ba3dbd45d7ffef3975f41898ab355025",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "car_model",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "car_seat_from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "car_seat_before",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "car_brand_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "class_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/model-cars/{car_model_id}/edit": {
+            "get": {
+                "tags": [
+                    "CarSettings/ModelCars"
+                ],
+                "summary": "Get model car by id",
+                "operationId": "/api/car-settings/model-cars/{car_model_id}/edit",
+                "parameters": [
+                    {
+                        "name": "car_model_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of clients."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/model-cars/{car_model_id}": {
+            "patch": {
+                "tags": [
+                    "CarSettings/ModelCars"
+                ],
+                "summary": "Update model car",
+                "operationId": "732c80947f1de49856375614dc213589",
+                "parameters": [
+                    {
+                        "name": "car_model_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "car_model",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "car_seat_from",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "car_seat_before",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "car_brand_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "class_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/dop-options": {
+            "get": {
+                "tags": [
+                    "CarSettings/Dop options"
+                ],
+                "summary": "Car dop options",
+                "operationId": "f412f3c63c7e09363b9e3a348c816b89",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_category_car_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_category_car_id_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_category_car_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_category_car_name_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_is_active_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarSettings/Dop options"
+                ],
+                "summary": "Create car dop option",
+                "operationId": "1e7cac736ce00c0f6ebcf348de2d140c",
+                "parameters": [
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/dop-options/{option_id}/edit": {
+            "get": {
+                "tags": [
+                    "CarSettings/Dop options"
+                ],
+                "summary": "Get licensor info by id",
+                "operationId": "/api/car-settings/dop-options/{option_id}/edit",
+                "parameters": [
+                    {
+                        "name": "option_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of clients."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/dop-options/{option_id}": {
+            "patch": {
+                "tags": [
+                    "CarSettings/Dop options"
+                ],
+                "summary": "Update car dop option",
+                "operationId": "a51f40b9b13300c797cc0d8fc65f9dcf",
+                "parameters": [
+                    {
+                        "name": "option_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "category_car_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -320,24 +2283,6 @@
                         "name": "filter_id_condition",
                         "in": "query",
                         "description": "Условия Филтра по id",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_division_id",
-                        "in": "query",
-                        "description": "Филтр по Подразделения",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_division_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Подразделения",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -677,14 +2622,6 @@
                         }
                     },
                     {
-                        "name": "filter_car_park_id",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "filter_promo_code_condition",
                         "in": "query",
                         "required": false,
@@ -735,14 +2672,6 @@
                 "summary": "Create car",
                 "operationId": "5d56e8c0623cef67065bef3079d5e3ae",
                 "parameters": [
-                    {
-                        "name": "division_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
                     {
                         "name": "category_car_id",
                         "in": "query",
@@ -874,14 +2803,6 @@
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    {
-                        "name": "car_park_id",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
                     }
                 ],
                 "responses": {
@@ -934,7 +2855,6 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "division_id",
                                     "category_car_id",
                                     "model_car_id",
                                     "color_id",
@@ -944,9 +2864,6 @@
                                     "count_seat"
                                 ],
                                 "properties": {
-                                    "division_id": {
-                                        "type": "integer"
-                                    },
                                     "category_car_id": {
                                         "type": "integer"
                                     },
@@ -991,9 +2908,6 @@
                                     },
                                     "dop_info": {
                                         "type": "string"
-                                    },
-                                    "car_park_id": {
-                                        "type": "integer"
                                     },
                                     "dop_options": {
                                         "type": "array",
@@ -1262,7 +3176,7 @@
                         "name": "name",
                         "in": "query",
                         "description": "Название города",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "string",
                             "example": "Хуҷанд"
@@ -1309,6 +3223,306 @@
                 "responses": {
                     "200": {
                         "description": "Deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/car-colors": {
+            "get": {
+                "tags": [
+                    "CarSettings/CarColors"
+                ],
+                "summary": "Car colors",
+                "operationId": "1ea77b57bf88bf867446deb515c31f87",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter_id_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_tj",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_tj_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_for_sms",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_name_for_sms_condition",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter_from_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_to_created_at",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "date-time"
+                        }
+                    },
+                    {
+                        "name": "filter_is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of type-auto."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "CarSettings/CarColors"
+                ],
+                "summary": "Create car colors",
+                "operationId": "74a0c07f0dc30a23096ceb5764d16cc0",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name_tj",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name_for_sms",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/car-colors/{color_id}/edit": {
+            "get": {
+                "tags": [
+                    "CarSettings/CarColors"
+                ],
+                "summary": "Get car color by id",
+                "operationId": "/api/car-settings/car-colors/{color_id}/edit",
+                "parameters": [
+                    {
+                        "name": "color_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of clients."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/car-settings/car-colors/{color_id}": {
+            "patch": {
+                "tags": [
+                    "CarSettings/CarColors"
+                ],
+                "summary": "Update car color",
+                "operationId": "62dc2edef4a7102cf7657154baeee5ab",
+                "parameters": [
+                    {
+                        "name": "color_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name_tj",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name_for_sms",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 },
                 "security": [
@@ -1425,20 +3639,18 @@
                         "name": "code",
                         "in": "query",
                         "description": "Код",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string",
-                            "example": "manual"
+                            "type": "string"
                         }
                     },
                     {
                         "name": "name",
                         "in": "query",
                         "description": "Название",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string",
-                            "example": "Механика"
+                            "type": "string"
                         }
                     }
                 ],
@@ -1885,20 +4097,18 @@
                         "name": "code",
                         "in": "query",
                         "description": "Код статуса",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string",
-                            "example": "overdue"
+                            "type": "string"
                         }
                     },
                     {
                         "name": "name",
                         "in": "query",
                         "description": "Название статуса",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string",
-                            "example": "Просрочена"
+                            "type": "string"
                         }
                     }
                 ],
@@ -2005,7 +4215,7 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "example": "2026-01-20 10:00:00"
+                            "example": "2026-01-20"
                         }
                     },
                     {
@@ -2014,7 +4224,7 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "example": "2026-01-27 10:00:00"
+                            "example": "2026-01-27"
                         }
                     }
                 ],
@@ -2076,7 +4286,7 @@
                     {
                         "name": "status_id",
                         "in": "query",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "integer"
                         }
@@ -2084,9 +4294,10 @@
                     {
                         "name": "end_datetime",
                         "in": "query",
-                        "required": true,
+                        "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "2026-01-27"
                         }
                     }
                 ],
@@ -2256,7 +4467,7 @@
                         "name": "duration_days",
                         "in": "query",
                         "description": "Количество дней",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "integer",
                             "example": 10
@@ -2266,7 +4477,7 @@
                         "name": "price",
                         "in": "query",
                         "description": "Цена",
-                        "required": true,
+                        "required": false,
                         "schema": {
                             "type": "number",
                             "example": 700000
@@ -2529,12 +4740,44 @@
             "description": "Auth"
         },
         {
+            "name": "CarSettings/BodyTypes",
+            "description": "CarSettings/BodyTypes"
+        },
+        {
+            "name": "CarSettings/Brands",
+            "description": "CarSettings/Brands"
+        },
+        {
+            "name": "CarSettings/Categories",
+            "description": "CarSettings/Categories"
+        },
+        {
+            "name": "CarSettings/Classes",
+            "description": "CarSettings/Classes"
+        },
+        {
+            "name": "CarCondition",
+            "description": "CarCondition"
+        },
+        {
+            "name": "CarSettings/ModelCars",
+            "description": "CarSettings/ModelCars"
+        },
+        {
+            "name": "CarSettings/Dop options",
+            "description": "CarSettings/Dop options"
+        },
+        {
             "name": "Car",
             "description": "Car"
         },
         {
             "name": "Cities",
             "description": "Cities"
+        },
+        {
+            "name": "CarSettings/CarColors",
+            "description": "CarSettings/CarColors"
         },
         {
             "name": "Gearboxes",

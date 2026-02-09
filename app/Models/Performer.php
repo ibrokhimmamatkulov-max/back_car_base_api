@@ -117,10 +117,6 @@ class Performer
 //     {
 //         return $this->hasMany(PerformerTransport::class,'performer_id','id');
 //     }
-//     public function division()
-//     {
-//         return $this->belongsTo(Division::class,'division_id','id');
-//     }
 
 //     public function active_car() {
 //         return $this->hasOne(PerformerTransport::class,'performer_id','id');

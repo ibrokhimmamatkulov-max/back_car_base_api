@@ -73,7 +73,7 @@ class AuthSwagger
      *     ),
      *
      *     @OA\Response(response=200, description="Успешная авторизация"),
-     *     @OA\Response(response=401, description="Неверный email или пароль")
+     *     @OA\Response(response=401, description="Неверный логин или пароль")
      * )
      */
     public function login() {}
