@@ -65,4 +65,39 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+
+    protected $routeMiddleware = [
+        // 'parse-login' => ParseLoginMiddleware::class,
+        // 'qr-scan' => \App\Http\Middleware\QRScanMiddleware::class,
+        // 'test-api' => \App\Http\Middleware\TestApiMiddleware::class,
+        // 'auth' => \App\Http\Middleware\Authenticate::class,
+        // 'no-access' => \App\Http\Middleware\AccessMiddleware::class,
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+       // 'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+    //     'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+    //    // 'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+    //     'api_key'   =>  \App\Http\Middleware\ApiKeyMiddleware::class,
+    //     'arzon_key' =>  \App\Http\Middleware\ArzonKeyMiddleware::class,
+
+        // 'apikey' => AstriksApiKey::class,
+        // 'block_update_history_save' => BlockUpdateHistory::class,
+        // 'provider_auth' => \App\Http\Middleware\AuthBasicMiddleware::class,
+
+        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
+        'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
+        // 'log-payment' => \App\Http\Middleware\LogPaymentProvider::class,
+        // 'access-route' => \App\Http\Middleware\RouteAccessRights::class,
+
+        // 'auth-key' => \App\Http\Middleware\AuthPackages::class,
+        // 'access-operator' => \App\Http\Middleware\AccessOperatorRouteMiddleware::class,
+        // 'sms-api-key' => \App\Http\Middleware\ApiSmsKeyMiddleware::class,
+        // 'api-log' => \App\Http\Middleware\LogApiRefactoringMiddleware::class,
+    ];
 }

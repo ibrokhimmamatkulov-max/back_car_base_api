@@ -43,6 +43,49 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'mysql_asterisk' => [
+            'driver' => env('DB_CONNECTION_SECOND'),
+            'host' => env('DB_HOST_SECOND'),
+            'port' => env('DB_PORT_SECOND'),
+            'database' => env('DB_DATABASE_SECOND'),
+            'username' => env('DB_USERNAME_SECOND'),
+            'password' => env('DB_PASSWORD_SECOND'),
+        ],
+        'mysql_performer' => [
+            'driver' => env('DB_CONNECTION_PERFORMER'),
+            'host' => env('DB_HOST_PERFORMER'),
+            'port' => env('DB_PORT_PERFORMER'),
+            'database' => env('DB_DATABASE_PERFORMER'),
+            'username' => env('DB_USERNAME_PERFORMER'),
+            'password' => env('DB_PASSWORD_PERFORMER'),
+            'strict' => false
+        ],
+        'mysql_tele_bot' => [
+            'driver' => env('DB_CONNECTION_TELE_BOT'),
+            'host' => env('DB_HOST_TELE_BOT'),
+            'port' => env('DB_PORT_TELE_BOT'),
+            'database' => env('DB_DATABASE_TELE_BOT'),
+            'username' => env('DB_USERNAME_TELE_BOT'),
+            'password' => env('DB_PASSWORD_TELE_BOT'),
+        ],
+        'mysql_location' => [
+            'driver' => env('DB_CONNECTION_LOCATION'),
+            'host' => env('DB_HOST_LOCATION'),
+            'port' => env('DB_PORT_LOCATION'),
+            'database' => env('DB_DATABASE_LOCATION'),
+            'username' => env('DB_USERNAME_LOCATION'),
+            'password' => env('DB_PASSWORD_LOCATION'),
+        ],
+
+        'mysql_test' => [
+            'driver' => env('DB_CONNECTION_TEST'),
+            'host' => env('DB_HOST_TEST'),
+            'port' => env('DB_PORT_TEST'),
+            'database' => env('DB_DATABASE_TEST'),
+            'username' => env('DB_USERNAME_TEST'),
+            'password' => env('DB_PASSWORD_TEST'),
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
@@ -56,10 +99,11 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => true,
+            'strict' => false,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_PERSISTENT => false,   // <--- добавить эту строку
             ]) : [],
         ],
 
@@ -74,7 +118,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
+            'schema' => 'public',
             'sslmode' => 'prefer',
         ],
 
@@ -89,8 +133,6 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            // 'encrypt' => env('DB_ENCRYPT', 'yes'),
-            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
     ],
@@ -125,14 +167,45 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', ''),
         ],
 
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        'second' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '2'),
+        ],
+
+        'orders' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '4'),
+        ],
+
+        'p_subscribe' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        'publish' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
         ],
@@ -140,12 +213,44 @@ return [
         'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
+            'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
 
+        'cancel_orders'   => [
+            'url'      => env('REDIS_URL'),
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME'),
+            'password' => env('REDIS_PASSWORD'),
+            'port'     => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '3'),
+        ],
+
+        'performerCancels'   => [
+            'url'      => env('REDIS_URL'),
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
+            'username' => env('REDIS_USERNAME'),
+            'password' => env('REDIS_PASSWORD'),
+            'port'     => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '6'),
+        ],
+        
+        'redis_geo' => [
+            'url' => env('REDIS_GEO_URL'),
+            'host' => env('REDIS_GEO_HOST', '127.0.0.1'),
+            'password' => env('REDIS_GEO_PASSWORD', null),
+            'port' => env('REDIS_GEO_PORT', '6379'),
+            'database' => env('REDIS_GEO_CACHE_DB', '6'),
+        ],
+
+        'car_state_status' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '5'),
+        ],
     ],
 
 ];
