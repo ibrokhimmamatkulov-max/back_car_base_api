@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('rentals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('performer_transport_id');
-            $table->foreignId('user_id')->nullable();
-            $table->foreignId('manager_id')->constrained('users');
+            $table->foreignId('performer_id')->nullable();
+            $table->foreignId('manager_id');
             $table->foreignId('status_id');
             $table->timestamp('start_datetime');
             $table->timestamp('end_datetime');

@@ -8,6 +8,8 @@ class PerformerTransport extends BasicModel
 {
     use SoftDeletes;
     
+    protected $connection = 'auto_baza';
+    public $table = 'performer_transports';
     public const ACTIVE_CONNECTION = 1;
     public const WAITING_CONNECTION = 2;
     public const DELETED = 3;

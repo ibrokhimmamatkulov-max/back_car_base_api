@@ -11,6 +11,7 @@ class Marka extends Model
 {
     use HasFactory;
 
+    protected $connection = 'auto_baza';
     public $table = 'model_cars';
     protected $fillable = [
         'name',

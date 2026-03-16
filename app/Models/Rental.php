@@ -10,9 +10,10 @@ class Rental extends Model
 {
     use HasFactory;
 
+    protected $connection = 'auto_baza';
     protected $fillable = [
         'performer_transport_id',
-        'user_id',
+        'performer_id',
         'manager_id',
         'status_id',
         'start_datetime',

@@ -23,8 +23,7 @@ class RentalSwagger
      *     security={{"bearerAuth":{}}},
      *
      *     @OA\Parameter(name="performer_transport_id", in="query", required=true, @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="user_id", in="query", required=false, @OA\Schema(type="integer")),
-     *     @OA\Parameter(name="manager_id", in="query", required=true, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="performer_id", in="query", required=false, @OA\Schema(type="integer")),
      *     @OA\Parameter(name="status_id", in="query", required=true, @OA\Schema(type="integer")),
      *     @OA\Parameter(name="start_datetime", in="query", required=true, @OA\Schema(type="string", example="2026-01-20")),
      *     @OA\Parameter(name="end_datetime", in="query", required=true, @OA\Schema(type="string", example="2026-01-27")),

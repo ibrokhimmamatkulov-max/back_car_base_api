@@ -2,15 +2,31 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Employee\ModelHasRole;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use HasRoles;
+    protected static $logFillable = true;
+    protected $connection = 'mysql';
+    protected $table = 'users';
+    public function __construct(array $attributes = [])
+    {
+        $this->table = DB::connection('mysql')->getDatabaseName().'.'.$this->table;
+        parent::__construct($attributes);
+    }
+    public const CLIENT_SERVICE = "stu_ClientCabinet";
+    public const DRIVER_SERVICE = "stu_DriverService";
+    public const TU_PHONE = "tu_Phone";
 
     /**
      * The attributes that are mass assignable.
@@ -18,12 +34,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'first_name',
         'last_name',
         'patronymic',
         'login',
         'email',
         'password',
+        'role',
+        'phone',
+        'status',
     ];
 
     /**
@@ -43,16 +63,46 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_user')->withTimestamps();;
+    public function employee() {
+        return $this->belongsTo(Employee::class, 'id', 'user_id')->with(['employee_group']);
     }
 
-    public function hasRole(string $role): bool
+    public function oauth_access_tokens()
     {
-        return $this->roles()->where('name', $role)->exists();
+        return $this->hasMany(OAuthAccessToken::class,'user_id','id');
     }
+
+    // public function model_has_roles(){
+    //     return $this->belongsTo(ModelHasRole::class, 'id', 'model_id');
+    // }
+
+    public function findForPassport($login)
+    {
+        return $this->where('login', $login)->first();
+    }
+    // public function sections()
+    // {
+    //     return $this->belongsToMany(Section::class);
+    // }
+
+    // public function subsections()
+    // {
+    //     return $this->belongsToMany(Subsection::class);
+    // }
+    // public function employeeDivision()
+    // {
+    //     return $this->hasMany(EmployeeDivision::class, 'employee_id', 'id')->with('division');
+    // }
+    // public function client() {
+    //     return $this->hasOne(Client::class, 'user_id', 'id');
+    // }
+    // public function tariffs()
+    // {
+    //     return $this->belongsToMany(Tariff::class, 'user_tariffs');
+    // }
+    
+
+
 }

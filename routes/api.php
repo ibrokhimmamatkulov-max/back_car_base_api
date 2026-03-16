@@ -37,10 +37,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
-
 
 Route::middleware('auth:api')->group(function (){
 
@@ -101,7 +97,7 @@ Route::middleware('auth:api')->group(function (){
     Route::get('/roles/{id}', [RoleController::class, 'show']);
     Route::patch('/roles/{id}', [RoleController::class, 'update']);
     Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
-    
+
     Route::get('/car-settings/categories', [CarCategoryController::class, 'index']);
     Route::post('/car-settings/categories', [CarCategoryController::class, 'store']);
     Route::get('/car-settings/categories/{category_car_id}/edit', [CarCategoryController::class, 'show']);
@@ -142,4 +138,9 @@ Route::middleware('auth:api')->group(function (){
     Route::post('/car-settings/dop-options', [CarOptionController::class, 'store']);
     Route::get('/car-settings/dop-options/{option_id}/edit', [CarOptionController::class, 'edit']);
     Route::patch('/car-settings/dop-options/{option_id}', [CarOptionController::class, 'update']);
+});
+
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', [AuthController::class, 'login'])->middleware('throttle:30,1');
 });

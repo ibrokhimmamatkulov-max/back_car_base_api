@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class OAuthAccessToken extends Model
+{
+    use HasFactory;
+
+    protected $connection = 'mysql';
+    public $table = 'oauth_access_tokens';
+    protected $fillable = ['revoked'];
+    protected $casts = [
+        'id' => 'string',
+    ];
+}

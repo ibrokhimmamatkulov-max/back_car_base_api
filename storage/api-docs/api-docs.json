@@ -166,83 +166,17 @@
                 ]
             }
         },
-        "/api/register": {
+        "/api/auth/login": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "Login"
                 ],
-                "summary": "Регистрация пользователя",
-                "operationId": "5e9dd82c858753ad481f146678e34951",
-                "parameters": [
-                    {
-                        "name": "first_name",
-                        "in": "query",
-                        "description": "Имя пользователя",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "last_name",
-                        "in": "query",
-                        "description": "Фамилия пользователя",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "patronymic",
-                        "in": "query",
-                        "description": "Отчество пользователя",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "password",
-                        "in": "query",
-                        "description": "Пароль пользователя",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "role",
-                        "in": "query",
-                        "description": "Роль пользователя (Admin, Manager, Driver и т.д.)",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "example": "Admin"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Пользователь успешно зарегистрирован"
-                    },
-                    "422": {
-                        "description": "Ошибка валидации данных"
-                    }
-                }
-            }
-        },
-        "/api/login": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Авторизация пользователя",
-                "operationId": "fd38eab35a3cc28d00ada587f6955506",
+                "summary": "Login",
+                "operationId": "login",
                 "parameters": [
                     {
                         "name": "login",
                         "in": "query",
-                        "description": "Логин пользователя",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -251,43 +185,33 @@
                     {
                         "name": "password",
                         "in": "query",
-                        "description": "Пароль пользователя",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "password"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Успешная авторизация"
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
                     },
                     "401": {
-                        "description": "Неверный логин или пароль"
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 }
-            }
-        },
-        "/api/logout": {
-            "post": {
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Выход пользователя из системы",
-                "operationId": "d2f0239468d539b07f33e62fab239518",
-                "responses": {
-                    "200": {
-                        "description": "Пользователь успешно вышел из системы"
-                    },
-                    "401": {
-                        "description": "Пользователь не авторизован"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
             }
         },
         "/api/car-settings/body-types": {
@@ -2260,394 +2184,6 @@
                 ],
                 "summary": "Car List",
                 "operationId": "18e082abef4788ea48b6034c7c44ac0e",
-                "parameters": [
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "description": "Лимит",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "filter_id",
-                        "in": "query",
-                        "description": "Филтр по id",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по id",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_color_id",
-                        "in": "query",
-                        "description": "Филтр по Цвета авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_color_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Цвету авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_year_of_issue",
-                        "in": "query",
-                        "description": "Филтр по Год выпуска",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_year_of_issue_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Год выпуска",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_body_type_id",
-                        "in": "query",
-                        "description": "Филтр по Тип кузова",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_body_type_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Тип кузова",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_status",
-                        "in": "query",
-                        "description": "Филтра по Статусу",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "filter_car_class_id",
-                        "in": "query",
-                        "description": "Филтра по Класс авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_class_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтр по Класс авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_model_id",
-                        "in": "query",
-                        "description": "Филтра по Моделу авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_model_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтр по Моделу авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_fuel_type_name",
-                        "in": "query",
-                        "description": "Филтра по Тип Топлива",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_fuel_type_name_condition",
-                        "in": "query",
-                        "description": "Условия Филтр по Тип Топлива",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_brand_id",
-                        "in": "query",
-                        "description": "Филтра по Бренду авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_brand_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтр по Бренду авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_option_id",
-                        "in": "query",
-                        "description": "Филтра по Доп. параметры",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_option_id_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Доп. параметры",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_carrying_capacity",
-                        "in": "query",
-                        "description": "Филтр по Грузоподъемносты авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_carrying_capacity_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Грузоподъемносты авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_length",
-                        "in": "query",
-                        "description": "Филтр по Длину авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_length_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Длину авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_height",
-                        "in": "query",
-                        "description": "Филтр по Высоту авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_tarif_id",
-                        "in": "query",
-                        "description": "Филтр по таьриф id",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_height_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Высоту авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_width",
-                        "in": "query",
-                        "description": "Филтр по Ширины авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_width_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Ширины авто",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_number",
-                        "in": "query",
-                        "description": "Филтр по Гос.номеру авто.",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_car_number_condition",
-                        "in": "query",
-                        "description": "Условия для Филтра гос.номер авто.",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_from_created_at",
-                        "in": "query",
-                        "description": "Филтр по Дата приема от",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_from_created_at_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Дата приема от",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_to_created_at",
-                        "in": "query",
-                        "description": "Филтр по Дата приема до",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_to_created_at_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Дата приема до",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_city_id",
-                        "in": "query",
-                        "description": "Фильтр по городу",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "filter_gearbox_id",
-                        "in": "query",
-                        "description": "Фильтр по коробке передач",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "filter_min_rent_days",
-                        "in": "query",
-                        "description": "Фильтр по минимальному сроку аренды",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "filter_count_seat",
-                        "in": "query",
-                        "description": "Филтр по Количество мест",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_count_seat_condition",
-                        "in": "query",
-                        "description": "Условия Филтра по Количество мест",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_promo_code_condition",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "filter_journal_car",
-                        "in": "query",
-                        "description": "Фильтр журнал автомобилей",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ALL_LIST",
-                                "ACTIVE",
-                                "DISMISSED",
-                                "CREATED_BY_ME",
-                                "INSPECTION_IN_THE_OFFICE",
-                                "DOUBLES"
-                            ],
-                            "default": "ALL_LIST"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Display a listing of type-auto."
@@ -4186,17 +3722,9 @@
                         }
                     },
                     {
-                        "name": "user_id",
+                        "name": "performer_id",
                         "in": "query",
                         "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "manager_id",
-                        "in": "query",
-                        "required": true,
                         "schema": {
                             "type": "integer"
                         }
@@ -4736,8 +4264,8 @@
             "description": "Application Statuses"
         },
         {
-            "name": "Auth",
-            "description": "Auth"
+            "name": "Login",
+            "description": "Login"
         },
         {
             "name": "CarSettings/BodyTypes",
