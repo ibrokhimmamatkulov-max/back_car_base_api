@@ -18,7 +18,7 @@ class ApplicationStatusController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:application_statuses,code',
+            'code' => 'required|string|max:50|unique:auto_baza.application_statuses,code',
             'name' => 'required|string|max:255',
         ]);
         if ($validator->fails()) {
@@ -48,7 +48,7 @@ class ApplicationStatusController extends Controller
             return response()->json(['message'=>'Not found']);
         }
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:application_statuses,code,' . $application_status->id,
+            'code' => 'required|string|max:50|unique:auto_baza.application_statuses,code,' . $application_status->id,
             'name' => 'required|string|max:255',
         ]);
         if ($validator->fails()) {

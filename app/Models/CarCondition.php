@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class CarCondition extends Model
 {
-    public $table = 'car_conditions';
     
     use HasFactory;
-
+    protected $connection = 'auto_baza';
+    public $table = 'car_conditions';
     protected $fillable = [
         'id',
         'name',

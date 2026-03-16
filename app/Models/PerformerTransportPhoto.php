@@ -9,7 +9,7 @@ class PerformerTransportPhoto extends Model
 {
     use HasFactory;
     
-    protected $connection = 'mysql';
+    protected $connection = 'auto_baza';
     protected $table = 'performer_transport_photos';
     protected $fillable = [
         'performer_transport_id',

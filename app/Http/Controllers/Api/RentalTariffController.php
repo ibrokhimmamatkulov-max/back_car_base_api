@@ -18,7 +18,7 @@ class RentalTariffController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'performer_transport_id' => 'required|exists:mysql_performer.performer_transports,id',
+            'performer_transport_id' => 'required|exists:auto_baza.performer_transports,id',
             'duration_days' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
             'free_weekend_day' => 'boolean',

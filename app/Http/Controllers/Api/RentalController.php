@@ -24,10 +24,9 @@ class RentalController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'performer_transport_id' => 'required|exists:performer_transports,id',
-            'user_id' => 'nullable|exists:users,id',
-            'manager_id' => 'required|exists:users,id',
-            'status_id' => 'required|exists:rental_statuses,id',
+            'performer_transport_id' => 'required|exists:auto_baza.performer_transports,id',
+            'performer_id' => 'nullable|exists:auto_baza.users,id',
+            'status_id' => 'required|exists:auto_baza.rental_statuses,id',
             'start_datetime' => 'required|date_format:Y-m-d|after_or_equal:today',
             'end_datetime' => 'required|date_format:Y-m-d',
         ]);
@@ -39,7 +38,7 @@ class RentalController extends Controller
         $validated = $validator->validated();
         $start = Carbon::createFromFormat('Y-m-d', $validated['start_datetime']);
         $end   = Carbon::createFromFormat('Y-m-d', $validated['end_datetime']);
-    
+
         if ($end->lte($start)) {
             return response()->json([
                 'errors' => [
@@ -50,8 +49,8 @@ class RentalController extends Controller
 
         $rental= Rental::create([
             'performer_transport_id'=>$validated['performer_transport_id'],
-            'user_id'=>$validated['user_id'] ?? null,
-            'manager_id'=>$validated['manager_id'],
+            'performer_id'=>$validated['performer_id'] ?? null,
+            'manager_id'=> auth()->id(),
             'status_id'=>$validated['status_id'],
             'start_datetime' => $start,
             'end_datetime' => $end,
@@ -80,7 +79,7 @@ class RentalController extends Controller
             return response()->json(['message'=>'Not found']);
         }
         $validator = Validator::make($request->all(), [
-            'status_id' => 'sometimes|exists:rental_statuses,id',
+            'status_id' => 'sometimes|exists:auto_baza.rental_statuses,id',
             'end_datetime' => 'sometimes|date_format:Y-m-d|after_or_equal:today',
         ]);
         if ($validator->fails()) {

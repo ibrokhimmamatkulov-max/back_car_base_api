@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryCar extends BasicModel
 {
+    protected $connection = 'auto_baza';
     public $table = 'category_cars';
     public const ACTIVE = 1;
     public const MOTORBIKE = 5;

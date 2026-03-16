@@ -25,13 +25,13 @@ class RentalApplicationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'performer_transport_id' => 'required|exists:performer_transports,id',
-            'rental_tariff_id' => 'required|exists:rental_tariffs,id',
-            'user_id' => 'nullable|exists:users,id',
+            'performer_transport_id' => 'required|exists:auto_baza.performer_transports,id',
+            'rental_tariff_id' => 'required|exists:auto_baza.rental_tariffs,id',
+            'user_id' => 'nullable|exists:auto_baza.users,id',
             'phone' => 'required|string|max:30',
-            'city_id' => 'required|exists:cities,id',
+            'city_id' => 'required|exists:auto_baza.cities,id',
             'promo_code' => 'nullable|string|max:50',
-            'status_id' => 'required|exists:application_statuses,id',
+            'status_id' => 'required|exists:auto_baza.application_statuses,id',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -60,7 +60,7 @@ class RentalApplicationController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'status_id' => 'required|exists:application_statuses,id',
+            'status_id' => 'required|exists:auto_baza.application_statuses,id',
             'promo_code' => 'nullable|string|max:50',
         ]);
         $rental_application = RentalApplication::find($id);

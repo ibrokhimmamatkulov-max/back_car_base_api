@@ -9,6 +9,7 @@ class RentalStatus extends Model
 {
     use HasFactory;
 
+    protected $connection = 'auto_baza';
     protected $fillable = [
         'code',
         'name',

@@ -9,7 +9,7 @@ class BodyType extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mysql_performer';
+    protected $connection = 'auto_baza';
     protected $fillable = ['category_car_id','name','is_active'];
 
     public const ACTIVE = 1;
