@@ -12,10 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('name');
-            $table->string('first_name')->nullable()->after('id');
-            $table->string('last_name')->nullable()->after('first_name');
-            $table->string('patronymic')->nullable()->after('last_name');
+            if (Schema::hasColumn('users', 'name')) {
+                $table->dropColumn('name');
+            }
+            if (!Schema::hasColumn('users', 'first_name')) {
+                $table->string('first_name')->nullable()->after('id');
+            }
+            if (!Schema::hasColumn('users', 'last_name')) {
+                $table->string('last_name')->nullable()->after('first_name');
+            }
+            if (!Schema::hasColumn('users', 'patronymic')) {
+                $table->string('patronymic')->nullable()->after('last_name');
+            }
         });
     }
 
