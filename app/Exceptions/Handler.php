@@ -35,6 +35,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof ValidationException) {
             return response()->json([
                 'success' => false,
+                'code'    => 422,
                 'message' => 'Validation error',
                 'errors'  => $e->errors(),
             ], 422);
@@ -44,6 +45,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof AuthenticationException) {
             return response()->json([
                 'success' => false,
+                'code'    => 401,
                 'message' => 'Unauthorized',
             ], 401);
         }
@@ -52,6 +54,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof AuthorizationException) {
             return response()->json([
                 'success' => false,
+                'code'    => 403,
                 'message' => $e->getMessage() ?: 'Forbidden',
             ], 403);
         }
@@ -61,6 +64,7 @@ class Handler extends ExceptionHandler
             $model = class_basename($e->getModel());
             return response()->json([
                 'success' => false,
+                'code'    => 404,
                 'message' => "{$model} not found",
             ], 404);
         }
@@ -69,6 +73,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof NotFoundHttpException) {
             return response()->json([
                 'success' => false,
+                'code'    => 404,
                 'message' => 'Route not found',
             ], 404);
         }
@@ -77,21 +82,25 @@ class Handler extends ExceptionHandler
         if ($e instanceof MethodNotAllowedHttpException) {
             return response()->json([
                 'success' => false,
+                'code'    => 405,
                 'message' => 'Method not allowed',
             ], 405);
         }
 
         // Любое другое HTTP-исключение (abort(403), abort(503) и т.д.)
         if ($e instanceof HttpException) {
+            $status = $e->getStatusCode();
             return response()->json([
                 'success' => false,
+                'code'    => $status,
                 'message' => $e->getMessage() ?: 'HTTP error',
-            ], $e->getStatusCode());
+            ], $status);
         }
 
         // Всё остальное — 500
         $response = [
             'success' => false,
+            'code'    => 500,
             'message' => $debug ? $e->getMessage() : 'Server error',
         ];
 
