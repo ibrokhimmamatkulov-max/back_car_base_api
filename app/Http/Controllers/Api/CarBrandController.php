@@ -15,130 +15,84 @@ class CarBrandController extends Controller
     {
         $car_brand = CarBrand::query();
         $limit = 100;
-        //limit
-        if($request->has('limit')){
+
+        if ($request->has('limit')) {
             $limit = $request->limit;
         }
-
-        //filter by is_active
-        if($request->has('filter_is_active')){
+        if ($request->has('filter_is_active')) {
             $car_brand->where('is_active', $request->filter_is_active);
         }
-
-        // filter by id
-        if($request->has('filter_id')){
+        if ($request->has('filter_id')) {
             $filter_id = $request->filter_id;
-            if($request->filter_id_condition == "equalOrMore"){
-                $car_brand->where('id' , '>=' , $filter_id);
-            }
-            elseif($request->filter_id_condition == "equalOrLess"){
-                $car_brand->where('id' , '>=' , $filter_id);
-            }
-            elseif($request->filter_id_condition == "less"){
-                $car_brand->where('id' , '<' , $filter_id);
-            }
-            elseif($request->filter_id_condition == "more"){
-                $car_brand->where('id' , '>' , $filter_id);
-            }else{
-                $car_brand->where('id', $filter_id);
-            }
+            match ($request->filter_id_condition) {
+                'equalOrMore' => $car_brand->where('id', '>=', $filter_id),
+                'equalOrLess' => $car_brand->where('id', '<=', $filter_id),
+                'less'        => $car_brand->where('id', '<', $filter_id),
+                'more'        => $car_brand->where('id', '>', $filter_id),
+                default       => $car_brand->where('id', $filter_id),
+            };
         }
-
-        // filter by name
-        if($request->has('filter_name')){
+        if ($request->has('filter_name')) {
             $name = $request->filter_name;
-            if($request->filter_name_condition != "startLike"){
-                $car_brand->where('name' , "Like" , "$name%");
-            }
-            elseif($request->filter_name_condition != "endLike"){
-                $car_brand->where('name' , "Like" , "%$name");
-            }
-            elseif($request->filter_name_condition != "include"){
-                $car_brand->where('name' , "Like" , "%$name%");
-            }
-            else{
-                $car_brand->where('name' , $name);
-            }
+            match ($request->filter_name_condition) {
+                'startLike' => $car_brand->where('name', 'LIKE', "$name%"),
+                'endLike'   => $car_brand->where('name', 'LIKE', "%$name"),
+                'include'   => $car_brand->where('name', 'LIKE', "%$name%"),
+                default     => $car_brand->where('name', $name),
+            };
         }
-
-        //filter by description
-        if($request->has('filter_description')){
+        if ($request->has('filter_description')) {
             $description = $request->filter_description;
-            if($request->filter_description_condition == "startLike"){
-                $car_brand->where('description' , "Like" , "$description%");
-            }
-            elseif($request->filter_description_condition == "endLike"){
-                $car_brand->where('description' , "Like" , "%$description");
-            }
-            elseif($request->filter_description_condition == "include"){
-                $car_brand->where('description' , "Like" , "%$description%");
-            }
-            else{
-                $car_brand->where('description' , $description);
-            }
+            match ($request->filter_description_condition) {
+                'startLike' => $car_brand->where('description', 'LIKE', "$description%"),
+                'endLike'   => $car_brand->where('description', 'LIKE', "%$description"),
+                'include'   => $car_brand->where('description', 'LIKE', "%$description%"),
+                default     => $car_brand->where('description', $description),
+            };
         }
-
-        // Filter created by login
-        if($request->has('filter_created_by_login')) {
-            $car_brand->with('createdBy', function($q) use ($request){
-                $q->where('login', $request->filter_created_by_login);
-            });
-        }
-
-        //filter by time
         if ($request->has('filter_from_created_at')) {
             $car_brand->where('created_at', '>=', Carbon::parse($request->filter_from_created_at)->format('Y-m-d H:i'));
         }
-
         if ($request->has('filter_to_created_at')) {
             $car_brand->where('created_at', '<=', Carbon::parse($request->filter_to_created_at)->format('Y-m-d H:i'));
         }
-        return CarBrandResource::collection($car_brand->limit($limit)->get());
+
+        return $this->success(CarBrandResource::collection($car_brand->limit($limit)->get()));
     }
 
     public function store(CarBrandRequest $request)
     {
-        CarBrand::updateOrCreate([
-            'name' => $request->name,
-            'description' => $request->description ?? null,
-            'created_by' => auth()->id(),
-            'is_active' => $request->is_active ?? 1,
-        ],[
-            'name' => $request->name,
-            'description' => $request->description ?? null,
-            'created_by' => auth()->id(),
-            'is_active' => $request->is_active ?? 1,
-        ]);
-        return response()->json([
-            'message' => 'Бренд авто добавлен'
-        ]);
+        CarBrand::updateOrCreate(
+            ['name' => $request->name],
+            [
+                'description' => $request->description ?? null,
+                'created_by'  => auth()->id(),
+                'is_active'   => $request->is_active ?? 1,
+            ]
+        );
+        return $this->success(null, 'Бренд авто добавлен', 201);
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $car_brand = CarBrand::find($id);
-        if ($car_brand) {
-            return new CarBrandResource($car_brand);
+        if (!$car_brand) {
+            return $this->error('Бренд авто не найден', 404);
         }
-        return response()->json($car_brand);
+        return $this->success(new CarBrandResource($car_brand));
     }
-  
-    public function update(CarBrandRequest $request, $id)
+
+    public function update(CarBrandRequest $request, int $id)
     {
         $car_brand = CarBrand::find($id);
-        if($car_brand) {
-            $car_brand->update([
-                'name' => $request->name,
-                'description' => $request->description ?? null,
-                'is_active' => $request->is_active ?? 1,
-            ]);
-            return response()->json([
-                'message' => 'Бренд авто изменён'
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Такой бренд авто не найден!'
-            ], 422);
+        if (!$car_brand) {
+            return $this->error('Бренд авто не найден', 404);
         }
+        $car_brand->update([
+            'name'        => $request->name,
+            'description' => $request->description ?? null,
+            'is_active'   => $request->is_active ?? 1,
+        ]);
+        return $this->success(null, 'Бренд авто изменён');
     }
 }

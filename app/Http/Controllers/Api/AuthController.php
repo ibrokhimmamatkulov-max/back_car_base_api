@@ -17,112 +17,79 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-        public function login(Request $request)
+    public function login(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'login' => 'required|string',
-                'password' => 'required|string'
+                'login'    => 'required|string',
+                'password' => 'required|string',
             ]);
+
             if ($validator->fails()) {
-                Log::build([
-                    'driver' => 'single',
-                    'path' => storage_path('logs/auth.log'),
-                ])->error('Validator errors: ', ['requests' => $request->all(), 'trace' => $validator->errors()]);    
-                return response()->json([
-                    'message' => 'Unauthorized'
-                ], 401);
+                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
+                    ->error('Validator errors: ', ['requests' => $request->all(), 'trace' => $validator->errors()]);
+                return $this->error('Unauthorized', 401);
             }
 
-            $user = User::with('roles','oauth_access_tokens')->where('login', $request->login)->first();
+            $user = User::with('roles', 'oauth_access_tokens')->where('login', $request->login)->first();
 
-            if(!$user) {
-                Log::build([
-                    'driver' => 'single',
-                    'path' => storage_path('logs/auth.log'),
-                ])->error('User not found: ', ['requests' => $request->all()]);    
-                return response()->json([
-                    'message' => 'Unauthorized'
-                ], 401);
+            if (!$user) {
+                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
+                    ->error('User not found: ', ['requests' => $request->all()]);
+                return $this->error('Unauthorized', 401);
             }
 
-            if (!$user->status || !Hash::check($request->password,$user->password)) {
-                Log::build([
-                    'driver' => 'single',
-                    'path' => storage_path('logs/auth.log'),
-                ])->error('User check status and password: ', ['requests' => $request->all(), 'user_status' => $user->status]);    
-                return response()->json([
-                    'message' => 'Unauthorized'
-                ], 401);
+            if (!$user->status || !Hash::check($request->password, $user->password)) {
+                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
+                    ->error('User check status and password: ', ['requests' => $request->all(), 'user_status' => $user->status]);
+                return $this->error('Unauthorized', 401);
             }
 
-            // $login_user = LoginUser::where('user_id', $user->id)->where('is_login', LoginUser::LOGIN)->orderByDesc('id')->first();
-            // if($login_user) {
-            //     Log::build([
-            //         'driver' => 'single',
-            //         'path' => storage_path('logs/auth.log'),
-            //     ])->error('User login already exists: ', ['requests' => $request->all()]);
-            //     return response()->json([
-            //         'message' => 'Unauthorized'
-            //     ], 401);
-            // }
             $token = (new OAuth2Service)->token($request->all());
-// return [
-//                 'token' => $token
-//             ];
-            if(!isset($token["data"])) {
-                Log::build([
-                    'driver' => 'single',
-                    'path' => storage_path('logs/auth.log'),
-                ])->error('Validator errors: ', ['requests' => $request->all(), 'trace' => $token]);
-                return response()->json([
-                    'message' => 'Unauthorized'
-                ], 401);
+
+            if (!isset($token['data'])) {
+                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
+                    ->error('Token error: ', ['requests' => $request->all(), 'trace' => $token]);
+                return $this->error('Unauthorized', 401);
             }
 
-            $token = $token["data"];
-            $oauth_access_token = OAuthAccessToken::where('user_id', $user->id);
-            $oauth_access_token->update(['name' => $user->login]);
+            $token = $token['data'];
+            OAuthAccessToken::where('user_id', $user->id)->update(['name' => $user->login]);
 
             $login = LoginUser::create([
-                'user_id' => $user->id,
-                'access_token' => $token["access_token"],
-                'refresh_token' => $token["refresh_token"],
-                'token_type' => $token["token_type"],
-                'access_token_expires' => $token["expires_in"],
-                'ip_address' => $request->header('x-forwarded-for') ?? $request->ip(),
-                'user_agent' => $request->userAgent() ?? null,
-                'expires_at' => Carbon::now()->addMonth()
+                'user_id'              => $user->id,
+                'access_token'         => $token['access_token'],
+                'refresh_token'        => $token['refresh_token'],
+                'token_type'           => $token['token_type'],
+                'access_token_expires' => $token['expires_in'],
+                'ip_address'           => $request->header('x-forwarded-for') ?? $request->ip(),
+                'user_agent'           => $request->userAgent() ?? null,
+                'expires_at'           => Carbon::now()->addMonth(),
             ]);
 
-            $token["login_id"] = $login->id;
+            $token['login_id']   = $login->id;
             $token['created_at'] = $login->created_at->toDateTimeString();
-            return response()->json($this->getAuthData($user,$token));
+
+            return $this->success($this->getAuthData($user, $token), 'Login successful');
         } catch (\Exception $e) {
-            Log::build([
-                'driver' => 'single',
-                'path' => storage_path('logs/auth.log'),
-            ])->error($e->getMessage(), ['requests' => $request->all(), 'trace' => $e->getTrace()]);
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+            Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
+                ->error($e->getMessage(), ['requests' => $request->all(), 'trace' => $e->getTrace()]);
+            return $this->error('Unauthorized', 401);
         }
     }
-    
- private function getAuthData(User $user, $token): array
+
+    private function getAuthData(User $user, $token): array
     {
         $role_id = $user->roles()->pluck('id')->first();
 
         $user_info = [
-            "first_name" => $user->first_name,
-            'last_name' => $user->last_name,
-            'patronymic' => $user->patronymic
+            'first_name' => $user->first_name,
+            'last_name'  => $user->last_name,
+            'patronymic' => $user->patronymic,
         ];
 
         $subsectionIds = $role_id
-            ? DB::table('subsection_role')
-                ->where('role_id', $role_id)
-                ->pluck('subsection_id')
+            ? DB::table('subsection_role')->where('role_id', $role_id)->pluck('subsection_id')
             : collect();
 
         $sections = $subsectionIds->isNotEmpty()
@@ -135,52 +102,39 @@ class AuthController extends Controller
                     'subsections.title as subsection_title',
                     'subsections.component_id as subsection_component_id'
                 )
-                ->orderBy('sections.title') 
-                ->orderBy('subsections.title') 
+                ->orderBy('sections.title')
+                ->orderBy('subsections.title')
                 ->get()
                 ->groupBy('section_title')
                 ->map(function ($items) {
                     return [
-                        'title' => $items->first()->section_title,
-                        'icon' => $items->first()->section_icon,
-                        'subsections' => $items
-                            ->sortBy('subsection_title') 
-                            ->map(function ($item) {
-                                return [
-                                    'title' => $item->subsection_title,
-                                    'component_id' => $item->subsection_component_id,
-                                ];
-                            })
-                            ->values(),
+                        'title'       => $items->first()->section_title,
+                        'icon'        => $items->first()->section_icon,
+                        'subsections' => $items->sortBy('subsection_title')->map(fn($item) => [
+                            'title'        => $item->subsection_title,
+                            'component_id' => $item->subsection_component_id,
+                        ])->values(),
                     ];
                 })
-                ->sortBy('title') 
+                ->sortBy('title')
                 ->values()
             : collect();
 
-
         return [
-            'id' => $token["login_id"],
-            'user_id' => $user->id,
-            'token_type' => $token["token_type"],
-            'access_token' => $token["access_token"],
-            'access_token_expires' => $token["expires_in"],
-            'access_token_expDate' => Carbon::now()->addSeconds($token["expires_in"])->toDateTimeString(),
-            'refresh_token' => $token["refresh_token"],
-            'role_id' => $role_id,
-            'division_id' => $user?->employee?->division_id,
-            'user_info' => $user_info,
-            'created_at' => $token['created_at'],
-            'role_ru' => $user?->roles()->first()?->display_name,
-            'section' => $sections,
-            'user_type' => $user?->employee?->user_type ?? 0,
-//            'access_routes' => AccessRouteHasRolesResource::collection(
-//                AccessRouteHasRole::with(['access_route', 'role'])
-//                    ->where('role_id', $role_id)
-//                    ->get()
-//            ),
+            'id'                    => $token['login_id'],
+            'user_id'               => $user->id,
+            'token_type'            => $token['token_type'],
+            'access_token'          => $token['access_token'],
+            'access_token_expires'  => $token['expires_in'],
+            'access_token_expDate'  => Carbon::now()->addSeconds($token['expires_in'])->toDateTimeString(),
+            'refresh_token'         => $token['refresh_token'],
+            'role_id'               => $role_id,
+            'division_id'           => $user?->employee?->division_id,
+            'user_info'             => $user_info,
+            'created_at'            => $token['created_at'],
+            'role_ru'               => $user?->roles()->first()?->display_name,
+            'section'               => $sections,
+            'user_type'             => $user?->employee?->user_type ?? 0,
         ];
     }
-
-
 }

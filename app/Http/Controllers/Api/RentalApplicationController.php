@@ -11,80 +11,67 @@ class RentalApplicationController extends Controller
 {
     public function index()
     {
-        $rental_application= RentalApplication::with([
-            'car',
-            'tariff',
-            'user',
-            'city',
-            'status'
-        ])->orderByDesc('id')->get();
-        return response()->json(['data'=>$rental_application]);
-
+        $rental_application = RentalApplication::with(['car', 'tariff', 'user', 'city', 'status'])
+            ->orderByDesc('id')->get();
+        return $this->success($rental_application);
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'performer_transport_id' => 'required|exists:auto_baza.performer_transports,id',
-            'rental_tariff_id' => 'required|exists:auto_baza.rental_tariffs,id',
-            'user_id' => 'nullable|exists:auto_baza.users,id',
-            'phone' => 'required|string|max:30',
-            'city_id' => 'required|exists:auto_baza.cities,id',
-            'promo_code' => 'nullable|string|max:50',
-            'status_id' => 'required|exists:auto_baza.application_statuses,id',
+            'rental_tariff_id'       => 'required|exists:auto_baza.rental_tariffs,id',
+            'user_id'                => 'nullable|exists:auto_baza.users,id',
+            'phone'                  => 'required|string|max:30',
+            'city_id'                => 'required|exists:auto_baza.cities,id',
+            'promo_code'             => 'nullable|string|max:50',
+            'status_id'              => 'required|exists:auto_baza.application_statuses,id',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
-        $rental_application= RentalApplication::create($validator->validated());
-        return response()->json(['data'=>$rental_application]);
+
+        $rental_application = RentalApplication::create($validator->validated());
+        return $this->success($rental_application, 'Заявка создана', 201);
     }
 
-    public function show($id)
+    public function show(int $id)
     {
-        $rental_application= RentalApplication::with([
-            'car.model_car.brand',
-            'tariff',
-            'user',
-            'city',
-            'status'
-        ])->find($id);
-        if(!$rental_application){
-            return response()->json(['message'=>'Not found']);
+        $rental_application = RentalApplication::with(['car.model_car.brand', 'tariff', 'user', 'city', 'status'])->find($id);
+        if (!$rental_application) {
+            return $this->error('Заявка не найдена', 404);
         }
-        return response()->json(['data'=>$rental_application]);
+        return $this->success($rental_application);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        $validator = Validator::make($request->all(), [
-            'status_id' => 'required|exists:auto_baza.application_statuses,id',
-            'promo_code' => 'nullable|string|max:50',
-        ]);
         $rental_application = RentalApplication::find($id);
-        if(!$rental_application){
-            return response()->json(['message'=>'Not found']);
+        if (!$rental_application) {
+            return $this->error('Заявка не найдена', 404);
         }
+
+        $validator = Validator::make($request->all(), [
+            'status_id'  => 'required|exists:auto_baza.application_statuses,id',
+            'promo_code' => 'nullable|string|max:50',
+        ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
+
         $rental_application->update($validator->validated());
-        return response()->json(['data'=>$rental_application]);
+        return $this->success($rental_application);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
-       $rental_application= RentalApplication::find($id);
-        if(!$rental_application){
-            return response()->json(['message'=>'Not found']);
+        $rental_application = RentalApplication::find($id);
+        if (!$rental_application) {
+            return $this->error('Заявка не найдена', 404);
         }
         $rental_application->delete();
-        return response()->json([
-            'message' => 'Заявка удалена'
-        ]);
+        return $this->success(null, 'Заявка удалена');
     }
 }

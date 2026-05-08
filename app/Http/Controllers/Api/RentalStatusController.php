@@ -11,8 +11,7 @@ class RentalStatusController extends Controller
 {
     public function index()
     {
-        $rental_status= RentalStatus::orderBy('id')->get();
-        return response()->json(['data'=>$rental_status]);
+        return $this->success(RentalStatus::orderBy('id')->get());
     }
 
     public function store(Request $request)
@@ -21,56 +20,51 @@ class RentalStatusController extends Controller
             'code' => 'required|string|max:50|unique:auto_baza.rental_statuses,code',
             'name' => 'required|string|max:255',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
 
-        $rental_status= RentalStatus::create($validator->validated());
-        return response()->json(['data'=>$rental_status]);
-
+        $status = RentalStatus::create($validator->validated());
+        return $this->success($status, 'Статус аренды создан', 201);
     }
 
-    public function show($id)
+    public function show(int $id)
     {
-        $rental_status= RentalStatus::find($id);
-        if(!$rental_status){
-            return response()->json(['message'=>'Not found']);
+        $status = RentalStatus::find($id);
+        if (!$status) {
+            return $this->error('Статус аренды не найден', 404);
         }
-        return response()->json(['data'=>$rental_status]);
+        return $this->success($status);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        $rental_status = RentalStatus::find($id);
-        if(!$rental_status){
-            return response()->json(['message'=>'Not found']);
+        $status = RentalStatus::find($id);
+        if (!$status) {
+            return $this->error('Статус аренды не найден', 404);
         }
+
         $validator = Validator::make($request->all(), [
-            'code' => 'sometimes|string|max:50|unique:auto_baza.rental_statuses,code,' . $rental_status->id,
+            'code' => 'sometimes|string|max:50|unique:auto_baza.rental_statuses,code,' . $status->id,
             'name' => 'sometimes|string|max:255',
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
-        }
-        $rental_status->update($validator->validated());
 
-        return response()->json(['data'=>$rental_status]);
+        if ($validator->fails()) {
+            return $this->error('Validation error', 422, $validator->errors());
+        }
+
+        $status->update($validator->validated());
+        return $this->success($status);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        $rental_status = RentalStatus::find($id);
-        if(!$rental_status){
-            return response()->json(['message'=>'Not found']);
+        $status = RentalStatus::find($id);
+        if (!$status) {
+            return $this->error('Статус аренды не найден', 404);
         }
-        $rental_status->delete();
-
-        return response()->json([
-            'message' => 'Статус аренды удалён'
-        ]);
+        $status->delete();
+        return $this->success(null, 'Статус аренды удалён');
     }
 }
