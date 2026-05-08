@@ -11,9 +11,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::orderBy('id')->get();
-
-        return response()->json($roles);
+        return $this->success(Role::orderBy('id')->get());
     }
 
     public function store(Request $request)
@@ -24,40 +22,27 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
 
         $role = Role::create($validator->validated());
-
-        return response()->json([
-            'message' => 'Role created successfully',
-            'data'    => $role
-        ], 201);
+        return $this->success($role, 'Role created successfully', 201);
     }
 
-    public function show($id)
+    public function show(int $id)
     {
         $role = Role::find($id);
-
         if (!$role) {
-            return response()->json([
-                'message' => 'Role not found'
-            ], 404);
+            return $this->error('Role not found', 404);
         }
-
-        return response()->json($role);
+        return $this->success($role);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $role = Role::find($id);
-
         if (!$role) {
-            return response()->json([
-                'message' => 'Role not found'
-            ], 404);
+            return $this->error('Role not found', 404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -66,39 +51,25 @@ class RoleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
 
         $role->update($validator->validated());
-
-        return response()->json([
-            'message' => 'Role updated successfully',
-            'data'    => $role
-        ]);
+        return $this->success($role, 'Role updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $role = Role::find($id);
-
         if (!$role) {
-            return response()->json([
-                'message' => 'Role not found'
-            ], 404);
+            return $this->error('Role not found', 404);
         }
 
         if ($role->users()->exists()) {
-            return response()->json([
-                'message' => 'Role is assigned to users and cannot be deleted'
-            ], 409);
+            return $this->error('Role is assigned to users and cannot be deleted', 409);
         }
 
         $role->delete();
-
-        return response()->json([
-            'message' => 'Role deleted successfully'
-        ]);
+        return $this->success(null, 'Role deleted successfully');
     }
 }

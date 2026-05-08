@@ -11,63 +11,60 @@ class CityController extends Controller
 {
     public function index()
     {
-        return City::orderBy('id')->get();
+        return $this->success(City::orderBy('id')->get());
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
-        $city= City::create($validator->validated());
-        return response()->json(['data'=>$city]);
+
+        $city = City::create($validator->validated());
+        return $this->success($city, 'Город создан', 201);
     }
 
-    public function show($id)
+    public function show(int $id)
     {
-        $city= City::find($id);
-        if(!$city){
-            return response()->json(['message'=>'Not found']);
+        $city = City::find($id);
+        if (!$city) {
+            return $this->error('Город не найден', 404);
         }
-        return response()->json(['data'=>$city]);
+        return $this->success($city);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
+        $city = City::find($id);
+        if (!$city) {
+            return $this->error('Город не найден', 404);
+        }
+
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string|max:255',
+            'name'        => 'sometimes|string|max:255',
             'description' => 'sometimes|string|max:500',
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
-        }
-        $city = City::find($id);
-        
-        if(!$city){
-            return response()->json(['message'=>'Not found']);
-        }
-        $city->update($validator->validated());
 
-        return response()->json(['data'=>$city]);
+        if ($validator->fails()) {
+            return $this->error('Validation error', 422, $validator->errors());
+        }
+
+        $city->update($validator->validated());
+        return $this->success($city);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
-       $city= City::find($id);
-       if(!$city){
-        return response()->json(['message'=>'Not found']);
-       }
-       $city->delete();
-        return response()->json([
-            'message' => 'Город удалён'
-        ]);
+        $city = City::find($id);
+        if (!$city) {
+            return $this->error('Город не найден', 404);
+        }
+        $city->delete();
+        return $this->success(null, 'Город удалён');
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class CarOptionController extends Controller
 {
-     public function index(Request $request, CarOptionService $carOptionService)
+    public function index(Request $request, CarOptionService $carOptionService)
     {
         return $carOptionService->getCarOptions($request);
     }
@@ -21,69 +21,38 @@ class CarOptionController extends Controller
     {
         DB::beginTransaction();
         try {
-            CarOption::updateOrCreate([
-                'name' => $request->name,
-                'category_car_id' => $request->category_car_id,
-                'is_active' => $request->is_active ?? 1
-            ], [
-                'name' => $request->name,
-                'category_car_id' => $request->category_car_id,
-                'is_active' => $request->is_active ?? 1
-            ]);
-
+            CarOption::updateOrCreate(
+                ['name' => $request->name, 'category_car_id' => $request->category_car_id],
+                ['is_active' => $request->is_active ?? 1]
+            );
             DB::commit();
-            return response()->json([
-                'message' => 'Доп опция авто добавлен'
-            ]);
-        } catch (\Exception $exception) {
+            return $this->success(null, 'Доп. опция авто добавлена', 201);
+        } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'message' => 'Произошла системная ошибка!',
-                'errors' => $exception->getMessage()
-            ], 422);
+            return $this->error('Произошла системная ошибка: ' . $e->getMessage(), 500);
         }
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
-        try {
-            $car_option = CarOption::find($id);
-            if ($car_option) {
-                return new CarOptionResource($car_option);
-            }
-            return response()->json($car_option);
-        } catch (\Exception $exception) {
-            return response()->json([
-                'message' => 'Произошла системная ошибка!',
-                'errors' => $exception->getMessage()
-            ], 422);
+        $car_option = CarOption::find($id);
+        if (!$car_option) {
+            return $this->error('Опция не найдена', 404);
         }
+        return $this->success(new CarOptionResource($car_option));
     }
 
-    public function update(CarOptionRequest $request, $id)
+    public function update(CarOptionRequest $request, int $id)
     {
-        try {
-            $car_option = CarOption::find($id);
-            if ($car_option) {
-                $car_option->update([
-                    'category_car_id' => $request->category_car_id,
-                    'name' => $request->name,
-                    'is_active' => $request->is_active ?? 1
-                ]);
-
-                return response()->json([
-                    'message' => 'Доп опция авто добавлен'
-                ]);
-            } else {
-                return response()->json([
-                    'message' => 'Not found'
-                ], 404);
-            }
-        } catch (\Exception $exception) {
-            return response()->json([
-                'message' => 'Произошла системная ошибка!',
-                'errors' => $exception->getMessage()
-            ], 422);
+        $car_option = CarOption::find($id);
+        if (!$car_option) {
+            return $this->error('Опция не найдена', 404);
         }
+        $car_option->update([
+            'category_car_id' => $request->category_car_id,
+            'name'            => $request->name,
+            'is_active'       => $request->is_active ?? 1,
+        ]);
+        return $this->success(null, 'Доп. опция авто изменена');
     }
 }

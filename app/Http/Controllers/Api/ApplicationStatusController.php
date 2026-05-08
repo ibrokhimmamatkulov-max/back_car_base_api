@@ -11,8 +11,7 @@ class ApplicationStatusController extends Controller
 {
     public function index()
     {
-        $application_status= ApplicationStatus::orderBy('id')->get();
-        return response()->json(['data'=>$application_status]);
+        return $this->success(ApplicationStatus::orderBy('id')->get());
     }
 
     public function store(Request $request)
@@ -21,57 +20,51 @@ class ApplicationStatusController extends Controller
             'code' => 'required|string|max:50|unique:auto_baza.application_statuses,code',
             'name' => 'required|string|max:255',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
 
-        $application_status= ApplicationStatus::create($validator->validated());
-        return response()->json(['data'=>$application_status]);
+        $status = ApplicationStatus::create($validator->validated());
+        return $this->success($status, 'Статус заявки создан', 201);
     }
 
-    public function show($id)
+    public function show(int $id)
     {
-        $application_status= ApplicationStatus::find($id);
-        if(!$application_status){
-            return response()->json(['message'=>'Not found']);
+        $status = ApplicationStatus::find($id);
+        if (!$status) {
+            return $this->error('Статус заявки не найден', 404);
         }
-        return response()->json(['data'=>$application_status]);
+        return $this->success($status);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        $application_status = ApplicationStatus::find($id);
-        
-        if(!$application_status){
-            return response()->json(['message'=>'Not found']);
+        $status = ApplicationStatus::find($id);
+        if (!$status) {
+            return $this->error('Статус заявки не найден', 404);
         }
+
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:auto_baza.application_statuses,code,' . $application_status->id,
+            'code' => 'required|string|max:50|unique:auto_baza.application_statuses,code,' . $status->id,
             'name' => 'required|string|max:255',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
 
-        $application_status->update($validator->validated());
-
-        return response()->json(['data'=>$application_status]);
+        $status->update($validator->validated());
+        return $this->success($status);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
-       $application_status= ApplicationStatus::find($id);
-        if(!$application_status){
-            return response()->json(['message'=>'Not found']);
+        $status = ApplicationStatus::find($id);
+        if (!$status) {
+            return $this->error('Статус заявки не найден', 404);
         }
-       $application_status->delete();
-
-        return response()->json([
-            'message' => 'Статус заявки удалён'
-        ]);
+        $status->delete();
+        return $this->success(null, 'Статус заявки удалён');
     }
 }

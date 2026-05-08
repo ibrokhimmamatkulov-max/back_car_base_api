@@ -11,8 +11,7 @@ class GearboxController extends Controller
 {
     public function index()
     {
-        $gearbox= Gearbox::orderBy('id')->get();
-        return response()->json(['data'=>$gearbox]);
+        return $this->success(Gearbox::orderBy('id')->get());
     }
 
     public function store(Request $request)
@@ -21,57 +20,51 @@ class GearboxController extends Controller
             'code' => 'required|string|max:50|unique:auto_baza.gearboxes,code',
             'name' => 'required|string|max:255',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
 
-        $gearbox= Gearbox::create($validator->validated());
-
-        return response()->json(['data'=>$gearbox]);
-
+        $gearbox = Gearbox::create($validator->validated());
+        return $this->success($gearbox, 'Коробка передач создана', 201);
     }
 
-    public function show($id)
-    {
-        $gearbox= Gearbox::find($id);
-        if(!$gearbox){
-            return response()->json(['message'=>'Not found']);
-        }
-        return response()->json(['data'=>$gearbox]);
-    }
-
-    public function update(Request $request, $id)
+    public function show(int $id)
     {
         $gearbox = Gearbox::find($id);
-        if(!$gearbox){
-            return response()->json(['message'=>'Not found']);
+        if (!$gearbox) {
+            return $this->error('Коробка передач не найдена', 404);
         }
+        return $this->success($gearbox);
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $gearbox = Gearbox::find($id);
+        if (!$gearbox) {
+            return $this->error('Коробка передач не найдена', 404);
+        }
+
         $validator = Validator::make($request->all(), [
             'code' => 'sometimes|string|max:50|unique:auto_baza.gearboxes,code,' . $gearbox->id,
             'name' => 'sometimes|string|max:255',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+            return $this->error('Validation error', 422, $validator->errors());
         }
-        $gearbox->update($validator->validated());
 
-        return response()->json(['data'=>$gearbox]);
+        $gearbox->update($validator->validated());
+        return $this->success($gearbox);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        $gearbox= Gearbox::find($id);
-        if(!$gearbox){
-            return response()->json(['message'=>'Not found']);
+        $gearbox = Gearbox::find($id);
+        if (!$gearbox) {
+            return $this->error('Коробка передач не найдена', 404);
         }
         $gearbox->delete();
-        return response()->json([
-            'message' => 'Коробка передач удалена'
-        ]);
+        return $this->success(null, 'Коробка передач удалена');
     }
 }

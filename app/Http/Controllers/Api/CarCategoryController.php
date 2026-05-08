@@ -13,101 +13,81 @@ class CarCategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $category_car = CategoryCar::query();
+        $query = CategoryCar::query();
         $limit = 100;
-        if($request->has('limit')){
-            $limit = $request->limit;
-        }
+
+        if ($request->has('limit')) $limit = $request->limit;
+
         if ($request->has('filter_id')) {
             $filter_id = $request->filter_id;
-            if ($request->filter_id_codition == "equalOrMore") {
-                $category_car->where('id', '>=', $filter_id);
-            } elseif ($request->filter_id_condition == "equalOrLess") {
-                $category_car->where('id', '>=', $filter_id);
-            } elseif ($request->filter_id_condition == "less") {
-                $category_car->where('id', '<', $filter_id);
-            } elseif ($request->filter_id_condition == "more") {
-                $category_car->where('id', '>', $filter_id);
-            } else {
-                $category_car->where('id', $filter_id);
-            }
+            match ($request->filter_id_condition) {
+                'equalOrMore' => $query->where('id', '>=', $filter_id),
+                'equalOrLess' => $query->where('id', '<=', $filter_id),
+                'less'        => $query->where('id', '<', $filter_id),
+                'more'        => $query->where('id', '>', $filter_id),
+                default       => $query->where('id', $filter_id),
+            };
         }
-        // filter by name
-        if($request->has('filter_name_condition')){
-            $name = $request->filter_name_condition;
-            if($request->filter_name_condition != "startLike"){
-                $category_car->where('name' , "Like" , "$name%");
-            }
-            elseif($request->filter_name_condition == "endLike"){
-                $category_car->where('name' , "Like" , "%$name");
-            }
-            elseif($request->filter_name_condition == "include"){
-                $category_car->where('name' , "Like" , "%$name%");
-            }
+        if ($request->has('filter_name')) {
+            $name = $request->filter_name;
+            match ($request->filter_name_condition) {
+                'startLike' => $query->where('name', 'LIKE', "$name%"),
+                'endLike'   => $query->where('name', 'LIKE', "%$name"),
+                'include'   => $query->where('name', 'LIKE', "%$name%"),
+                default     => $query->where('name', $name),
+            };
         }
-        if($request->has('filter_description_condition')){
-            $name = $request->filter_description_condition;
-            if($request->filter_name_condition == "startLike"){
-                $category_car->where('description' , "Like" , "$name%");
-            }
-            elseif($request->filter_name_condition == "endLike"){
-                $category_car->where('description' , "Like" , "%$name");
-            }
-            elseif($request->filter_name_condition == "include"){
-                $category_car->where('description' , "Like" , "%$name%");
-            }
+        if ($request->has('filter_description')) {
+            $desc = $request->filter_description;
+            match ($request->filter_description_condition) {
+                'startLike' => $query->where('description', 'LIKE', "$desc%"),
+                'endLike'   => $query->where('description', 'LIKE', "%$desc"),
+                'include'   => $query->where('description', 'LIKE', "%$desc%"),
+                default     => $query->where('description', $desc),
+            };
         }
         if ($request->has('filter_from_created_at')) {
-            $category_car->where('created_at', '>=', Carbon::parse($request->filter_from_created_at)->format('Y-m-d H:i'));
+            $query->where('created_at', '>=', Carbon::parse($request->filter_from_created_at)->format('Y-m-d H:i'));
+        }
+        if ($request->has('filter_to_created_at')) {
+            $query->where('created_at', '<=', Carbon::parse($request->filter_to_created_at)->format('Y-m-d H:i'));
         }
 
-        if ($request->has('filter_to_created_at')) {
-            $category_car = $category_car->where('created_at', '<=', Carbon::parse($request->filter_to_created_at)->format('Y-m-d H:i'));
-        }
-        return CarCategoryResource::collection($category_car->orderByDesc('id')->limit($limit)->get());
+        return $this->success(CarCategoryResource::collection($query->orderByDesc('id')->limit($limit)->get()));
     }
 
     public function store(CarCategoryRequest $request)
     {
-        CategoryCar::updateOrCreate([
-            'name' => $request->name,
-            'description' => $request->description ?? null,
-            'is_active' => $request->is_active ?? 1,
-        ],[
-            'name' => $request->name,
-            'description' => $request->description ?? null,
-            'is_active' => $request->is_active ?? 1,
-        ]);
-        return response()->json([
-            'message' => 'Категория авто добавлен'
-        ]);
-    }
-
-    public function show($id)
-    {
-        $category_car = CategoryCar::find($id);
-        if ($category_car) {
-            return new CarCategoryResource($category_car);
-        }
-        return response()->json($category_car);
-    }
-
-    public function update(CarCategoryRequest $request, $id)
-    {
-        $category_car = CategoryCar::find($id);
-        if($category_car) {
-            $category_car->update([
-                'name' => $request->name,
+        CategoryCar::updateOrCreate(
+            ['name' => $request->name],
+            [
                 'description' => $request->description ?? null,
-                'is_active' => $request->is_active ?? 1,
-            ]);
-            return response()->json([
-                'message' => 'Категория авто изменена'
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Категория автомобиля не найден!'
-            ], 422);
+                'is_active'   => $request->is_active ?? 1,
+            ]
+        );
+        return $this->success(null, 'Категория авто добавлена', 201);
+    }
+
+    public function show(int $id)
+    {
+        $category = CategoryCar::find($id);
+        if (!$category) {
+            return $this->error('Категория автомобиля не найдена', 404);
         }
+        return $this->success(new CarCategoryResource($category));
+    }
+
+    public function update(CarCategoryRequest $request, int $id)
+    {
+        $category = CategoryCar::find($id);
+        if (!$category) {
+            return $this->error('Категория автомобиля не найдена', 404);
+        }
+        $category->update([
+            'name'        => $request->name,
+            'description' => $request->description ?? null,
+            'is_active'   => $request->is_active ?? 1,
+        ]);
+        return $this->success(null, 'Категория авто изменена');
     }
 }
