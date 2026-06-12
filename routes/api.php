@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\CarController;
 use App\Http\Controllers\Api\CarModelController;
 use App\Http\Controllers\Api\CarOptionController;
 use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\LandingController;
 use App\Http\Controllers\Api\ColorCarController;
 use App\Http\Controllers\Api\GearboxController;
 use App\Http\Controllers\Api\PerformerTransportPhotoController;
@@ -143,4 +144,12 @@ Route::middleware('auth:api')->group(function (){
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:30,1');
+});
+
+// Public landing API — без авторизации
+Route::prefix('landing')->group(function () {
+    Route::get('cities',        [LandingController::class, 'cities']);
+    Route::get('offers',        [LandingController::class, 'offers']);
+    Route::get('offers/{id}',   [LandingController::class, 'offer']);
+    Route::post('apply',        [LandingController::class, 'apply'])->middleware('throttle:10,1');
 });

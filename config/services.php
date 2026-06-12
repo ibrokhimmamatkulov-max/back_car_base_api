@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'landing' => [
+        // place_type_id из таблицы polygons, соответствующий типу "город"
+        // Установить в .env: LANDING_CITY_PLACE_TYPE_ID=X
+        'city_place_type_id' => env('LANDING_CITY_PLACE_TYPE_ID'),
+    ],
+
 ];

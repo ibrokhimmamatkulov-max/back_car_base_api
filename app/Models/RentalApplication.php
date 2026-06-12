@@ -14,8 +14,10 @@ class RentalApplication extends Model
         'performer_transport_id',
         'rental_tariff_id',
         'user_id',
+        'name',
         'phone',
         'city_id',
+        'comment',
         'promo_code',
         'status_id',
     ];
