@@ -4,6 +4,7 @@ namespace App\Http\Resources\Landing;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class OfferListResource extends JsonResource
 {
@@ -28,7 +29,7 @@ class OfferListResource extends JsonResource
             ],
             'min_price'    => $this->tariffs->min('price'),
             'min_rent_days'=> $this->min_rent_days,
-            'photos'       => $this->photos->pluck('path'),
+            'photos'       => $this->photos->map(fn($p) => Storage::url($p->path)),
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Resources\Landing;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class OfferDetailResource extends JsonResource
 {
@@ -42,7 +43,7 @@ class OfferDetailResource extends JsonResource
                 'id'   => $opt->car_option?->id,
                 'name' => $opt->car_option?->name,
             ]),
-            'photos'       => $this->photos->pluck('path'),
+            'photos'       => $this->photos->map(fn($p) => Storage::url($p->path)),
             'tariffs'      => $this->tariffs->map(fn ($t) => [
                 'id'              => $t->id,
                 'duration_days'   => $t->duration_days,
