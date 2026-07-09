@@ -1,0 +1,67 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    image: car-base-api-app:${APP_VERSION:-latest}
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - storage-data:/var/www/html/storage
+      - storage-public:/var/www/html/storage/app/public
+    networks:
+      - app-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: nginx
+    image: car-base-api-nginx:${APP_VERSION:-latest}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8001}:80"
+    volumes:
+      - storage-public:/var/www/html/public/storage:ro
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  # Собственная БД проекта (default-подключение "mysql" из config/database.php).
+  # Остальные подключения (auto_baza, mysql_performer, mysql_location,
+  # mysql_tele_bot, mysql_asterisk, mysql_test) живут на другом сервере БД
+  # и настраиваются только через переменные окружения в .env — контейнеры
+  # для них здесь не создаются.
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mysql-data:
+  storage-data:
+  storage-public:
+
+networks:
+  app-network:
+    driver: bridge
