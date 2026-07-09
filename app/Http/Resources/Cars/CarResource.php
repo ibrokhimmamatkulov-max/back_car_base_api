@@ -10,6 +10,7 @@ use App\Models\Division;
 use App\Models\Marka;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class CarResource extends JsonResource
 {
@@ -90,7 +91,7 @@ class CarResource extends JsonResource
             "gearbox_id" => $this->gearbox_id,
             "gearbox" => $this->gearbox?->name,
             "min_rent_days" => $this->min_rent_days,
-            "photos" => $this->photos->pluck('path'),
+            "photos" => $this->photos->map(fn($p) => Storage::url($p->path)),
             "tariffs" => $this->tariffs->map(function ($tariff) {
                 return [
                     'id' => $tariff->id,

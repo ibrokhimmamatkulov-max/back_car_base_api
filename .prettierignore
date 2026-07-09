@@ -1,0 +1,11 @@
+node_modules/
+vendor/
+storage/
+bootstrap/cache/
+public/build/
+public/hot
+public/vendor/
+.env
+.env.*
+*.log
+
