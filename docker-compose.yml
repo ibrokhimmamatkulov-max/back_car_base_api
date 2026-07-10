@@ -35,16 +35,16 @@ services:
 
   # Собственная БД проекта (default-подключение "mysql" из config/database.php).
   # Остальные подключения (auto_baza, mysql_performer, mysql_location,
-  # mysql_tele_bot, mysql_asterisk, mysql_test) живут на другом сервере БД
+  # mysql_tele_bot, mysql_asterisk, mysql_taxi) живут на другом сервере БД
   # и настраиваются только через переменные окружения в .env — контейнеры
   # для них здесь не создаются.
   mysql:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE_BAZA}
-      MYSQL_USER: ${DB_USERNAME_BAZA}
-      MYSQL_PASSWORD: ${DB_PASSWORD_BAZA}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
