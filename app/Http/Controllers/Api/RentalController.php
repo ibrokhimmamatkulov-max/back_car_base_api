@@ -20,9 +20,9 @@ class RentalController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'performer_transport_id' => 'required|exists:auto_baza.performer_transports,id',
-            'performer_id'           => 'nullable|exists:auto_baza.users,id',
-            'status_id'              => 'required|exists:auto_baza.rental_statuses,id',
+            'performer_transport_id' => 'required|exists:performer_transports,id',
+            'performer_id'           => 'nullable|exists:users,id',
+            'status_id'              => 'required|exists:rental_statuses,id',
             'start_datetime'         => 'required|date_format:Y-m-d|after_or_equal:today',
             'end_datetime'           => 'required|date_format:Y-m-d',
         ]);
@@ -70,7 +70,7 @@ class RentalController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'status_id'    => 'sometimes|exists:auto_baza.rental_statuses,id',
+            'status_id'    => 'sometimes|exists:rental_statuses,id',
             'end_datetime' => 'sometimes|date_format:Y-m-d|after_or_equal:today',
         ]);
 

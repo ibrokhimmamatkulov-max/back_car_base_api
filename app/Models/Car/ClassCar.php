@@ -10,7 +10,6 @@ class ClassCar extends Model
 {
     use HasFactory;
 
-    protected $connection = 'auto_baza';
     protected $fillable = [
         'name',
         'category_car_id',

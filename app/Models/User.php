@@ -12,7 +12,8 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class
+User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
@@ -102,7 +103,7 @@ class User extends Authenticatable
     // {
     //     return $this->belongsToMany(Tariff::class, 'user_tariffs');
     // }
-    
+
 
 
 }

@@ -105,8 +105,8 @@ class CarController extends Controller
             'dop_info'         => 'nullable|string',
             'dop_options'      => 'nullable|array',
             'dop_options.*.car_option_id' => ['required', Rule::exists(CarOption::class, 'id')],
-            'city_id'       => ['required', Rule::exists('auto_baza.cities', 'id')],
-            'gearbox_id'    => ['required', Rule::exists('auto_baza.gearboxes', 'id')],
+            'city_id'       => ['required', Rule::exists('cities', 'id')],
+            'gearbox_id'    => ['required', Rule::exists('gearboxes', 'id')],
             'min_rent_days' => ['required', 'integer', 'min:1'],
             'address'       => ['required', 'string', 'max:255'],
         ]);
@@ -233,8 +233,8 @@ class CarController extends Controller
             'dop_info'         => 'nullable|string',
             'dop_options'      => 'nullable|array',
             'dop_options.*.car_option_id' => ['required', Rule::exists(CarOption::class, 'id')],
-            'city_id'       => ['required', Rule::exists('auto_baza.cities', 'id')],
-            'gearbox_id'    => ['required', Rule::exists('auto_baza.gearboxes', 'id')],
+            'city_id'       => ['required', Rule::exists('cities', 'id')],
+            'gearbox_id'    => ['required', Rule::exists('gearboxes', 'id')],
             'min_rent_days' => ['required', 'integer', 'min:1'],
             'address'       => ['required', 'string', 'max:255'],
         ]);

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class CarBrand extends Model
 {
     use HasFactory;
-    protected $connection = 'auto_baza';
     protected $fillable = [
         'name',
         'description',

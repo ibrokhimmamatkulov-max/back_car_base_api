@@ -60,15 +60,6 @@ return [
             'password' => env('DB_PASSWORD_PERFORMER'),
             'strict' => false
         ],
-        'auto_baza' => [
-            'driver' => env('DB_CONNECTION_BAZA'),
-            'host' => env('DB_HOST_BAZA'),
-            'port' => env('DB_PORT_BAZA'),
-            'database' => env('DB_DATABASE_BAZA'),
-            'username' => env('DB_USERNAME_BAZA'),
-            'password' => env('DB_PASSWORD_BAZA'),
-            'strict' => false
-        ],
         'mysql_tele_bot' => [
             'driver' => env('DB_CONNECTION_TELE_BOT'),
             'host' => env('DB_HOST_TELE_BOT'),

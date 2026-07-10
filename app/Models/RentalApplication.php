@@ -9,7 +9,6 @@ class RentalApplication extends Model
 {
     use HasFactory;
 
-    protected $connection = 'auto_baza';
     protected $fillable = [
         'performer_transport_id',
         'rental_tariff_id',

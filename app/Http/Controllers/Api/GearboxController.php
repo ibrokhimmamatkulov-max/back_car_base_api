@@ -17,7 +17,7 @@ class GearboxController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:auto_baza.gearboxes,code',
+            'code' => 'required|string|max:50|unique:gearboxes,code',
             'name' => 'required|string|max:255',
         ]);
 
@@ -46,7 +46,7 @@ class GearboxController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'code' => 'sometimes|string|max:50|unique:auto_baza.gearboxes,code,' . $gearbox->id,
+            'code' => 'sometimes|string|max:50|unique:gearboxes,code,' . $gearbox->id,
             'name' => 'sometimes|string|max:255',
         ]);
 

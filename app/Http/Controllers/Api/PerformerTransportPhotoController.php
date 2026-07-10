@@ -19,7 +19,7 @@ class PerformerTransportPhotoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'performer_transport_id' => 'required|exists:auto_baza.performer_transports,id',
+            'performer_transport_id' => 'required|exists:performer_transports,id',
             'photo'                  => 'required|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 

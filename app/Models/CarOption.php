@@ -12,7 +12,6 @@ class CarOption extends Model
     // use FiltersTrait;
     use HasFactory;
     public const CONDICIONER = 1;
-    protected $connection = 'auto_baza';
     protected $fillable = [
         'category_car_id',
         'name',

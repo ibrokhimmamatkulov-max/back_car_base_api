@@ -17,7 +17,7 @@ class RentalStatusController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:auto_baza.rental_statuses,code',
+            'code' => 'required|string|max:50|unique:rental_statuses,code',
             'name' => 'required|string|max:255',
         ]);
 
@@ -46,7 +46,7 @@ class RentalStatusController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'code' => 'sometimes|string|max:50|unique:auto_baza.rental_statuses,code,' . $status->id,
+            'code' => 'sometimes|string|max:50|unique:rental_statuses,code,' . $status->id,
             'name' => 'sometimes|string|max:255',
         ]);
 

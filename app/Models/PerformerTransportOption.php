@@ -10,7 +10,6 @@ class PerformerTransportOption extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $connection = 'auto_baza';  
     protected $fillable = [
         'performer_transport_id',
         'option_id',
