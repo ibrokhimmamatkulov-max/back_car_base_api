@@ -17,7 +17,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'        => 'required|string|max:50|unique:auto_baza.roles,name',
+            'name'        => 'required|string|max:50|unique:roles,name',
             'description' => 'nullable|string|max:255',
         ]);
 
@@ -46,7 +46,7 @@ class RoleController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'name'        => 'nullable|string|max:50|unique:auto_baza.roles,name,' . $role->id,
+            'name'        => 'nullable|string|max:50|unique:roles,name,' . $role->id,
             'description' => 'nullable|string|max:255',
         ]);
 

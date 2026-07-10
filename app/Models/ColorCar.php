@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ColorCar extends BasicModel
 {
     use HasFactory;
-    protected $connection = 'auto_baza';
     public $table = 'colors';
     protected $fillable = [
         'name',

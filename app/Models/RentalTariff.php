@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RentalTariff extends Model
 {
     use HasFactory;
-    
-    protected $connection = 'auto_baza';
+
     protected $table = 'rental_tariffs';
     protected $fillable = [
         'performer_transport_id',

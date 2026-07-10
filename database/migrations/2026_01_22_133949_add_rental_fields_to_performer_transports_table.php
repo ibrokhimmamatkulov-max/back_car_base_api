@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
 {
-    Schema::connection('auto_baza')->table('performer_transports', function (Blueprint $table) {
-        if (!Schema::connection('auto_baza')->hasColumn('performer_transports', 'gearbox_id')) {
+    Schema::table('performer_transports', function (Blueprint $table) {
+        if (!Schema::hasColumn('performer_transports', 'gearbox_id')) {
             $table->foreignId('gearbox_id')->nullable();
         }
-        if (!Schema::connection('auto_baza')->hasColumn('performer_transports', 'min_rent_days')) {
+        if (!Schema::hasColumn('performer_transports', 'min_rent_days')) {
             $table->unsignedInteger('min_rent_days')->default(1);
         }
-        if (!Schema::connection('auto_baza')->hasColumn('performer_transports', 'city_id')) {
+        if (!Schema::hasColumn('performer_transports', 'city_id')) {
             $table->foreignId('city_id')->nullable();
         }
-        if (!Schema::connection('auto_baza')->hasColumn('performer_transports', 'address')) {
+        if (!Schema::hasColumn('performer_transports', 'address')) {
             $table->string('address')->nullable();
         }
     });
@@ -32,7 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('auto_baza')->table('performer_transports', function (Blueprint $table) {
+        Schema::table('performer_transports', function (Blueprint $table) {
             $table->dropForeign(['gearbox_id']);
             $table->dropForeign(['city_id']);
             $table->dropColumn(['gearbox_id','min_rent_days','city_id','address']);

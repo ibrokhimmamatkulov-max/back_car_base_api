@@ -17,7 +17,7 @@ class ApplicationStatusController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:auto_baza.application_statuses,code',
+            'code' => 'required|string|max:50|unique:application_statuses,code',
             'name' => 'required|string|max:255',
         ]);
 
@@ -46,7 +46,7 @@ class ApplicationStatusController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'code' => 'required|string|max:50|unique:auto_baza.application_statuses,code,' . $status->id,
+            'code' => 'required|string|max:50|unique:application_statuses,code,' . $status->id,
             'name' => 'required|string|max:255',
         ]);
 
