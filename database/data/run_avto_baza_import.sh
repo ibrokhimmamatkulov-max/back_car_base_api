@@ -12,7 +12,7 @@ set -eu
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 IMPORT_FILE="${1:-$SCRIPT_DIR/avto_baza_new_tables_import.sql}"
 DB_SERVICE="${2:-mysql}"
-DB_NAME="${3:-car_base_api}"
+DB_NAME="${3:-avto_baza}"
 
 TABLES="body_types car_brands car_conditions car_connecteds car_options category_cars class_cars colors divisions model_cars performer_transports performer_transport_options"
 
