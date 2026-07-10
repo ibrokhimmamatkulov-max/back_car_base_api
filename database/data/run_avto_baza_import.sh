@@ -21,6 +21,16 @@ if [ -z "${DB_ROOT_PASSWORD:-}" ]; then
     exit 1
 fi
 
+# Поддержка обоих вариантов CLI: docker compose (v2, плагин) и docker-compose (v1, standalone).
+if docker compose version >/dev/null 2>&1; then
+    COMPOSE="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
+    COMPOSE="docker-compose"
+else
+    echo "ERROR: не найден ни 'docker compose', ни 'docker-compose'." >&2
+    exit 1
+fi
+
 if [ ! -f "$IMPORT_FILE" ]; then
     echo "ERROR: файл с данными не найден: $IMPORT_FILE" >&2
     exit 1
@@ -39,7 +49,7 @@ for t in $TABLES; do
     fi
 done
 
-COUNTS_OUTPUT=$(docker compose exec -T "$DB_SERVICE" mysql -N -u root -p"$DB_ROOT_PASSWORD" "$DB_NAME" -e "$UNION_QUERY")
+COUNTS_OUTPUT=$($COMPOSE exec -T "$DB_SERVICE" mysql -N -u root -p"$DB_ROOT_PASSWORD" "$DB_NAME" -e "$UNION_QUERY")
 
 echo "$COUNTS_OUTPUT"
 
@@ -56,10 +66,10 @@ fi
 echo "OK: все 12 таблиц пустые."
 
 echo "== 2/3: Импорт данных из $IMPORT_FILE =="
-docker compose exec -T "$DB_SERVICE" mysql -u root -p"$DB_ROOT_PASSWORD" "$DB_NAME" < "$IMPORT_FILE"
+$COMPOSE exec -T "$DB_SERVICE" mysql -u root -p"$DB_ROOT_PASSWORD" "$DB_NAME" < "$IMPORT_FILE"
 
 echo "== 3/3: Счётчики после импорта =="
-docker compose exec -T "$DB_SERVICE" mysql -N -u root -p"$DB_ROOT_PASSWORD" "$DB_NAME" -e "$UNION_QUERY"
+$COMPOSE exec -T "$DB_SERVICE" mysql -N -u root -p"$DB_ROOT_PASSWORD" "$DB_NAME" -e "$UNION_QUERY"
 
 echo ""
 echo "Готово. Сверьте счётчики с оригинальным дампом avto_baza.sql и убедитесь,"
