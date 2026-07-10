@@ -22,7 +22,7 @@ class Division extends BasicModel
     ];
     public function __construct(array $attributes = [])
     {
-        $this->table = DB::connection('mysql')->getDatabaseName().'.'.$this->table;
+        $this->table = DB::connection('mysql_taxi')->getDatabaseName().'.'.$this->table;
         parent::__construct($attributes);
     }
 

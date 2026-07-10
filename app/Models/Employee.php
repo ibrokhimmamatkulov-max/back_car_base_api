@@ -13,7 +13,7 @@ class Employee extends Model
     use HasFactory;
     // use FiltersTrait;
     const OPERATOR = 'operator';
-    protected $connection = 'mysql';
+    protected $connection = 'mysql_taxi';
 
     protected $fillable = [
         'division_id',

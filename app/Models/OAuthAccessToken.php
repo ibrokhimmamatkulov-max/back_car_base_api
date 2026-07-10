@@ -9,7 +9,7 @@ class OAuthAccessToken extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mysql';
+    protected $connection = 'mysql_taxi';
     public $table = 'oauth_access_tokens';
     protected $fillable = ['revoked'];
     protected $casts = [

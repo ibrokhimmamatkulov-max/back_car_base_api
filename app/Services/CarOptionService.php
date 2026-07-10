@@ -75,7 +75,7 @@ class CarOptionService
         //         null
         //     );
 
-        //     $allowanceIds = DB::connection('mysql')
+        //     $allowanceIds = DB::connection('mysql_taxi')
         //         ->table('allowances')
         //         ->where('name', 'like', '%' . $request->filter_allowance_name . '%')
         //         ->pluck('id');

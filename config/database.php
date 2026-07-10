@@ -77,13 +77,13 @@ return [
             'password' => env('DB_PASSWORD_LOCATION'),
         ],
 
-        'mysql_test' => [
-            'driver' => env('DB_CONNECTION_TEST'),
-            'host' => env('DB_HOST_TEST'),
-            'port' => env('DB_PORT_TEST'),
-            'database' => env('DB_DATABASE_TEST'),
-            'username' => env('DB_USERNAME_TEST'),
-            'password' => env('DB_PASSWORD_TEST'),
+        'mysql_taxi' => [
+            'driver' => env('DB_CONNECTION_TAXI'),
+            'host' => env('DB_HOST_TAXI'),
+            'port' => env('DB_PORT_TAXI'),
+            'database' => env('DB_DATABASE_TAXI'),
+            'username' => env('DB_USERNAME_TAXI'),
+            'password' => env('DB_PASSWORD_TAXI'),
         ],
 
         'mysql' => [
@@ -235,7 +235,7 @@ return [
             'port'     => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '6'),
         ],
-        
+
         'redis_geo' => [
             'url' => env('REDIS_GEO_URL'),
             'host' => env('REDIS_GEO_HOST', '127.0.0.1'),
