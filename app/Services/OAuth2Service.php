@@ -55,10 +55,14 @@ class OAuth2Service
                 'data' => json_decode($response,true)
             ];
         }catch(\Exception $e) {
-            Log::build([
-                'driver' => 'single',
-                'path' => storage_path('logs/oauth2_service.log'),
-            ])->error($e->getMessage(),['requests' => $req_data, 'trace' => $e->getTrace()]);
+            Log::channel('oauth2')->error($e->getMessage(), [
+                'grant_type' => $type,
+                'request'    => array_diff_key($req_data, array_flip(['password', 'client_secret'])),
+                'exception'  => get_class($e),
+                'file'       => $e->getFile(),
+                'line'       => $e->getLine(),
+                'trace'      => $e->getTraceAsString(),
+            ]);
             return [
                 'status' => false,
                 'message' => $e->getMessage(),

@@ -26,30 +26,40 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
-                    ->error('Validator errors: ', ['requests' => $request->all(), 'trace' => $validator->errors()]);
+                $this->logAuth('warning', 'Login rejected: validation failed', $request, [
+                    'errors' => $validator->errors()->toArray(),
+                ]);
                 return $this->error('Unauthorized', 401);
             }
 
             $user = User::with('roles', 'oauth_access_tokens')->where('login', $request->login)->first();
 
             if (!$user) {
-                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
-                    ->error('User not found: ', ['requests' => $request->all()]);
+                $this->logAuth('warning', 'Login rejected: user not found', $request);
                 return $this->error('Unauthorized', 401);
             }
 
-            if (!$user->status || !Hash::check($request->password, $user->password)) {
-                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
-                    ->error('User check status and password: ', ['requests' => $request->all(), 'user_status' => $user->status]);
+            if (!$user->status) {
+                $this->logAuth('warning', 'Login rejected: user is inactive', $request, [
+                    'user_id' => $user->id,
+                ]);
+                return $this->error('Unauthorized', 401);
+            }
+
+            if (!Hash::check($request->password, $user->password)) {
+                $this->logAuth('warning', 'Login rejected: invalid password', $request, [
+                    'user_id' => $user->id,
+                ]);
                 return $this->error('Unauthorized', 401);
             }
 
             $token = (new OAuth2Service)->token($request->all());
 
             if (!isset($token['data'])) {
-                Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
-                    ->error('Token error: ', ['requests' => $request->all(), 'trace' => $token]);
+                $this->logAuth('error', 'Login rejected: token issuance failed', $request, [
+                    'user_id'      => $user->id,
+                    'oauth_result' => $token,
+                ]);
                 return $this->error('Unauthorized', 401);
             }
 
@@ -70,12 +80,32 @@ class AuthController extends Controller
             $token['login_id']   = $login->id;
             $token['created_at'] = $login->created_at->toDateTimeString();
 
+            $this->logAuth('info', 'Login successful', $request, ['user_id' => $user->id]);
+
             return $this->success($this->getAuthData($user, $token), 'Login successful');
         } catch (\Exception $e) {
-            Log::build(['driver' => 'single', 'path' => storage_path('logs/auth.log')])
-                ->error($e->getMessage(), ['requests' => $request->all(), 'trace' => $e->getTrace()]);
+            $this->logAuth('error', 'Login failed: unhandled exception', $request, [
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+                'file'      => $e->getFile(),
+                'line'      => $e->getLine(),
+                'trace'     => $e->getTraceAsString(),
+            ]);
             return $this->error('Unauthorized', 401);
         }
+    }
+
+    /**
+     * Write a structured, readable entry to the dedicated auth log channel.
+     * Never includes the raw password, only the attempted login and request metadata.
+     */
+    private function logAuth(string $level, string $message, Request $request, array $context = []): void
+    {
+        Log::channel('auth')->log($level, $message, array_merge([
+            'login'      => $request->input('login'),
+            'ip'         => $request->header('x-forwarded-for') ?? $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ], $context));
     }
 
     private function getAuthData(User $user, $token): array
