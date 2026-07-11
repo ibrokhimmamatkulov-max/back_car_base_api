@@ -33,11 +33,6 @@ services:
     networks:
       - app-network
 
-  # Собственная БД проекта (default-подключение "mysql" из config/database.php).
-  # Остальные подключения (auto_baza, mysql_performer, mysql_location,
-  # mysql_tele_bot, mysql_asterisk, mysql_taxi) живут на другом сервере БД
-  # и настраиваются только через переменные окружения в .env — контейнеры
-  # для них здесь не создаются.
   mysql:
     image: mysql:8.0
     restart: unless-stopped
