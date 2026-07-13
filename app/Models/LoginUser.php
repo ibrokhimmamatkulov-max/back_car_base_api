@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class LoginUser extends Model
 {
     use HasFactory;
+    protected $connection = 'mysql_taxi';
     public const LOGIN = 1;
     public const NOT_LOGIN = 0;
     protected $fillable = [
