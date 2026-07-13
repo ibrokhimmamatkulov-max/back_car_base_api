@@ -119,11 +119,11 @@ class AuthController extends Controller
         ];
 
         $subsectionIds = $role_id
-            ? DB::table('subsection_role')->where('role_id', $role_id)->pluck('subsection_id')
+            ? DB::connection('mysql_taxi')->table('subsection_role')->where('role_id', $role_id)->pluck('subsection_id')
             : collect();
 
         $sections = $subsectionIds->isNotEmpty()
-            ? DB::table('sections')
+            ? DB::connection('mysql_taxi')->table('sections')
                 ->join('subsections', 'sections.id', '=', 'subsections.section_id')
                 ->whereIn('subsections.id', $subsectionIds)
                 ->select(
