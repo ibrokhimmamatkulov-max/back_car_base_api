@@ -64,7 +64,7 @@ return [
 
     'storage' => [
         'database' => [
-            'connection' => env('DB_CONNECTION', 'mysql'),
+            'connection' => env('PASSPORT_DB_CONNECTION', 'mysql_taxi'),
         ],
     ],
 
