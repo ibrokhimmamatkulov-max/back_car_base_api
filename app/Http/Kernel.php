@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
         // 'auth' => \App\Http\Middleware\Authenticate::class,
         // 'no-access' => \App\Http\Middleware\AccessMiddleware::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'swagger.docs.auth' => \App\Http\Middleware\SwaggerDocsAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
