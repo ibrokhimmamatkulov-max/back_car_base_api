@@ -147,6 +147,22 @@ class CarSwagger
      *          type="string"
      *     )
      *   ),
+     *   @OA\Parameter(
+     *     name="tariffs",
+     *     in="query",
+     *     required=false,
+     *     description="Тарифы аренды",
+     *     @OA\Schema(
+     *       type="array",
+     *       @OA\Items(
+     *         type="object",
+     *         required={"duration_days","price"},
+     *         @OA\Property(property="duration_days", type="integer", description="Срок аренды в днях"),
+     *         @OA\Property(property="price", type="number", description="Цена"),
+     *         @OA\Property(property="free_weekend_day", type="boolean", description="Бесплатный выходной день")
+     *       )
+     *     )
+     *   ),
      *
      *     @OA\Response(response=200, description="Success",@OA\MediaType(mediaType="application/json",)),
      *     @OA\Response(response=401,description="Unauthenticated"),
@@ -200,6 +216,18 @@ class CarSwagger
      *           required={"car_option_id"},
      *           @OA\Property(property="car_option_id", type="integer"),
      *           @OA\Property(property="is_check", type="boolean")
+     *         )
+     *       ),
+     *       @OA\Property(
+     *         property="tariffs",
+     *         type="array",
+     *         description="Тарифы аренды",
+     *         @OA\Items(
+     *           type="object",
+     *           required={"duration_days","price"},
+     *           @OA\Property(property="duration_days", type="integer", description="Срок аренды в днях"),
+     *           @OA\Property(property="price", type="number", description="Цена"),
+     *           @OA\Property(property="free_weekend_day", type="boolean", description="Бесплатный выходной день")
      *         )
      *       )
      *     )

@@ -8,6 +8,7 @@ use App\Models\CarOption;
 use App\Models\CategoryCar;
 use App\Models\ColorCar;
 use App\Models\PerformerTransportOption;
+use App\Models\RentalTariff;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -109,6 +110,10 @@ class CarController extends Controller
             'gearbox_id'    => ['required', Rule::exists('gearboxes', 'id')],
             'min_rent_days' => ['required', 'integer', 'min:1'],
             'address'       => ['required', 'string', 'max:255'],
+            'tariffs'                        => 'nullable|array',
+            'tariffs.*.duration_days'        => ['required_with:tariffs', 'integer', 'min:1'],
+            'tariffs.*.price'                => ['required_with:tariffs', 'numeric', 'min:0'],
+            'tariffs.*.free_weekend_day'     => ['boolean'],
         ]);
 
         if ($validator->fails()) {
@@ -192,6 +197,19 @@ class CarController extends Controller
             }
         }
 
+        $tariffs = $request->tariffs;
+        if (is_array($tariffs)) {
+            foreach ($tariffs as $tariff) {
+                $tariff = (array)$tariff;
+                RentalTariff::create([
+                    'performer_transport_id' => $car->id,
+                    'duration_days'          => $tariff['duration_days'],
+                    'price'                  => $tariff['price'],
+                    'free_weekend_day'       => $tariff['free_weekend_day'] ?? false,
+                ]);
+            }
+        }
+
         return $this->success(['car_id' => $car->id], 'Автомобиль успешно добавлен!', 201);
     }
 
@@ -237,6 +255,10 @@ class CarController extends Controller
             'gearbox_id'    => ['required', Rule::exists('gearboxes', 'id')],
             'min_rent_days' => ['required', 'integer', 'min:1'],
             'address'       => ['required', 'string', 'max:255'],
+            'tariffs'                        => 'nullable|array',
+            'tariffs.*.duration_days'        => ['required_with:tariffs', 'integer', 'min:1'],
+            'tariffs.*.price'                => ['required_with:tariffs', 'numeric', 'min:0'],
+            'tariffs.*.free_weekend_day'     => ['boolean'],
         ]);
 
         if ($validator->fails()) {
@@ -248,6 +270,14 @@ class CarController extends Controller
             $decoded = json_decode($dop_options, true);
             if (json_last_error() === JSON_ERROR_NONE) {
                 $dop_options = $decoded;
+            }
+        }
+
+        $tariffs = $request->tariffs;
+        if (is_string($tariffs)) {
+            $decoded = json_decode($tariffs, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $tariffs = $decoded;
             }
         }
 
@@ -322,6 +352,19 @@ class CarController extends Controller
                     ['performer_transport_id' => $car->id, 'option_id' => $item['car_option_id']],
                     ['is_check' => 1]
                 );
+            }
+        }
+
+        if (is_array($tariffs)) {
+            RentalTariff::where('performer_transport_id', $car->id)->delete();
+            foreach ($tariffs as $tariff) {
+                $tariff = (array)$tariff;
+                RentalTariff::create([
+                    'performer_transport_id' => $car->id,
+                    'duration_days'          => $tariff['duration_days'],
+                    'price'                  => $tariff['price'],
+                    'free_weekend_day'       => $tariff['free_weekend_day'] ?? false,
+                ]);
             }
         }
 
