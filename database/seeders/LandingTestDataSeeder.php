@@ -47,15 +47,17 @@ class LandingTestDataSeeder extends Seeder
             ],
         );
 
-        RentalTariff::firstOrCreate(
-            ['performer_transport_id' => $transport->id, 'duration_days' => 1],
+        $tariffOneDay = RentalTariff::firstOrCreate(
+            ['duration_days' => 1],
             ['price' => 150, 'free_weekend_day' => false],
         );
 
-        RentalTariff::firstOrCreate(
-            ['performer_transport_id' => $transport->id, 'duration_days' => 7],
+        $tariffWeek = RentalTariff::firstOrCreate(
+            ['duration_days' => 7],
             ['price' => 900, 'free_weekend_day' => true],
         );
+
+        $transport->tariffs()->syncWithoutDetaching([$tariffOneDay->id, $tariffWeek->id]);
 
         $this->command->info("City id={$city->id}, Transport id={$transport->id}");
         $this->command->info("Test: GET /api/landing/offers?city_id={$city->id}");

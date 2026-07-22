@@ -22,13 +22,6 @@ class RentalTariffSwagger
      *     summary="Создать тариф",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
-     *         name="performer_transport_id",
-     *         in="query",
-     *         required=true,
-     *         description="ID автомобиля",
-     *         @OA\Schema(type="integer", example=12)
-     *     ),
-     *     @OA\Parameter(
      *         name="duration_days",
      *         in="query",
      *         required=true,

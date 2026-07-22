@@ -11,9 +11,9 @@ use App\Models\ApplicationStatus;
 use App\Models\PerformerTransport;
 use App\Models\Polygon;
 use App\Models\RentalApplication;
-use App\Models\RentalTariff;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LandingController extends Controller
 {
@@ -42,17 +42,15 @@ class LandingController extends Controller
                 fn ($tq) => $tq->where('duration_days', $request->integer('duration_days'))
             ));
 
+        $minPriceSubquery = fn () => DB::table('car_rental_tariff')
+            ->join('rental_tariffs', 'rental_tariffs.id', '=', 'car_rental_tariff.rental_tariff_id')
+            ->select('rental_tariffs.price')
+            ->whereColumn('car_rental_tariff.performer_transport_id', 'performer_transports.id')
+            ->orderBy('rental_tariffs.price')->limit(1);
+
         match ($request->input('sort')) {
-            'price_asc'  => $query->orderBy(
-                RentalTariff::select('price')
-                    ->whereColumn('performer_transport_id', 'performer_transports.id')
-                    ->orderBy('price')->limit(1)
-            ),
-            'price_desc' => $query->orderByDesc(
-                RentalTariff::select('price')
-                    ->whereColumn('performer_transport_id', 'performer_transports.id')
-                    ->orderBy('price')->limit(1)
-            ),
+            'price_asc'  => $query->orderBy($minPriceSubquery()),
+            'price_desc' => $query->orderByDesc($minPriceSubquery()),
             'year_desc'  => $query->orderByDesc('year_of_issue'),
             'year_asc'   => $query->orderBy('year_of_issue'),
             default      => $query->orderByDesc('created_at'),
@@ -102,7 +100,8 @@ class LandingController extends Controller
 
         // Если указан tariff_id, проверяем принадлежность к объявлению
         if (! empty($data['tariff_id'])) {
-            $validTariff = RentalTariff::where('id', $data['tariff_id'])
+            $validTariff = DB::table('car_rental_tariff')
+                ->where('rental_tariff_id', $data['tariff_id'])
                 ->where('performer_transport_id', $data['offer_id'])
                 ->exists();
 

@@ -11,17 +11,16 @@ class RentalTariffController extends Controller
 {
     public function index()
     {
-        $rental_tariff = RentalTariff::with('car.model_car.brand')->orderByDesc('id')->get();
+        $rental_tariff = RentalTariff::orderByDesc('id')->get();
         return $this->success($rental_tariff);
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'performer_transport_id' => 'required|exists:performer_transports,id',
-            'duration_days'          => 'required|integer|min:1',
-            'price'                  => 'required|numeric|min:0',
-            'free_weekend_day'       => 'boolean',
+            'duration_days'    => 'required|integer|min:1',
+            'price'            => 'required|numeric|min:0',
+            'free_weekend_day' => 'boolean',
         ]);
 
         if ($validator->fails()) {
@@ -34,7 +33,7 @@ class RentalTariffController extends Controller
 
     public function show(int $id)
     {
-        $rental_tariff = RentalTariff::with('car.model_car.brand')->find($id);
+        $rental_tariff = RentalTariff::find($id);
         if (!$rental_tariff) {
             return $this->error('Тариф не найден', 404);
         }

@@ -101,7 +101,8 @@ class PerformerTransport extends BasicModel
     }
     
     public function tariffs() {
-        return $this->hasMany(RentalTariff::class);
+        return $this->belongsToMany(RentalTariff::class, 'car_rental_tariff', 'performer_transport_id', 'rental_tariff_id')
+            ->withTimestamps();
     }
 
     public function rental_aplication() {

@@ -11,14 +11,8 @@ class RentalTariff extends Model
 
     protected $table = 'rental_tariffs';
     protected $fillable = [
-        'performer_transport_id',
         'duration_days',
         'price',
         'free_weekend_day',
     ];
-
-    public function car()
-    {
-        return $this->belongsTo(PerformerTransport::class, 'performer_transport_id');
-    }
 }

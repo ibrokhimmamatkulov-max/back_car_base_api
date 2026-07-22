@@ -151,16 +151,10 @@ class CarSwagger
      *     name="tariffs",
      *     in="query",
      *     required=false,
-     *     description="Тарифы аренды",
+     *     description="Список ID тарифов аренды (см. /api/rental-tariffs)",
      *     @OA\Schema(
      *       type="array",
-     *       @OA\Items(
-     *         type="object",
-     *         required={"duration_days","price"},
-     *         @OA\Property(property="duration_days", type="integer", description="Срок аренды в днях"),
-     *         @OA\Property(property="price", type="number", description="Цена"),
-     *         @OA\Property(property="free_weekend_day", type="boolean", description="Бесплатный выходной день")
-     *       )
+     *       @OA\Items(type="integer")
      *     )
      *   ),
      *
@@ -221,14 +215,8 @@ class CarSwagger
      *       @OA\Property(
      *         property="tariffs",
      *         type="array",
-     *         description="Тарифы аренды",
-     *         @OA\Items(
-     *           type="object",
-     *           required={"duration_days","price"},
-     *           @OA\Property(property="duration_days", type="integer", description="Срок аренды в днях"),
-     *           @OA\Property(property="price", type="number", description="Цена"),
-     *           @OA\Property(property="free_weekend_day", type="boolean", description="Бесплатный выходной день")
-     *         )
+     *         description="Список ID тарифов аренды (см. /api/rental-tariffs)",
+     *         @OA\Items(type="integer")
      *       )
      *     )
      *   ),
