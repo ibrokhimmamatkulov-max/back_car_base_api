@@ -20,7 +20,7 @@ class RentalTariffController extends Controller
         $validator = Validator::make($request->all(), [
             'duration_days'    => 'required|integer|min:1',
             'price'            => 'required|numeric|min:0',
-            'free_weekend_day' => 'boolean',
+            'free_weekend_day' => 'integer|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -50,7 +50,7 @@ class RentalTariffController extends Controller
         $validator = Validator::make($request->all(), [
             'duration_days'    => 'sometimes|integer|min:1',
             'price'            => 'sometimes|numeric|min:0',
-            'free_weekend_day' => 'sometimes|boolean',
+            'free_weekend_day' => 'sometimes|integer|min:0',
         ]);
 
         if ($validator->fails()) {

@@ -39,7 +39,7 @@ class RentalTariffSwagger
      *         name="free_weekend_day",
      *         in="query",
      *         required=false,
-     *         description="Бесплатный выходной",
+     *         description="Количество бесплатных выходных дней",
      *         @OA\Schema(type="integer", example=0)
      *     ),
      *
@@ -98,7 +98,7 @@ class RentalTariffSwagger
      *         name="free_weekend_day",
      *         in="query",
      *         required=false,
-     *         description="Бесплатный выходной",
+     *         description="Количество бесплатных выходных дней",
      *         @OA\Schema(type="integer", example=0)
      *     ),
      *

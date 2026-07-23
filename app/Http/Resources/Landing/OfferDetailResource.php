@@ -48,7 +48,7 @@ class OfferDetailResource extends JsonResource
                 'id'              => $t->id,
                 'duration_days'   => $t->duration_days,
                 'price'           => $t->price,
-                'free_weekend_day'=> (bool) $t->free_weekend_day,
+                'free_weekend_day'=> (int) $t->free_weekend_day,
             ]),
             'performer_id' => $this->performer_id,
         ];

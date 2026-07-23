@@ -49,12 +49,12 @@ class LandingTestDataSeeder extends Seeder
 
         $tariffOneDay = RentalTariff::firstOrCreate(
             ['duration_days' => 1],
-            ['price' => 150, 'free_weekend_day' => false],
+            ['price' => 150, 'free_weekend_day' => 0],
         );
 
         $tariffWeek = RentalTariff::firstOrCreate(
             ['duration_days' => 7],
-            ['price' => 900, 'free_weekend_day' => true],
+            ['price' => 900, 'free_weekend_day' => 1],
         );
 
         $transport->tariffs()->syncWithoutDetaching([$tariffOneDay->id, $tariffWeek->id]);

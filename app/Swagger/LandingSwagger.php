@@ -131,7 +131,7 @@ class LandingSwagger
      *                     @OA\Property(property="id",               type="integer", example=1),
      *                     @OA\Property(property="duration_days",    type="integer", example=7),
      *                     @OA\Property(property="price",            type="number",  example=180000),
-     *                     @OA\Property(property="free_weekend_day", type="boolean", example=true)
+     *                     @OA\Property(property="free_weekend_day", type="integer", example=1)
      *                 ))
      *             )
      *         )
