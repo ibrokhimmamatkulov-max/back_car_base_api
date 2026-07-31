@@ -22,7 +22,9 @@ class CarResource extends JsonResource
      */
     public function toArray($request)
     {
-        $car_options = CarOptionResource::collection($this->car_options);
+        $car_options = CarOptionResource::collection(
+            $this->dopOptions->pluck('car_option')->filter()->values()
+        );
         return [
             "id" => $this->id,
             'performer_id' => $this->performer_id??null,

@@ -190,7 +190,7 @@ class CarFilterService
             }
 
             $perfomers = $perfomers->pluck('id');
-            $query = PerformerTransport::whereIn('performer_id', $perfomers);
+            $query = $query->whereIn('performer_id', $perfomers);
         }
 
         // if (isset($request->filter_login)) {
@@ -204,7 +204,7 @@ class CarFilterService
                     'success' => false,
                     'message' => "filter_category_car_id принимает только цифру",
                 ]);
-            $query = PerformerTransport::where('car_model_id', $request->filter_category_car_id);
+            $query = $query->where('car_model_id', $request->filter_category_car_id);
         }
 
 
@@ -231,7 +231,7 @@ class CarFilterService
                     'success' => false,
                     'message' => "filter_category_car_id принимает только цифру",
                 ]);
-            $query = PerformerTransport::where('condition_id', $request->filter_condition_id);
+            $query = $query->where('condition_id', $request->filter_condition_id);
         }
 
         if ($request->has('filter_journal_car')) {

@@ -19,9 +19,9 @@ class LandingApplicationRequest extends FormRequest
         return [
             'name'      => 'required|string|max:255',
             'phone'     => ['required', 'string', 'regex:/^(\+?992|0)?[0-9]{9}$/'],
-            'city_id'   => ['required', 'integer', Rule::exists('auto_baza.cities', 'id')],
-            'offer_id'  => ['required', 'integer', Rule::exists('auto_baza.performer_transports', 'id')->where('active', 1)],
-            'tariff_id' => ['nullable', 'integer', Rule::exists('auto_baza.rental_tariffs', 'id')],
+            'city_id'   => ['required', 'integer', Rule::exists('cities', 'id')],
+            'offer_id'  => ['required', 'integer', Rule::exists('performer_transports', 'id')->where('active', 1)],
+            'tariff_id' => ['nullable', 'integer', Rule::exists('rental_tariffs', 'id')],
             'comment'   => 'nullable|string|max:1000',
         ];
     }

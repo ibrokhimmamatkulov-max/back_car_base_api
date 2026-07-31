@@ -21,7 +21,7 @@ class RentalController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'performer_transport_id' => 'required|exists:performer_transports,id',
-            'performer_id'           => 'nullable|exists:users,id',
+            'performer_id'           => 'nullable|exists:mysql_taxi.users,id',
             'status_id'              => 'required|exists:rental_statuses,id',
             'start_datetime'         => 'required|date_format:Y-m-d|after_or_equal:today',
             'end_datetime'           => 'required|date_format:Y-m-d',
