@@ -93,7 +93,7 @@ class CarResource extends JsonResource
             "gearbox_id" => $this->gearbox_id,
             "gearbox" => $this->gearbox?->name,
             "min_rent_days" => $this->min_rent_days,
-            "photos" => $this->photos->map(fn($p) => Storage::url($p->path)),
+            "photos" => $this->photos->map(fn($p) => Storage::disk('public')->url($p->path)),
             "tariffs" => $this->tariffs->pluck('id'),
         ];
     }

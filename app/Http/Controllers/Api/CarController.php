@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\PerformerTransport;
+use App\Models\PerformerTransportPhoto;
 use App\Http\Controllers\Controller;
 use App\Models\BodyType;
 use App\Models\CarCondition;
@@ -112,6 +113,8 @@ class CarController extends Controller
             'address'       => ['required', 'string', 'max:255'],
             'tariffs'       => 'nullable|array',
             'tariffs.*'     => ['integer', Rule::exists(RentalTariff::class, 'id')],
+            'photos'        => ['nullable', 'array', 'max:4'],
+            'photos.*'      => ['file', 'image', 'mimes:jpg,jpeg,png', 'max:4096'],
         ]);
 
         if ($validator->fails()) {
@@ -198,6 +201,13 @@ class CarController extends Controller
         $tariffs = $request->tariffs;
         if (is_array($tariffs)) {
             $car->tariffs()->sync($tariffs);
+        }
+
+        foreach ($request->file('photos', []) as $photo) {
+            PerformerTransportPhoto::create([
+                'performer_transport_id' => $car->id,
+                'path' => $photo->store('cars', 'public'),
+            ]);
         }
 
         return $this->success(['car_id' => $car->id], 'Автомобиль успешно добавлен!', 201);
