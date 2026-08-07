@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LandingApplicationRequest;
-use App\Http\Resources\Landing\CityResource;
 use App\Http\Resources\Landing\OfferDetailResource;
-use App\Http\Resources\Landing\OfferListResource;
 use App\Models\ApplicationStatus;
 use App\Models\PerformerTransport;
-use App\Models\Polygon;
 use App\Models\RentalApplication;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,56 +14,16 @@ use Illuminate\Support\Facades\DB;
 
 class LandingController extends Controller
 {
-    // 1. Список городов из polygons (mysql_location)
+    // 1. Тот же список городов, что и в GET /api/cities
     public function cities(): JsonResponse
     {
-        $typeId = config('services.landing.city_place_type_id');
-
-        $cities = Polygon::where('is_active', 1)
-            ->when($typeId, fn ($q) => $q->where('place_type_id', $typeId))
-            ->orderBy('name')
-            ->get(['id', 'name', 'lat', 'lng']);
-
-        return $this->success(CityResource::collection($cities));
+        return app(CityController::class)->index();
     }
 
-    // 2. Список объявлений с фильтрами
+    // 2. Те же данные и фильтры, что и в GET /api/cars
     public function offers(Request $request): JsonResponse
     {
-        $query = PerformerTransport::query()
-            ->where('active', PerformerTransport::ACTIVE)
-            ->with(['model_car.brand', 'gearbox', 'city', 'body_type', 'photos', 'tariffs'])
-            ->when($request->filled('city_id'),     fn ($q) => $q->where('city_id',     $request->integer('city_id')))
-            ->when($request->filled('gearbox_id'),  fn ($q) => $q->where('gearbox_id',  $request->integer('gearbox_id')))
-            ->when($request->filled('duration_days'), fn ($q) => $q->whereHas('tariffs',
-                fn ($tq) => $tq->where('duration_days', $request->integer('duration_days'))
-            ));
-
-        $minPriceSubquery = fn () => DB::table('car_rental_tariff')
-            ->join('rental_tariffs', 'rental_tariffs.id', '=', 'car_rental_tariff.rental_tariff_id')
-            ->select('rental_tariffs.price')
-            ->whereColumn('car_rental_tariff.performer_transport_id', 'performer_transports.id')
-            ->orderBy('rental_tariffs.price')->limit(1);
-
-        match ($request->input('sort')) {
-            'price_asc'  => $query->orderBy($minPriceSubquery()),
-            'price_desc' => $query->orderByDesc($minPriceSubquery()),
-            'year_desc'  => $query->orderByDesc('year_of_issue'),
-            'year_asc'   => $query->orderBy('year_of_issue'),
-            default      => $query->orderByDesc('created_at'),
-        };
-
-        $offers = $query->paginate($request->integer('per_page', 12));
-
-        return $this->success([
-            'data' => OfferListResource::collection($offers),
-            'meta' => [
-                'total'        => $offers->total(),
-                'per_page'     => $offers->perPage(),
-                'current_page' => $offers->currentPage(),
-                'last_page'    => $offers->lastPage(),
-            ],
-        ]);
+        return app(CarController::class)->index($request);
     }
 
     // 3. Детальная страница объявления
