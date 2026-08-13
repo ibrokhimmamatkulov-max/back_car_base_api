@@ -36,6 +36,39 @@ class LandingSwagger
 
     /**
      * @OA\Get(
+     *     path="/api/landing/rental-tariffs",
+     *     tags={"Landing"},
+     *     summary="Список тарифов для landing",
+     *     description="Возвращает список тарифов аренды без авторизации.",
+     *     @OA\Response(response=200, description="OK")
+     * )
+     */
+    public function rentalTariffs() {}
+
+    /**
+     * @OA\Get(
+     *     path="/api/landing/gearboxes",
+     *     tags={"Landing"},
+     *     summary="Список коробок передач для landing",
+     *     description="Возвращает список коробок передач без авторизации.",
+     *     @OA\Response(response=200, description="OK")
+     * )
+     */
+    public function gearboxes() {}
+
+    /**
+     * @OA\Get(
+     *     path="/api/landing/fuel-types",
+     *     tags={"Landing"},
+     *     summary="Список типов топлива для landing",
+     *     description="Возвращает активные типы топлива без авторизации.",
+     *     @OA\Response(response=200, description="OK")
+     * )
+     */
+    public function fuelTypes() {}
+
+    /**
+     * @OA\Get(
      *     path="/api/landing/offers",
      *     tags={"Landing"},
      *     summary="Список объявлений с фильтрами",
@@ -43,6 +76,8 @@ class LandingSwagger
      *
      *     @OA\Parameter(name="city_id",       in="query", required=false, description="ID города",             @OA\Schema(type="integer")),
      *     @OA\Parameter(name="gearbox_id",    in="query", required=false, description="ID типа коробки передач", @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="fuel_type_id",  in="query", required=false, description="ID типа топлива", @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="tariff_id",     in="query", required=false, description="ID тарифа", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="duration_days", in="query", required=false, description="Длительность тарифа (дни): 1, 7, 30...", @OA\Schema(type="integer")),
      *     @OA\Parameter(name="sort",          in="query", required=false, description="Сортировка: price_asc | price_desc | year_asc | year_desc", @OA\Schema(type="string", enum={"price_asc","price_desc","year_asc","year_desc"})),
      *     @OA\Parameter(name="per_page",      in="query", required=false, description="Записей на страницу (по умолчанию 12)", @OA\Schema(type="integer")),

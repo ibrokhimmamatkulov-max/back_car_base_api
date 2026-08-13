@@ -7,8 +7,11 @@ use App\Http\Requests\LandingApplicationRequest;
 use App\Http\Resources\Landing\OfferDetailResource;
 use App\Http\Resources\Landing\OfferListResource;
 use App\Models\ApplicationStatus;
+use App\Models\CarOption;
+use App\Models\Gearbox;
 use App\Models\PerformerTransport;
 use App\Models\RentalApplication;
+use App\Models\RentalTariff;
 use App\Services\CarFilterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,6 +23,25 @@ class LandingController extends Controller
     public function cities(): JsonResponse
     {
         return app(CityController::class)->index();
+    }
+
+    public function rentalTariffs(): JsonResponse
+    {
+        return $this->success(RentalTariff::orderByDesc('id')->get());
+    }
+
+    public function gearboxes(): JsonResponse
+    {
+        return $this->success(Gearbox::orderBy('id')->get());
+    }
+
+    public function fuelTypes(): JsonResponse
+    {
+        return $this->success(
+            CarOption::where('model', 'car_fuel_type')
+                ->where('is_active', 1)
+                ->get(['id', 'name'])
+        );
     }
 
     // 2. Данные из списка автомобилей в формате landing с пагинацией
@@ -34,6 +56,11 @@ class LandingController extends Controller
         $query = CarFilterService::applyFilters($query, $request)
             ->when($request->filled('city_id'), fn ($q) => $q->where('city_id', $request->integer('city_id')))
             ->when($request->filled('gearbox_id'), fn ($q) => $q->where('gearbox_id', $request->integer('gearbox_id')))
+            ->when($request->filled('fuel_type_id'), fn ($q) => $q->where('fuel_type_id', $request->integer('fuel_type_id')))
+            ->when($request->filled('tariff_id'), fn ($q) => $q->whereHas(
+                'tariffs',
+                fn ($tq) => $tq->whereKey($request->integer('tariff_id'))
+            ))
             ->when($request->filled('duration_days'), fn ($q) => $q->whereHas(
                 'tariffs',
                 fn ($tq) => $tq->where('duration_days', $request->integer('duration_days'))

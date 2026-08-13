@@ -148,8 +148,11 @@ Route::group(['prefix' => 'auth'], function () {
 
 // Public landing API — без авторизации
 Route::prefix('landing')->group(function () {
-    Route::get('cities',        [LandingController::class, 'cities']);
-    Route::get('offers',        [LandingController::class, 'offers']);
-    Route::get('offers/{id}',   [LandingController::class, 'offer']);
-    Route::post('apply',        [LandingController::class, 'apply'])->middleware('throttle:10,1');
+    Route::get('cities',          [LandingController::class, 'cities']);
+    Route::get('rental-tariffs', [LandingController::class, 'rentalTariffs']);
+    Route::get('gearboxes',      [LandingController::class, 'gearboxes']);
+    Route::get('fuel-types',     [LandingController::class, 'fuelTypes']);
+    Route::get('offers',         [LandingController::class, 'offers']);
+    Route::get('offers/{id}',    [LandingController::class, 'offer']);
+    Route::post('apply',         [LandingController::class, 'apply'])->middleware('throttle:10,1');
 });
