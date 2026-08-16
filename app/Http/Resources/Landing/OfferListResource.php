@@ -29,6 +29,12 @@ class OfferListResource extends JsonResource
             ],
             'min_price'    => $this->tariffs->min('price'),
             'min_rent_days'=> $this->min_rent_days,
+            'tariffs'      => $this->tariffs->map(fn ($t) => [
+                'id'              => $t->id,
+                'duration_days'   => $t->duration_days,
+                'price'           => $t->price,
+                'free_weekend_day'=> (int) $t->free_weekend_day,
+            ]),
             'photos'       => $this->photos->map(fn($p) => Storage::url($p->path)),
         ];
     }
