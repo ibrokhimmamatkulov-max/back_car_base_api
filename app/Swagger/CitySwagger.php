@@ -35,6 +35,13 @@ class CitySwagger
      *         description="Описание",
      *         @OA\Schema(type="string", example="Столица")
      *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         required=false,
+     *         description="Порядок сортировки (меньше — выше в списке)",
+     *         @OA\Schema(type="integer", example=0)
+     *     ),
      *
      *     @OA\Response(response=201, description="Created")
      * )
@@ -87,11 +94,58 @@ class CitySwagger
      *         description="Описание",
      *         @OA\Schema(type="string")
      *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         required=false,
+     *         description="Порядок сортировки (меньше — выше в списке)",
+     *         @OA\Schema(type="integer", example=0)
+     *     ),
      *
      *     @OA\Response(response=200, description="Updated")
      * )
      */
     public function update(){}
+
+    /**
+     * @OA\Patch(
+     *     path="/api/cities/{id}",
+     *     tags={"Cities"},
+     *     summary="Частично обновить город",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID города",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         required=false,
+     *         description="Название города",
+     *         @OA\Schema(type="string", example="Хуҷанд")
+     *     ),
+     *     @OA\Parameter(
+     *         name="description",
+     *         in="query",
+     *         required=false,
+     *         description="Описание",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         required=false,
+     *         description="Порядок сортировки (меньше — выше в списке)",
+     *         @OA\Schema(type="integer", example=0)
+     *     ),
+     *
+     *     @OA\Response(response=200, description="Updated")
+     * )
+     */
+    public function patch(){}
 
     /**
      * @OA\Delete(
