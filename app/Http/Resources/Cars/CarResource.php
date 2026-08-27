@@ -68,9 +68,10 @@ class CarResource extends JsonResource
             "dop_info" => $this->dop_info,
             "dop_options" => $car_options,
             'status_id' => $this->connected_id,
-            "status" => $this->whenPivotLoadedAs('car_connection', CarConnected::class, function () {
-                return $this->car_connection->name;
-            }),
+            'status' => "",
+            // "status" => $this->whenPivotLoadedAs('car_connection', CarConnected::class, function () {
+            //     return $this->car_connection->name;
+            // }),
             "active" => $this->active,
             // "car_drivers" => $this->when(count($this->car_drivers) > 0, function () {
             //     return CarHasDriversResource::collection($this->whenLoaded('car_drivers'));

@@ -11,7 +11,7 @@ class CityController extends Controller
 {
     public function index()
     {
-        return $this->success(City::orderBy('id')->get());
+        return $this->success(City::orderBy('sort')->get());
     }
 
     public function store(Request $request)
@@ -19,6 +19,7 @@ class CityController extends Controller
         $validator = Validator::make($request->all(), [
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
+            'sort'        => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -48,6 +49,7 @@ class CityController extends Controller
         $validator = Validator::make($request->all(), [
             'name'        => 'sometimes|string|max:255',
             'description' => 'sometimes|string|max:500',
+            'sort'        => 'sometimes|integer',
         ]);
 
         if ($validator->fails()) {

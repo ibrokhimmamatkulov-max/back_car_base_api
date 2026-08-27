@@ -58,6 +58,7 @@ Route::middleware('auth:api')->group(function (){
     Route::post('cities', [CityController::class, 'store']);
     Route::get('cities/{id}', [CityController::class, 'show']);
     Route::put('cities/{id}', [CityController::class, 'update']);
+    Route::patch('cities/{id}', [CityController::class, 'update']);
     Route::delete('cities/{id}', [CityController::class, 'destroy']);
     Route::get('application-statuses', [ApplicationStatusController::class, 'index']);
     Route::post('application-statuses', [ApplicationStatusController::class, 'store']);

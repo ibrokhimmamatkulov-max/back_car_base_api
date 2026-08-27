@@ -47,7 +47,7 @@ class LandingController extends Controller
     // 2. Данные из списка автомобилей в формате landing с пагинацией
     public function offers(Request $request): JsonResponse
     {
-        $query = PerformerTransport::query()->where('active', PerformerTransport::ACTIVE)->with([
+        $query = PerformerTransport::query()->with([
             'model_car', 'car_connection', 'model_car.brand', 'model_car.category_car',
             'model_car.class_car', 'body_type', 'color', 'condition', 'updated_user',
             'dopOptions', 'dopOptions.car_option', 'fuel_type', 'photos', 'tariffs', 'city', 'gearbox',
