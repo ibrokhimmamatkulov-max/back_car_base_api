@@ -97,8 +97,7 @@ class LandingController extends Controller
     // 3. Детальная страница объявления
     public function offer(int $id): JsonResponse
     {
-        $offer = PerformerTransport::where('active', PerformerTransport::ACTIVE)
-            ->with([
+        $offer = PerformerTransport::with([
                 'model_car.brand',
                 'gearbox',
                 'city',
