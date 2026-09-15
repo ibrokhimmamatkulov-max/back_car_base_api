@@ -9,6 +9,9 @@ class RentalApplication extends Model
 {
     use HasFactory;
 
+    public const CHANGED_BY_OWNER = 'owner';
+    public const CHANGED_BY_MANAGER = 'manager';
+
     protected $fillable = [
         'performer_transport_id',
         'rental_tariff_id',
@@ -19,6 +22,22 @@ class RentalApplication extends Model
         'comment',
         'promo_code',
         'status_id',
+        // Гараж 2.0
+        'owner_id',
+        'desired_start_date',
+        'desired_end_date',
+        'price_tier_id',
+        'calculated_total',
+        'source',
+        'status_changed_by',
+        'status_changed_at',
+    ];
+
+    protected $casts = [
+        'desired_start_date' => 'date',
+        'desired_end_date'   => 'date',
+        'calculated_total'   => 'decimal:2',
+        'status_changed_at'  => 'datetime',
     ];
 
     public function car()
@@ -45,5 +64,19 @@ class RentalApplication extends Model
     {
         return $this->belongsTo(ApplicationStatus::class, 'status_id');
     }
-    
+
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class, 'owner_id');
+    }
+
+    public function priceTier()
+    {
+        return $this->belongsTo(RentalPriceTier::class, 'price_tier_id');
+    }
+
+    public function scopeOwnedBy($query, int $ownerId)
+    {
+        return $query->where('rental_applications.owner_id', $ownerId);
+    }
 }

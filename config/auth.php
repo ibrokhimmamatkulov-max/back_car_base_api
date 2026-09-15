@@ -44,6 +44,13 @@ return [
             'driver' => 'passport',
             'provider' => 'users',
         ],
+
+        // Арендодатели. Отдельный контур: Sanctum + своя таблица в своей базе.
+        // Смешивать с 'api' нельзя — токен владельца не должен открывать админские ручки.
+        'owner' => [
+            'driver' => 'sanctum',
+            'provider' => 'owners',
+        ],
     ],
 
     /*
@@ -67,6 +74,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+        'owners' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Owner::class,
         ],
 
         // 'users' => [

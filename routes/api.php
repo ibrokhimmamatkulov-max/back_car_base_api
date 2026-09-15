@@ -20,6 +20,15 @@ use App\Http\Controllers\Api\RentalController;
 use App\Http\Controllers\Api\RentalStatusController;
 use App\Http\Controllers\Api\RentalTariffController;
 use App\Http\Controllers\Api\RoleController;
+// Гараж 2.0 — кабинет арендодателя и модерация
+use App\Http\Controllers\Api\Moderation\ListingModerationController;
+use App\Http\Controllers\Api\Moderation\OwnerManagementController;
+use App\Http\Controllers\Api\Owner\ApplicationController as OwnerApplicationController;
+use App\Http\Controllers\Api\Owner\AuthController as OwnerAuthController;
+use App\Http\Controllers\Api\Owner\AvailabilityController as OwnerAvailabilityController;
+use App\Http\Controllers\Api\Owner\ListingController as OwnerListingController;
+use App\Http\Controllers\Api\Owner\ListingPhotoController as OwnerListingPhotoController;
+use App\Http\Controllers\Api\Owner\ProfileController as OwnerProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -150,10 +159,87 @@ Route::group(['prefix' => 'auth'], function () {
 // Public landing API — без авторизации
 Route::prefix('landing')->group(function () {
     Route::get('cities',          [LandingController::class, 'cities']);
+    Route::get('cities/default',  [LandingController::class, 'defaultCity']);
     Route::get('rental-tariffs', [LandingController::class, 'rentalTariffs']);
     Route::get('gearboxes',      [LandingController::class, 'gearboxes']);
     Route::get('fuel-types',     [LandingController::class, 'fuelTypes']);
+    Route::get('car-brands',     [LandingController::class, 'carBrands']);
+    Route::get('car-models',     [LandingController::class, 'carModels']);
+    Route::get('body-types',     [LandingController::class, 'bodyTypes']);
+    Route::get('colors',         [LandingController::class, 'colors']);
+    Route::get('price-calc',     [LandingController::class, 'priceCalc']);
     Route::get('offers',         [LandingController::class, 'offers']);
     Route::get('offers/{id}',    [LandingController::class, 'offer']);
     Route::post('apply',         [LandingController::class, 'apply'])->middleware('throttle:10,1');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Кабинет арендодателя — guard 'owner' (Sanctum)
+|--------------------------------------------------------------------------
+| Отдельный контур от админского 'api' (Passport): токен владельца не должен
+| открывать админские ручки.
+*/
+Route::prefix('owner')->group(function () {
+
+    Route::prefix('auth')->group(function () {
+        Route::post('request-otp',     [OwnerAuthController::class, 'requestOtp'])->middleware('throttle:20,1');
+        Route::post('verify-otp',      [OwnerAuthController::class, 'verifyOtp'])->middleware('throttle:20,1');
+        Route::post('login',           [OwnerAuthController::class, 'login'])->middleware('throttle:10,1');
+        Route::post('forgot-password', [OwnerAuthController::class, 'forgotPassword'])->middleware('throttle:10,1');
+        Route::post('logout', [OwnerAuthController::class, 'logout'])->middleware('auth:owner');
+    });
+
+    Route::middleware(['auth:owner', 'owner.active'])->group(function () {
+
+        Route::get('me',              [OwnerProfileController::class, 'show']);
+        Route::patch('me',            [OwnerProfileController::class, 'update']);
+        Route::post('me/change-password',          [OwnerProfileController::class, 'changePassword']);
+        Route::post('me/change-phone/request-otp', [OwnerProfileController::class, 'requestPhoneChange']);
+        Route::post('me/change-phone/verify-otp',  [OwnerProfileController::class, 'confirmPhoneChange']);
+
+        Route::get('listings',   [OwnerListingController::class, 'index']);
+        Route::post('listings',  [OwnerListingController::class, 'store']);
+
+        // owns.listing — первый рубеж проверки владения; второй внутри контроллеров.
+        Route::middleware('owns.listing')->group(function () {
+            Route::get('listings/{id}',         [OwnerListingController::class, 'show']);
+            Route::patch('listings/{id}',       [OwnerListingController::class, 'update']);
+            Route::delete('listings/{id}',      [OwnerListingController::class, 'destroy']);
+            Route::post('listings/{id}/pause',    [OwnerListingController::class, 'pause']);
+            Route::post('listings/{id}/publish',  [OwnerListingController::class, 'publish']);
+            Route::post('listings/{id}/resubmit', [OwnerListingController::class, 'resubmit']);
+
+            Route::get('listings/{id}/photos',              [OwnerListingPhotoController::class, 'index']);
+            Route::post('listings/{id}/photos',             [OwnerListingPhotoController::class, 'store']);
+            Route::delete('listings/{id}/photos/{photoId}', [OwnerListingPhotoController::class, 'destroy']);
+
+            Route::get('listings/{id}/unavailable-periods',              [OwnerAvailabilityController::class, 'index']);
+            Route::post('listings/{id}/unavailable-periods',             [OwnerAvailabilityController::class, 'store']);
+            Route::delete('listings/{id}/unavailable-periods/{periodId}', [OwnerAvailabilityController::class, 'destroy']);
+        });
+
+        Route::get('applications',          [OwnerApplicationController::class, 'index']);
+        Route::get('applications/statuses', [OwnerApplicationController::class, 'statuses']);
+        Route::get('applications/{id}',     [OwnerApplicationController::class, 'show']);
+        Route::patch('applications/{id}',   [OwnerApplicationController::class, 'update']);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Модерация — guard 'api' (менеджер, Passport)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:api')->prefix('moderation')->group(function () {
+    Route::get('listings',             [ListingModerationController::class, 'index']);
+    Route::get('listings/{id}',        [ListingModerationController::class, 'show']);
+    Route::get('listings/{id}/logs',   [ListingModerationController::class, 'logs']);
+    Route::post('listings/{id}/approve', [ListingModerationController::class, 'approve']);
+    Route::post('listings/{id}/reject',  [ListingModerationController::class, 'reject']);
+
+    Route::get('owners',              [OwnerManagementController::class, 'index']);
+    Route::get('owners/{id}',         [OwnerManagementController::class, 'show']);
+    Route::post('owners/{id}/block',   [OwnerManagementController::class, 'block']);
+    Route::post('owners/{id}/unblock', [OwnerManagementController::class, 'unblock']);
 });

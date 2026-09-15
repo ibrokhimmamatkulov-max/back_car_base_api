@@ -12,5 +12,10 @@ class City extends Model
         'name',
         'description',
         'sort',
+        'is_default',
+    ];
+
+    protected $casts = [
+        'is_default' => 'boolean',
     ];
 }

@@ -23,6 +23,11 @@ class LandingApplicationRequest extends FormRequest
             'offer_id'  => ['required', 'integer', Rule::exists('performer_transports', 'id')],
             'tariff_id' => ['nullable', 'integer', Rule::exists('rental_tariffs', 'id')],
             'comment'   => 'nullable|string|max:1000',
+
+            // Желаемые даты аренды. Ничего не бронируют — это данные лида,
+            // по которым считается ориентировочная стоимость (ТЗ §2).
+            'desired_start_date' => 'nullable|date_format:Y-m-d|after_or_equal:today',
+            'desired_end_date'   => 'nullable|date_format:Y-m-d|after:desired_start_date|required_with:desired_start_date',
         ];
     }
 
@@ -37,6 +42,8 @@ class LandingApplicationRequest extends FormRequest
             'offer_id.required'=> 'Не указано объявление.',
             'offer_id.exists'  => 'Объявление не найдено или недоступно.',
             'tariff_id.exists' => 'Выбранный тариф не найден.',
+            'desired_end_date.after'         => 'Дата окончания должна быть позже даты начала.',
+            'desired_end_date.required_with' => 'Укажите дату окончания аренды.',
         ];
     }
 

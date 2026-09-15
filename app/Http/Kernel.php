@@ -64,6 +64,9 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        // Гараж 2.0
+        'owner.active' => \App\Http\Middleware\EnsureOwnerIsActive::class,
+        'owns.listing' => \App\Http\Middleware\EnsureOwnsListing::class,
     ];
 
     protected $routeMiddleware = [
