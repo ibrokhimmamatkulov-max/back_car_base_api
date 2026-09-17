@@ -98,6 +98,7 @@ Route::middleware('auth:api')->group(function (){
     Route::delete('rentals/{id}', [RentalController::class, 'destroy']);
 
     Route::get('rental-applications', [RentalApplicationController::class, 'index']);
+    Route::get('rental-applications/summary', [RentalApplicationController::class, 'summary']);
     Route::post('rental-applications', [RentalApplicationController::class, 'store']);
     Route::get('rental-applications/{id}', [RentalApplicationController::class, 'show']);
     Route::put('rental-applications/{id}', [RentalApplicationController::class, 'update']);

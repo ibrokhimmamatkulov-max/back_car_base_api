@@ -29,14 +29,21 @@ class ListingService
         $this->assertPriceTiers($data);
         $this->assertPlateIsFree($data['car_number'] ?? null);
 
-        return DB::transaction(function () use ($owner, $data) {
+        // Премодерация отключена решением заказчика: объявление выходит сразу,
+        // менеджер смотрит его постфактум в админке (см. config/listing.php).
+        $autoPublish = (bool) config('listing.auto_publish', true);
+
+        return DB::transaction(function () use ($owner, $data, $autoPublish) {
             $listing = PerformerTransport::create(
                 $this->carAttributes($data) + [
                     'owner_id'          => $owner->id,
                     'listing_type'      => PerformerTransport::TYPE_GENERAL,
                     'source'            => PerformerTransport::SOURCE_OWNER,
-                    'moderation_status' => PerformerTransport::STATUS_PENDING,
+                    'moderation_status' => $autoPublish
+                        ? PerformerTransport::STATUS_PUBLISHED
+                        : PerformerTransport::STATUS_PENDING,
                     'submitted_at'      => now(),
+                    'published_at'      => $autoPublish ? now() : null,
                     'active'            => PerformerTransport::ACTIVE,
                 ]
             );
@@ -67,10 +74,15 @@ class ListingService
 
             $listing->fill($attributes);
 
-            // Правка существенных полей у опубликованного объявления возвращает
-            // его на модерацию; старая редакция остаётся видимой до решения.
+            // При включённой премодерации правка существенных полей возвращает
+            // объявление на проверку. При автопубликации оно остаётся на витрине:
+            // блокировать владельца из-за смены цены смысла нет.
             $returned = false;
-            if ($significant && $listing->moderation_status === PerformerTransport::STATUS_PUBLISHED) {
+            if (
+                $significant
+                && !config('listing.auto_publish', true)
+                && $listing->moderation_status === PerformerTransport::STATUS_PUBLISHED
+            ) {
                 $listing->moderation_status = PerformerTransport::STATUS_PENDING;
                 $listing->submitted_at = now();
                 $returned = true;
