@@ -28,6 +28,15 @@ class ListingRequest extends FormRequest
             'condition_id'  => 'nullable|integer|exists:car_conditions,id',
             'count_seat'    => 'nullable|integer|min:1|max:60',
 
+            // Технические поля (часть — специфика Таджикистана)
+            'customs_cleared'  => 'nullable|boolean',
+            'engine_volume'    => 'nullable|numeric|min:0.1|max:9.9',
+            'mileage'          => 'nullable|integer|min:0|max:2000000',
+            'drive_type'       => 'nullable|in:fwd,rwd,awd',
+            'has_taxi_license' => 'nullable|boolean',
+            'has_turbo'        => 'nullable|boolean',
+            'VIN'              => 'nullable|string|max:32',
+
             // Шаг 4 — описание
             'title'       => 'nullable|string|max:180',
             'description' => 'nullable|string|max:5000',

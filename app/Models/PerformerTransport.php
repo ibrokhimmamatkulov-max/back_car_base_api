@@ -68,14 +68,31 @@ class PerformerTransport extends BasicModel
         'title',
         'description',
         'max_rent_days',
+        // Технические поля
+        'customs_cleared',
+        'engine_volume',
+        'mileage',
+        'drive_type',
+        'has_taxi_license',
+        'has_turbo',
+        'vin_verified',
+        'vin_verified_at',
+        'VIN',
     ];
 
     protected $casts = [
-        'published_at'  => 'datetime',
-        'submitted_at'  => 'datetime',
-        'min_rent_days' => 'integer',
-        'max_rent_days' => 'integer',
-        'views_count'   => 'integer',
+        'published_at'     => 'datetime',
+        'submitted_at'     => 'datetime',
+        'vin_verified_at'  => 'datetime',
+        'min_rent_days'    => 'integer',
+        'max_rent_days'    => 'integer',
+        'views_count'      => 'integer',
+        'mileage'          => 'integer',
+        'engine_volume'    => 'float',
+        'customs_cleared'  => 'boolean',
+        'has_taxi_license' => 'boolean',
+        'has_turbo'        => 'boolean',
+        'vin_verified'     => 'boolean',
     ];
 
     public function model_car() {
