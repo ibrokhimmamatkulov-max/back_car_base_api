@@ -27,6 +27,18 @@ class OfferDetailResource extends JsonResource
             'address'      => $this->address,
             'min_rent_days'=> $this->min_rent_days,
             'max_rent_days'=> $this->max_rent_days,
+
+            // Технические поля заполняются владельцем при подаче, но до сих пор
+            // никуда не доходили: карточка показывала только коробку и топливо.
+            'customs_cleared'  => $this->customs_cleared !== null ? (bool) $this->customs_cleared : null,
+            'engine_volume'    => $this->engine_volume !== null ? (float) $this->engine_volume : null,
+            'mileage'          => $this->mileage !== null ? (int) $this->mileage : null,
+            'drive_type'       => $this->drive_type,
+            'has_taxi_license' => (bool) $this->has_taxi_license,
+            'has_turbo'        => (bool) $this->has_turbo,
+            // Отметку ставит менеджер по снимкам техпаспорта; сами документы
+            // в объявлении не показываются (ТЗ §4).
+            'vin_verified'     => (bool) $this->vin_verified,
             'city'         => [
                 'id'   => $this->city?->id,
                 'name' => $this->city?->name,
