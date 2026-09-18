@@ -186,9 +186,56 @@ class LandingController extends Controller
     // Заявка
     // ------------------------------------------------------------------
 
+    /**
+     * Код для подтверждения телефона в заявке.
+     *
+     * Отдельно от входа владельца: аккаунт не создаётся, арендатор остаётся
+     * анонимным. Смысл — отсечь выдуманные номера, чтобы владелец получал
+     * лиды, по которым можно дозвониться.
+     */
+    public function requestApplyOtp(Request $request): JsonResponse
+    {
+        $phone = (string) $request->input('phone', '');
+
+        if (!PhoneNormalizer::isValid($phone)) {
+            return $this->error('Validation error', 422, [
+                'phone' => ['Введите корректный номер телефона.'],
+            ]);
+        }
+
+        $limit = $this->otp->checkRateLimit($phone, $request->ip());
+
+        if (!$limit['allowed']) {
+            return $this->error(
+                "Слишком много запросов. Повторите через {$limit['seconds']} сек.",
+                429,
+                ['retry_after' => $limit['seconds']]
+            );
+        }
+
+        $issued = $this->otp->issue($phone, OwnerOtpCode::PURPOSE_APPLICATION, $request->ip());
+
+        return $this->success([
+            'expires_in' => (int) config('otp.ttl_seconds'),
+            'delivery'   => $this->otp->isStubMode() ? 'stub' : 'sms',
+            'stub_code'  => $issued['stub_code'],
+        ]);
+    }
+
     public function apply(LandingApplicationRequest $request): JsonResponse
     {
         $data = $request->validated();
+
+        // Телефон должен быть подтверждён кодом
+        $verified = $this->otp->verify(
+            $data['phone'],
+            (string) $request->input('code', ''),
+            OwnerOtpCode::PURPOSE_APPLICATION
+        );
+
+        if (!$verified['ok']) {
+            return $this->error($verified['error'], 422, ['code' => [$verified['error']]]);
+        }
 
         $offer = PerformerTransport::query()
             ->visibleOnShowcase()
@@ -229,7 +276,9 @@ class LandingController extends Controller
             'calculated_total'       => $calc['total'],
             'desired_start_date'     => $data['desired_start_date'] ?? null,
             'desired_end_date'       => $data['desired_end_date'] ?? null,
-            'name'                   => $data['name'],
+            // Имя необязательно: спрашиваем только телефон, чтобы не терять
+            // заявки на лишнем поле. Менеджер и владелец узнают имя при звонке.
+            'name'                   => $data['name'] ?? 'Без имени',
             'phone'                  => PhoneNormalizer::normalize($data['phone']),
             'city_id'                => $data['city_id'],
             'comment'                => $data['comment'] ?? null,

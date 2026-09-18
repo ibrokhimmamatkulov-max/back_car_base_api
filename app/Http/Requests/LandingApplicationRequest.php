@@ -17,8 +17,11 @@ class LandingApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'      => 'required|string|max:255',
+            'name'      => 'nullable|string|max:255',
             'phone'     => ['required', 'string', 'regex:/^(\+?992|0)?[0-9]{9}$/'],
+            // Код подтверждения телефона: отсекает выдуманные номера,
+            // аккаунт при этом не создаётся — арендатор остаётся анонимным
+            'code'      => ['required', 'string', 'max:10'],
             'city_id'   => ['required', 'integer', Rule::exists('cities', 'id')],
             'offer_id'  => ['required', 'integer', Rule::exists('performer_transports', 'id')],
             'tariff_id' => ['nullable', 'integer', Rule::exists('rental_tariffs', 'id')],
@@ -34,7 +37,7 @@ class LandingApplicationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required'    => 'Укажите ваше имя.',
+            'code.required'    => 'Введите код из SMS.',
             'phone.required'   => 'Укажите номер телефона.',
             'phone.regex'      => 'Некорректный номер телефона. Введите номер в формате 992XXXXXXXXX.',
             'city_id.required' => 'Выберите город.',

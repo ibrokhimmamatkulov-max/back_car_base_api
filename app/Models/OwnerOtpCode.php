@@ -13,6 +13,13 @@ class OwnerOtpCode extends Model
     public const PURPOSE_PHONE_CHANGE = 'phone_change';
     public const PURPOSE_PASSWORD_RESET = 'password_reset';
 
+    /**
+     * Подтверждение телефона в заявке на аренду.
+     * Аккаунт НЕ создаёт: арендатор остаётся анонимным, это только проверка,
+     * что номер живой — владелец получает лиды, по которым можно дозвониться.
+     */
+    public const PURPOSE_APPLICATION = 'application';
+
     public const MAX_ATTEMPTS = 5;
 
     protected $table = 'owner_otp_codes';
