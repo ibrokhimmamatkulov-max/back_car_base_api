@@ -27,14 +27,32 @@ class OwnerListingResource extends JsonResource
             'applications_count' => $this->whenCounted('applications'),
 
             'brand'         => $this->model_car?->brand?->name,
+            // Марка выбирается в форме отдельно от модели, а хранится только
+            // car_model_id — без её id форму правки нечем заполнить.
+            'brand_id'      => $this->model_car?->brand?->id,
             'model'         => $this->model_car?->car_model,
             'car_model_id'  => $this->car_model_id,
             'year'          => $this->year_of_issue,
             'car_number'    => $this->car_number,
             'count_seat'    => $this->count_seat,
             'address'       => $this->address,
+            'dop_info'      => $this->dop_info,
             'min_rent_days' => $this->min_rent_days,
             'max_rent_days' => $this->max_rent_days,
+
+            // Всё, что принимает ListingRequest, обязано и возвращаться:
+            // форма редактирования заполняется из этого ответа, и поле,
+            // которого здесь нет, она затрёт пустым значением.
+            'condition_id'     => $this->condition_id,
+            'customs_cleared'  => $this->customs_cleared !== null ? (bool) $this->customs_cleared : null,
+            'engine_volume'    => $this->engine_volume !== null ? (float) $this->engine_volume : null,
+            'mileage'          => $this->mileage !== null ? (int) $this->mileage : null,
+            'drive_type'       => $this->drive_type,
+            'has_taxi_license' => (bool) $this->has_taxi_license,
+            'has_turbo'        => (bool) $this->has_turbo,
+
+            // Только для показа: отметку ставит менеджер, владелец её не меняет
+            'vin_verified'     => (bool) $this->vin_verified,
 
             'city'      => $this->relationOrNull($this->city),
             'gearbox'   => $this->relationOrNull($this->gearbox),
