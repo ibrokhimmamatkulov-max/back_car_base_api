@@ -22,11 +22,13 @@ use App\Http\Controllers\Api\RentalTariffController;
 use App\Http\Controllers\Api\RoleController;
 // Гараж 2.0 — кабинет арендодателя и модерация
 use App\Http\Controllers\Api\Moderation\ListingModerationController;
+use App\Http\Controllers\Api\Moderation\DocumentReviewController;
 use App\Http\Controllers\Api\Moderation\OwnerManagementController;
 use App\Http\Controllers\Api\Owner\ApplicationController as OwnerApplicationController;
 use App\Http\Controllers\Api\Owner\AuthController as OwnerAuthController;
 use App\Http\Controllers\Api\Owner\AvailabilityController as OwnerAvailabilityController;
 use App\Http\Controllers\Api\Owner\ListingController as OwnerListingController;
+use App\Http\Controllers\Api\Owner\ListingDocumentController as OwnerListingDocumentController;
 use App\Http\Controllers\Api\Owner\ListingPhotoController as OwnerListingPhotoController;
 use App\Http\Controllers\Api\Owner\ProfileController as OwnerProfileController;
 use Illuminate\Http\Request;
@@ -212,6 +214,12 @@ Route::prefix('owner')->group(function () {
             Route::post('listings/{id}/publish',  [OwnerListingController::class, 'publish']);
             Route::post('listings/{id}/resubmit', [OwnerListingController::class, 'resubmit']);
 
+            // Техпаспорт. Файлы лежат на приватном диске и наружу не отдаются:
+            // в объявлении документы не показываются (ТЗ §4).
+            Route::get('listings/{id}/documents',               [OwnerListingDocumentController::class, 'index']);
+            Route::post('listings/{id}/documents',              [OwnerListingDocumentController::class, 'store']);
+            Route::delete('listings/{id}/documents/{documentId}', [OwnerListingDocumentController::class, 'destroy']);
+
             Route::get('listings/{id}/photos',              [OwnerListingPhotoController::class, 'index']);
             Route::post('listings/{id}/photos',             [OwnerListingPhotoController::class, 'store']);
             Route::delete('listings/{id}/photos/{photoId}', [OwnerListingPhotoController::class, 'destroy']);
@@ -239,6 +247,12 @@ Route::middleware('auth:api')->prefix('moderation')->group(function () {
     Route::get('listings/{id}/logs',   [ListingModerationController::class, 'logs']);
     Route::post('listings/{id}/approve', [ListingModerationController::class, 'approve']);
     Route::post('listings/{id}/reject',  [ListingModerationController::class, 'reject']);
+
+    // Сверка техпаспорта: единственное место, где выставляется vin_verified
+    Route::get('listings/{id}/documents',                [DocumentReviewController::class, 'index']);
+    Route::get('listings/{id}/documents/{documentId}',   [DocumentReviewController::class, 'show']);
+    Route::post('listings/{id}/documents/verify',        [DocumentReviewController::class, 'verify']);
+    Route::post('listings/{id}/documents/reject',        [DocumentReviewController::class, 'reject']);
 
     Route::get('owners',              [OwnerManagementController::class, 'index']);
     Route::get('owners/{id}',         [OwnerManagementController::class, 'show']);
