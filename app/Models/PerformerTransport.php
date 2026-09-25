@@ -190,6 +190,16 @@ class PerformerTransport extends BasicModel
             ->orderBy('min_days');
     }
 
+    /**
+     * Тариф аренды под такси — с 25.09.2026 единственный способ подачи.
+     * priceTiers() остаётся только для чтения старых объявлений типа
+     * general, форма подачи их больше не создаёт.
+     */
+    public function taxiTariff()
+    {
+        return $this->hasOne(TaxiTariff::class, 'performer_transport_id');
+    }
+
     public function unavailablePeriods()
     {
         return $this->hasMany(ListingUnavailablePeriod::class, 'performer_transport_id')
@@ -273,6 +283,14 @@ class PerformerTransport extends BasicModel
             return $this->relationLoaded('priceTiers')
                 ? $this->priceTiers->min('price_per_day')
                 : $this->priceTiers()->min('price_per_day');
+        }
+
+        // С 25.09.2026 — новый тариф под такси, один на объявление.
+        // Старая связь tariffs() (car_rental_tariff) остаётся запасным
+        // путём для записей, созданных до этой даты.
+        $taxiTariff = $this->relationLoaded('taxiTariff') ? $this->taxiTariff : $this->taxiTariff()->first();
+        if ($taxiTariff) {
+            return (float) $taxiTariff->price_per_day;
         }
 
         return $this->relationLoaded('tariffs')

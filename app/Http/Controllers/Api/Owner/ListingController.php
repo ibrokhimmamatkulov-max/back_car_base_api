@@ -25,7 +25,7 @@ class ListingController extends Controller
 
         $listings = PerformerTransport::query()
             ->ownedBy($owner->id)
-            ->with(['model_car.brand', 'city', 'gearbox', 'body_type', 'photos', 'priceTiers'])
+            ->with(['model_car.brand', 'city', 'gearbox', 'body_type', 'photos', 'priceTiers', 'taxiTariff'])
             ->withCount('applications')
             // «Все» значит все — включая архив, у него теперь есть выход
             // (публикация обратно), так что прятать эти карточки незачем.

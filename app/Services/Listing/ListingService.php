@@ -7,15 +7,22 @@ use App\Models\ListingTerms;
 use App\Models\Owner;
 use App\Models\PerformerTransport;
 use App\Models\PerformerTransportOption;
-use App\Models\RentalPriceTier;
+use App\Models\TaxiTariff;
 use App\Models\VehicleVin;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 /**
  * Создание и обновление объявления одной транзакцией:
- * машина + условия + ступени цены. Частично созданное объявление —
+ * машина + условия + тариф. Частично созданное объявление —
  * худший из возможных исходов, поэтому всё или ничего.
+ *
+ * С 25.09.2026 платформа целиком про аренду под такси: listing_type у
+ * новых объявлений всегда TYPE_TAXI, «ступеней цены» общей посуточной
+ * аренды форма подачи больше не собирает. RentalPriceTier и
+ * PriceTierValidator остаются в коде ради старых записей типа general —
+ * их читает публичная карточка, но создавать такие через эту форму
+ * больше нельзя.
  */
 class ListingService
 {
@@ -29,7 +36,6 @@ class ListingService
 
     public function create(Owner $owner, array $data): PerformerTransport
     {
-        $this->assertPriceTiers($data);
         $this->assertPlateIsFree($data['car_number'] ?? null);
 
         // Премодерация отключена решением заказчика: объявление выходит сразу,
@@ -40,7 +46,7 @@ class ListingService
             $listing = PerformerTransport::create(
                 $this->carAttributes($data) + [
                     'owner_id'          => $owner->id,
-                    'listing_type'      => PerformerTransport::TYPE_GENERAL,
+                    'listing_type'      => PerformerTransport::TYPE_TAXI,
                     'source'            => PerformerTransport::SOURCE_OWNER,
                     'moderation_status' => $autoPublish
                         ? PerformerTransport::STATUS_PUBLISHED
@@ -52,11 +58,11 @@ class ListingService
             );
 
             $this->syncTerms($listing, $data['terms'] ?? []);
-            $this->syncPriceTiers($listing, $data['price_tiers'] ?? []);
+            $this->syncTariff($listing, $data['tariff']);
             $this->syncDopOptions($listing, $data['dop_options'] ?? []);
             $this->recordVin($listing, $data['VIN'] ?? null, $owner->id);
 
-            return $listing->load(['terms', 'priceTiers', 'dopOptions.car_option']);
+            return $listing->load(['terms', 'taxiTariff', 'dopOptions.car_option']);
         });
     }
 
@@ -65,10 +71,6 @@ class ListingService
      */
     public function update(PerformerTransport $listing, array $data): array
     {
-        if (array_key_exists('price_tiers', $data)) {
-            $this->assertPriceTiers($data + ['min_rent_days' => $listing->min_rent_days]);
-        }
-
         if (!empty($data['car_number'])) {
             $this->assertPlateIsFree($data['car_number'], $listing->id);
         }
@@ -99,8 +101,8 @@ class ListingService
                 $this->syncTerms($listing, $data['terms'] ?? []);
             }
 
-            if (array_key_exists('price_tiers', $data)) {
-                $this->syncPriceTiers($listing, $data['price_tiers'] ?? []);
+            if (array_key_exists('tariff', $data)) {
+                $this->syncTariff($listing, $data['tariff']);
             }
 
             if (array_key_exists('dop_options', $data)) {
@@ -112,7 +114,7 @@ class ListingService
             }
 
             return [
-                'listing'                => $listing->load(['terms', 'priceTiers']),
+                'listing'                => $listing->load(['terms', 'taxiTariff']),
                 'returned_to_moderation' => $returned,
             ];
         });
@@ -131,8 +133,13 @@ class ListingService
             $blockers[] = 'Добавьте хотя бы одну фотографию.';
         }
 
-        if ($listing->isGeneral() && $listing->priceTiers()->count() === 0) {
-            $blockers[] = 'Задайте хотя бы одну ступень цены.';
+        // isGeneral() — только для старых записей до 25.09.2026, новые всегда taxi.
+        if ($listing->isGeneral()) {
+            if ($listing->priceTiers()->count() === 0) {
+                $blockers[] = 'Задайте хотя бы одну ступень цены.';
+            }
+        } elseif (!$listing->taxiTariff) {
+            $blockers[] = 'Задайте тариф аренды.';
         }
 
         return $blockers;
@@ -152,8 +159,8 @@ class ListingService
             }
         }
 
-        // Цены и условия — тоже существенные.
-        return array_key_exists('price_tiers', $data) || array_key_exists('terms', $data);
+        // Тариф и условия — тоже существенные.
+        return array_key_exists('tariff', $data) || array_key_exists('terms', $data);
     }
 
     private function syncTerms(PerformerTransport $listing, array $terms): void
@@ -164,26 +171,23 @@ class ListingService
         );
     }
 
-    private function syncPriceTiers(PerformerTransport $listing, array $tiers): void
+    /** Один тариф на объявление — updateOrCreate, а не список, как раньше у ступеней цены */
+    private function syncTariff(PerformerTransport $listing, array $tariff): void
     {
-        RentalPriceTier::where('performer_transport_id', $listing->id)->delete();
-
-        foreach ($tiers as $tier) {
-            RentalPriceTier::create([
-                'performer_transport_id' => $listing->id,
-                'min_days'               => (int) $tier['min_days'],
-                'max_days'               => isset($tier['max_days']) && $tier['max_days'] !== null
-                    ? (int) $tier['max_days']
-                    : null,
-                'price_per_day'          => $tier['price_per_day'],
-            ]);
-        }
+        TaxiTariff::updateOrCreate(
+            ['performer_transport_id' => $listing->id],
+            [
+                'min_months'         => $tariff['min_months'],
+                'off_days_per_month' => $tariff['off_days_per_month'],
+                'price_per_day'      => $tariff['price_per_day'],
+            ]
+        );
     }
 
     /**
      * Доп. опции хранятся как набор строк в pivot-таблице, а не M:N-связь
      * напрямую: у PerformerTransportOption есть свои is_check и SoftDeletes.
-     * Простое delete+create — тот же приём, что и у ступеней цены.
+     * Простое delete+create — тот же приём, что и у тарифа.
      */
     private function syncDopOptions(PerformerTransport $listing, array $optionIds): void
     {
@@ -214,18 +218,6 @@ class ListingService
         }
 
         VehicleVin::record($vin, $listing->id, $ownerId);
-    }
-
-    private function assertPriceTiers(array $data): void
-    {
-        $errors = PriceTierValidator::validate(
-            $data['price_tiers'] ?? [],
-            (int) ($data['min_rent_days'] ?? 1)
-        );
-
-        if ($errors) {
-            throw ValidationException::withMessages(['price_tiers' => $errors]);
-        }
     }
 
     /**

@@ -65,9 +65,7 @@ class OfferDetailResource extends JsonResource
             ])->values(),
             'photos'       => $this->photos->map(fn ($p) => Storage::url($p->path))->values(),
 
-            'min_price'    => $isGeneral
-                ? $this->priceTiers->min('price_per_day')
-                : $this->tariffs->min('price'),
+            'min_price'    => $this->min_price !== null ? (float) $this->min_price : null,
 
             'price_tiers'  => $isGeneral
                 ? $this->priceTiers->map(fn ($t) => [
@@ -78,6 +76,15 @@ class OfferDetailResource extends JsonResource
                 ])->values()
                 : [],
 
+            // Тариф под такси с 25.09.2026 — один на объявление, не список.
+            'taxi_tariff'  => $this->taxiTariff ? [
+                'min_months'         => $this->taxiTariff->min_months,
+                'off_days_per_month' => $this->taxiTariff->off_days_per_month,
+                'price_per_day'      => (float) $this->taxiTariff->price_per_day,
+                'monthly_total'      => $this->taxiTariff->monthly_total,
+            ] : null,
+
+            // Старая таксопарковая схема — только для записей до 25.09.2026.
             'tariffs'      => $this->tariffs->map(fn ($t) => [
                 'id'              => $t->id,
                 'duration_days'   => $t->duration_days,

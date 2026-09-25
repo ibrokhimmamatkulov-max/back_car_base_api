@@ -113,7 +113,7 @@ class LandingController extends Controller
             ->with([
                 'model_car.brand', 'model_car.category_car', 'model_car.class_car',
                 'body_type', 'color', 'fuel_type', 'photos', 'city', 'gearbox',
-                'tariffs', 'priceTiers', 'terms',
+                'taxiTariff', 'tariffs', 'priceTiers', 'terms',
             ]);
 
         $query = $this->applyFilters($query, $request);
@@ -138,7 +138,7 @@ class LandingController extends Controller
             ->visibleOnShowcase()
             ->with([
                 'model_car.brand', 'gearbox', 'city', 'body_type', 'color', 'fuel_type',
-                'photos', 'tariffs', 'priceTiers', 'terms', 'unavailablePeriods',
+                'photos', 'taxiTariff', 'tariffs', 'priceTiers', 'terms', 'unavailablePeriods',
                 'dopOptions.car_option', 'owner',
             ])
             ->find($id);
@@ -362,7 +362,12 @@ class LandingController extends Controller
         // Минимальная цена по объявлению независимо от типа: берём меньшее
         // из ступеней и старых тарифов. COALESCE, потому что у taxi ступеней
         // нет, а у general нет тарифов.
+        // С 25.09.2026 — taxi_tariffs.price_per_day, один тариф на объявление.
+        // Старые пути (rental_price_tiers у general, rental_tariffs у taxi до
+        // этой даты) остаются в LEAST() ради записей, созданных раньше.
         $minPrice = fn () => DB::raw('(SELECT LEAST(
+                COALESCE((SELECT tt.price_per_day FROM taxi_tariffs tt
+                          WHERE tt.performer_transport_id = performer_transports.id), 999999999),
                 COALESCE((SELECT MIN(rpt.price_per_day) FROM rental_price_tiers rpt
                           WHERE rpt.performer_transport_id = performer_transports.id), 999999999),
                 COALESCE((SELECT MIN(rt.price) FROM car_rental_tariff crt

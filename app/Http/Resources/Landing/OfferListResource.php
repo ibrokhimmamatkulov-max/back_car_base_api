@@ -38,10 +38,7 @@ class OfferListResource extends JsonResource
             ],
             'count_seat'   => $this->count_seat,
 
-            // У general цена берётся из ступеней, у taxi — из старых тарифов.
-            'min_price'    => $isGeneral
-                ? $this->priceTiers->min('price_per_day')
-                : $this->tariffs->min('price'),
+            'min_price'    => $this->min_price !== null ? (float) $this->min_price : null,
 
             'min_rent_days' => $this->min_rent_days,
             'max_rent_days' => $this->max_rent_days,
@@ -57,7 +54,16 @@ class OfferListResource extends JsonResource
                 ])->values()
                 : [],
 
-            // Старая таксопарковая схема — оставлена как есть для listing_type = taxi.
+            // Тариф под такси с 25.09.2026 — один на объявление, не список.
+            'taxi_tariff'  => $this->taxiTariff ? [
+                'min_months'         => $this->taxiTariff->min_months,
+                'off_days_per_month' => $this->taxiTariff->off_days_per_month,
+                'price_per_day'      => (float) $this->taxiTariff->price_per_day,
+                'monthly_total'      => $this->taxiTariff->monthly_total,
+            ] : null,
+
+            // Старая таксопарковая схема — только для записей до 25.09.2026,
+            // у которых нет своей строки в taxi_tariffs.
             'tariffs'      => $this->tariffs->map(fn ($t) => [
                 'id'              => $t->id,
                 'duration_days'   => $t->duration_days,

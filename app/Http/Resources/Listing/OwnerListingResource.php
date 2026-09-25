@@ -65,6 +65,15 @@ class OwnerListingResource extends JsonResource
             'price_tiers' => PriceTierResource::collection($this->whenLoaded('priceTiers')),
             'terms'       => $this->whenLoaded('terms', fn () => new ListingTermsResource($this->terms)),
 
+            // Тариф аренды под такси — форма правки заполняется отсюда,
+            // как и остальные разделы выше.
+            'tariff' => $this->whenLoaded('taxiTariff', fn () => $this->taxiTariff ? [
+                'min_months'         => $this->taxiTariff->min_months,
+                'off_days_per_month' => $this->taxiTariff->off_days_per_month,
+                'price_per_day'      => (float) $this->taxiTariff->price_per_day,
+                'monthly_total'      => $this->taxiTariff->monthly_total,
+            ] : null),
+
             'dop_options' => $this->whenLoaded('dopOptions', fn () => $this->dopOptions
                 ->map(fn ($o) => ['id' => $o->car_option?->id, 'name' => $o->car_option?->name])
                 ->filter(fn ($o) => $o['id'] !== null)

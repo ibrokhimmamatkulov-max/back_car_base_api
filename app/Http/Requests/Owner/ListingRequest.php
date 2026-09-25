@@ -48,15 +48,22 @@ class ListingRequest extends FormRequest
             'address'     => 'nullable|string|max:255',
             'dop_info'    => 'nullable|string|max:2000',
 
-            // Сроки
+            // Сроки — раньше был отдельный диапазон в сутках для общей
+            // посуточной аренды, поле осталось nullable ради старых записей,
+            // форма подачи его больше не заполняет: минимальный срок теперь
+            // задаёт сам тариф (tariff.min_months).
             'min_rent_days' => 'nullable|integer|min:1|max:365',
             'max_rent_days' => 'nullable|integer|min:1|max:3650|gte:min_rent_days',
 
-            // Шаг 3 — ступени цены
-            'price_tiers'                 => "{$required}|array|min:1",
-            'price_tiers.*.min_days'      => 'required|integer|min:1',
-            'price_tiers.*.max_days'      => 'nullable|integer|min:1',
-            'price_tiers.*.price_per_day' => 'required|numeric|min:1|max:100000',
+            /*
+             * Тариф аренды под такси (решение от 25.09.2026) — единственный
+             * вид объявления на платформе, «ступеней цены» общей посуточной
+             * аренды больше нет. Один тариф на объявление, не список.
+             */
+            'tariff'                     => "{$required}|array",
+            'tariff.min_months'          => "{$required}|integer|in:3,4,6",
+            'tariff.off_days_per_month'  => "{$required}|integer|in:0,2,3,4",
+            'tariff.price_per_day'       => "{$required}|numeric|min:1|max:100000",
 
             // Шаг 3 — условия
             'terms'                          => 'nullable|array',
@@ -84,10 +91,15 @@ class ListingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'price_tiers.required'   => 'Задайте хотя бы одну ступень цены.',
-            'price_tiers.min'        => 'Задайте хотя бы одну ступень цены.',
-            'max_rent_days.gte'      => 'Максимальный срок не может быть меньше минимального.',
-            'car_number.required'    => 'Укажите госномер — по нему мы не даём выставить одну машину дважды.',
+            'max_rent_days.gte'   => 'Максимальный срок не может быть меньше минимального.',
+            'car_number.required' => 'Укажите госномер — по нему мы не даём выставить одну машину дважды.',
+
+            'tariff.required'                    => 'Укажите тариф аренды.',
+            'tariff.min_months.required'         => 'Выберите минимальный срок аренды.',
+            'tariff.min_months.in'               => 'Минимальный срок — 3, 4 или 6 месяцев.',
+            'tariff.off_days_per_month.required' => 'Укажите число выходных в месяц.',
+            'tariff.off_days_per_month.in'       => 'Выходных в месяц — 0, 2, 3 или 4.',
+            'tariff.price_per_day.required'      => 'Укажите цену за сутки.',
         ];
     }
 

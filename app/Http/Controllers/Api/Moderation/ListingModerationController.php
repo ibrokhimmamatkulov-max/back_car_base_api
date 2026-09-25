@@ -32,7 +32,7 @@ class ListingModerationController extends Controller
         $listings = PerformerTransport::query()
             ->whereNotNull('owner_id')
             ->when($status, fn ($q) => $q->where('moderation_status', $status))
-            ->with(['model_car.brand', 'city', 'owner', 'photos', 'priceTiers'])
+            ->with(['model_car.brand', 'city', 'owner', 'photos', 'priceTiers', 'taxiTariff'])
             ->when($request->filled('city_id'), fn ($q) => $q->where('city_id', $request->integer('city_id')))
             ->when($request->filled('owner_id'), fn ($q) => $q->where('owner_id', $request->integer('owner_id')))
             ->when($request->filled('search'), function ($q) use ($request) {
@@ -65,7 +65,7 @@ class ListingModerationController extends Controller
     {
         $listing = PerformerTransport::with([
             'model_car.brand', 'city', 'gearbox', 'body_type', 'color', 'fuel_type',
-            'photos', 'terms', 'priceTiers', 'unavailablePeriods', 'owner', 'documents',
+            'photos', 'terms', 'priceTiers', 'taxiTariff', 'unavailablePeriods', 'owner', 'documents',
         ])->find($id);
 
         if (!$listing) {
