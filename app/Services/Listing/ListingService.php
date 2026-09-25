@@ -8,6 +8,7 @@ use App\Models\Owner;
 use App\Models\PerformerTransport;
 use App\Models\PerformerTransportOption;
 use App\Models\RentalPriceTier;
+use App\Models\VehicleVin;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -53,6 +54,7 @@ class ListingService
             $this->syncTerms($listing, $data['terms'] ?? []);
             $this->syncPriceTiers($listing, $data['price_tiers'] ?? []);
             $this->syncDopOptions($listing, $data['dop_options'] ?? []);
+            $this->recordVin($listing, $data['VIN'] ?? null, $owner->id);
 
             return $listing->load(['terms', 'priceTiers', 'dopOptions.car_option']);
         });
@@ -103,6 +105,10 @@ class ListingService
 
             if (array_key_exists('dop_options', $data)) {
                 $this->syncDopOptions($listing, $data['dop_options'] ?? []);
+            }
+
+            if (!empty($data['VIN'])) {
+                $this->recordVin($listing, $data['VIN'], $listing->owner_id);
             }
 
             return [
@@ -192,6 +198,22 @@ class ListingService
                 'is_check'               => true,
             ]);
         }
+    }
+
+    /**
+     * Реестр VIN живёт отдельно от объявления (см. миграцию
+     * vehicle_vins) — переживает архивацию и повторное выставление
+     * машины под другим аккаунтом. Статус битый/небитый record() не
+     * трогает: его выставляют отдельно, подача объявления не должна
+     * случайно сбросить уже известную отметку.
+     */
+    private function recordVin(PerformerTransport $listing, ?string $vin, ?int $ownerId): void
+    {
+        if (!$vin) {
+            return;
+        }
+
+        VehicleVin::record($vin, $listing->id, $ownerId);
     }
 
     private function assertPriceTiers(array $data): void

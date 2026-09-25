@@ -37,7 +37,12 @@ class ModerationService
             PerformerTransport::STATUS_PENDING,
             PerformerTransport::STATUS_ARCHIVED,
         ],
-        PerformerTransport::STATUS_ARCHIVED => [],
+        // Владелец может вернуть архивную карточку на витрину сам — тем же
+        // resume(), что и после паузы: содержимое не менялось, повторная
+        // проверка не нужна. Раньше архив был тупиком без выхода.
+        PerformerTransport::STATUS_ARCHIVED => [
+            PerformerTransport::STATUS_PUBLISHED,
+        ],
     ];
 
     public function __construct(
@@ -105,9 +110,9 @@ class ModerationService
         return $this->transition($listing, PerformerTransport::STATUS_PUBLISHED, null, 'Возвращено владельцем');
     }
 
-    public function archive(PerformerTransport $listing): PerformerTransport
+    public function archive(PerformerTransport $listing, string $reason = 'Удалено владельцем'): PerformerTransport
     {
-        return $this->transition($listing, PerformerTransport::STATUS_ARCHIVED, null, 'Удалено владельцем');
+        return $this->transition($listing, PerformerTransport::STATUS_ARCHIVED, null, $reason);
     }
 
     public function resubmit(PerformerTransport $listing): PerformerTransport

@@ -230,6 +230,10 @@ Route::middleware('auth:api')->prefix('moderation')->group(function () {
     Route::post('listings/{id}/approve', [ListingModerationController::class, 'approve']);
     Route::post('listings/{id}/reject',  [ListingModerationController::class, 'reject']);
 
+    // Платный подъём в топ выдачи, решение от 25.09.2026
+    Route::post('listings/{id}/boost',   [ListingModerationController::class, 'boost']);
+    Route::post('listings/{id}/unboost', [ListingModerationController::class, 'unboost']);
+
     // Сверка техпаспорта: единственное место, где выставляется vin_verified
     Route::get('listings/{id}/documents',                [DocumentReviewController::class, 'index']);
     Route::get('listings/{id}/documents/{documentId}',   [DocumentReviewController::class, 'show']);

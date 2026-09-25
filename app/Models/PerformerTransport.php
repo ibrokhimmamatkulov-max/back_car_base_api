@@ -64,6 +64,7 @@ class PerformerTransport extends BasicModel
         'moderation_status',
         'rejection_reason',
         'published_at',
+        'boosted_until',
         'submitted_at',
         'title',
         'description',
@@ -82,6 +83,7 @@ class PerformerTransport extends BasicModel
 
     protected $casts = [
         'published_at'     => 'datetime',
+        'boosted_until'    => 'datetime',
         'submitted_at'     => 'datetime',
         'vin_verified_at'  => 'datetime',
         'min_rent_days'    => 'integer',
@@ -218,6 +220,17 @@ class PerformerTransport extends BasicModel
     {
         return $query
             ->where('performer_transports.moderation_status', self::STATUS_PUBLISHED)
+            ->where(function ($q) {
+                // Срок объявления истёк (config('listing.lifetime_days'), 30 по
+                // умолчанию) — прячем немедленно, не дожидаясь команды listings:expire.
+                // Без published_at (легаси-записи) правило не применяется: сравнивать не с чем.
+                $q->whereNull('performer_transports.published_at')
+                  ->orWhere(
+                      'performer_transports.published_at',
+                      '>=',
+                      now()->subDays((int) config('listing.lifetime_days', 30))
+                  );
+            })
             ->where(function ($q) {
                 // active — легаси-флаг, у части старых строк он NULL.
                 $q->where('performer_transports.active', self::ACTIVE)

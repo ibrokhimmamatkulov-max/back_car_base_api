@@ -13,6 +13,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // 30-дневный срок объявления (config listing.lifetime_days). Витрина
+        // прячет просроченное сама, эта команда переводит статус в archived,
+        // чтобы владелец видел это в кабинете. Требует работающий крон
+        // с `php artisan schedule:run` на сервере.
+        $schedule->command('listings:expire')->daily();
     }
 
     /**

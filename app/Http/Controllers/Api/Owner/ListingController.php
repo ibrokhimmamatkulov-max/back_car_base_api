@@ -27,8 +27,9 @@ class ListingController extends Controller
             ->ownedBy($owner->id)
             ->with(['model_car.brand', 'city', 'gearbox', 'body_type', 'photos', 'priceTiers'])
             ->withCount('applications')
+            // «Все» значит все — включая архив, у него теперь есть выход
+            // (публикация обратно), так что прятать эти карточки незачем.
             ->when($request->filled('status'), fn ($q) => $q->where('moderation_status', $request->input('status')))
-            ->when(!$request->filled('status'), fn ($q) => $q->where('moderation_status', '!=', PerformerTransport::STATUS_ARCHIVED))
             ->orderByDesc('id')
             ->paginate($request->integer('per_page', 20));
 

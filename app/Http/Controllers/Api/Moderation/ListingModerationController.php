@@ -134,6 +134,53 @@ class ListingModerationController extends Controller
         return $this->success(new OwnerListingResource($listing), 'Объявление отклонено.');
     }
 
+    /**
+     * Платный подъём в топ выдачи. boosted_until — единственное поле,
+     * которым это управляется: сортировка на витрине уже учитывает его
+     * (см. LandingController::applySorting).
+     */
+    public function boost(Request $request, int $id): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'days' => 'required|integer|min:1|max:365',
+        ], [
+            'days.required' => 'Укажите, на сколько дней поднять объявление.',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation error', 422, $validator->errors());
+        }
+
+        $listing = PerformerTransport::find($id);
+
+        if (!$listing) {
+            return $this->error('Объявление не найдено.', 404);
+        }
+
+        $days = $request->integer('days');
+        $listing->boosted_until = now()->addDays($days);
+        $listing->save();
+
+        return $this->success(
+            new OwnerListingResource($listing),
+            "Объявление поднято в топ на {$days} дн."
+        );
+    }
+
+    public function unboost(int $id): JsonResponse
+    {
+        $listing = PerformerTransport::find($id);
+
+        if (!$listing) {
+            return $this->error('Объявление не найдено.', 404);
+        }
+
+        $listing->boosted_until = null;
+        $listing->save();
+
+        return $this->success(new OwnerListingResource($listing), 'Объявление снято с топа.');
+    }
+
     public function logs(int $id): JsonResponse
     {
         $listing = PerformerTransport::find($id);

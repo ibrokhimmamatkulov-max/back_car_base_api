@@ -22,6 +22,7 @@ class OwnerListingResource extends JsonResource
             'moderation_status' => $this->moderation_status,
             'rejection_reason'  => $this->rejection_reason,
             'published_at'      => $this->published_at?->toIso8601String(),
+            'boosted_until'     => $this->boosted_until?->toIso8601String(),
             'submitted_at'      => $this->submitted_at?->toIso8601String(),
             'views_count'       => (int) $this->views_count,
             'applications_count' => $this->whenCounted('applications'),

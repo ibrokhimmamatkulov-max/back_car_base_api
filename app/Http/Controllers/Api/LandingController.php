@@ -370,6 +370,15 @@ class LandingController extends Controller
                           WHERE crt.performer_transport_id = performer_transports.id), 999999999)
             ))');
 
+        // Поднятое в топ — всегда первым, независимо от выбранной сортировки.
+        // Сама сортировка ниже работает уже внутри двух групп: поднятые
+        // между собой, обычные между собой.
+        $query->orderByRaw(
+            'CASE WHEN performer_transports.boosted_until IS NOT NULL '
+            . 'AND performer_transports.boosted_until > ? THEN 0 ELSE 1 END',
+            [now()]
+        );
+
         return match ($request->input('sort')) {
             'price_asc'  => $query->orderBy($minPrice()),
             'price_desc' => $query->orderByDesc($minPrice()),
