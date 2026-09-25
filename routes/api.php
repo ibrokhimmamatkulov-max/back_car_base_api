@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\Owner\ListingController as OwnerListingController;
 use App\Http\Controllers\Api\Owner\ListingDocumentController as OwnerListingDocumentController;
 use App\Http\Controllers\Api\Owner\ListingPhotoController as OwnerListingPhotoController;
 use App\Http\Controllers\Api\Owner\ProfileController as OwnerProfileController;
+use App\Http\Controllers\Api\Owner\ReferenceController as OwnerReferenceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -173,6 +174,9 @@ Route::prefix('owner')->group(function () {
     });
 
     Route::middleware(['auth:owner', 'owner.active'])->group(function () {
+
+        // Справочники под поля ListingRequest — состояние, привод, объём двигателя, год, доп. опции
+        Route::get('reference',       [OwnerReferenceController::class, 'index']);
 
         Route::get('me',              [OwnerProfileController::class, 'show']);
         Route::patch('me',            [OwnerProfileController::class, 'update']);

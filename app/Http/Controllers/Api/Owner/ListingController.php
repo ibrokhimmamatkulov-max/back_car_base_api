@@ -50,7 +50,7 @@ class ListingController extends Controller
         $listing = $this->listings->create($owner, $request->validated());
 
         return $this->success(
-            new OwnerListingResource($listing->load(['model_car.brand', 'city', 'terms', 'priceTiers'])),
+            new OwnerListingResource($listing->load(['model_car.brand', 'city', 'terms', 'priceTiers', 'dopOptions.car_option'])),
             'Объявление отправлено на проверку.',
             201
         );
@@ -66,7 +66,7 @@ class ListingController extends Controller
 
         return $this->success(new OwnerListingResource($listing->load([
             'model_car.brand', 'city', 'gearbox', 'body_type', 'color', 'fuel_type',
-            'photos', 'terms', 'priceTiers', 'unavailablePeriods',
+            'photos', 'terms', 'priceTiers', 'unavailablePeriods', 'dopOptions.car_option',
         ])));
     }
 
@@ -85,7 +85,7 @@ class ListingController extends Controller
         $result = $this->listings->update($listing, $request->validated());
 
         return $this->success(
-            new OwnerListingResource($result['listing']->load(['model_car.brand', 'city', 'terms', 'priceTiers'])),
+            new OwnerListingResource($result['listing']->load(['model_car.brand', 'city', 'terms', 'priceTiers', 'dopOptions.car_option'])),
             $result['returned_to_moderation']
                 ? 'Изменения сохранены. Объявление отправлено на повторную проверку, до её окончания на сайте показывается прежняя версия.'
                 : 'Изменения сохранены.'

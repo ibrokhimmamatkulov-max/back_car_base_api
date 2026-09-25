@@ -64,6 +64,11 @@ class OwnerListingResource extends JsonResource
             'price_tiers' => PriceTierResource::collection($this->whenLoaded('priceTiers')),
             'terms'       => $this->whenLoaded('terms', fn () => new ListingTermsResource($this->terms)),
 
+            'dop_options' => $this->whenLoaded('dopOptions', fn () => $this->dopOptions
+                ->map(fn ($o) => ['id' => $o->car_option?->id, 'name' => $o->car_option?->name])
+                ->filter(fn ($o) => $o['id'] !== null)
+                ->values()),
+
             'unavailable_periods' => $this->whenLoaded(
                 'unavailablePeriods',
                 fn () => $this->unavailablePeriods->map(fn ($p) => [

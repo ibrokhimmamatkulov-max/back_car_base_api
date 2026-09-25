@@ -15,7 +15,7 @@ class OwnerManagementController extends Controller
     public function index(Request $request): JsonResponse
     {
         $owners = Owner::query()
-            ->withCount('listings')
+            ->withCount(['listings', 'applications'])
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->input('status')))
             ->when($request->filled('search'), function ($q) use ($request) {
                 $search = $request->input('search');
@@ -33,7 +33,10 @@ class OwnerManagementController extends Controller
         return $this->success([
             'data' => collect($owners->items())->map(fn ($owner) => array_merge(
                 (new OwnerResource($owner))->toArray($request),
-                ['listings_count' => $owner->listings_count]
+                [
+                    'listings_count'     => $owner->listings_count,
+                    'applications_count' => $owner->applications_count,
+                ]
             )),
             'meta' => [
                 'total'        => $owners->total(),

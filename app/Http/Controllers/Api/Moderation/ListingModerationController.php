@@ -22,16 +22,32 @@ class ListingModerationController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $status = $request->input('status', PerformerTransport::STATUS_PENDING);
+        // 'status' раньше был обязателен по факту — умолчание 'pending' не давало
+        // посмотреть объявления в любом другом статусе разом. Ручкой никто ещё не
+        // пользовался (админка вместо неё по ошибке ходила в публичную /landing/offers,
+        // которая отдаёт только опубликованное), так что менять умолчание можно
+        // без риска сломать существующий вызов.
+        $status = $request->input('status');
 
         $listings = PerformerTransport::query()
-            ->where('moderation_status', $status)
             ->whereNotNull('owner_id')
+            ->when($status, fn ($q) => $q->where('moderation_status', $status))
             ->with(['model_car.brand', 'city', 'owner', 'photos', 'priceTiers'])
             ->when($request->filled('city_id'), fn ($q) => $q->where('city_id', $request->integer('city_id')))
             ->when($request->filled('owner_id'), fn ($q) => $q->where('owner_id', $request->integer('owner_id')))
-            // Самые давно ждущие — первыми: очередь, а не стек.
-            ->orderBy('submitted_at')
+            ->when($request->filled('search'), function ($q) use ($request) {
+                $search = $request->input('search');
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('car_number', 'like', "%{$search}%")
+                        ->orWhereHas('model_car', fn ($m) => $m->where('car_model', 'like', "%{$search}%"))
+                        ->orWhereHas('model_car.brand', fn ($m) => $m->where('name', 'like', "%{$search}%"));
+                });
+            })
+            // Живая очередь на проверке — по возрасту заявки, старые первыми
+            // (честная очередь, а не стек). Во всех остальных режимах —
+            // недавно поданные сверху, это ближе к тому, что хотят увидеть
+            // при обычном просмотре объявлений.
+            ->orderBy('submitted_at', $status === PerformerTransport::STATUS_PENDING ? 'asc' : 'desc')
             ->paginate($request->integer('per_page', 20));
 
         return $this->success([

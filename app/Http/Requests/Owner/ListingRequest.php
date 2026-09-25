@@ -28,6 +28,11 @@ class ListingRequest extends FormRequest
             'condition_id'  => 'nullable|integer|exists:car_conditions,id',
             'count_seat'    => 'nullable|integer|min:1|max:60',
 
+            // Доп. опции: кондиционер, камера и т.п. — те же car_options, что
+            // показывает карточка объявления, запись раньше нигде не принималась.
+            'dop_options'   => 'nullable|array',
+            'dop_options.*' => 'integer|exists:car_options,id',
+
             // Технические поля (часть — специфика Таджикистана)
             'customs_cleared'  => 'nullable|boolean',
             'engine_volume'    => 'nullable|numeric|min:0.1|max:9.9',

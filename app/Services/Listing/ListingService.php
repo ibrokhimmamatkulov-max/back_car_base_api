@@ -2,9 +2,11 @@
 
 namespace App\Services\Listing;
 
+use App\Models\CarOption;
 use App\Models\ListingTerms;
 use App\Models\Owner;
 use App\Models\PerformerTransport;
+use App\Models\PerformerTransportOption;
 use App\Models\RentalPriceTier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -50,8 +52,9 @@ class ListingService
 
             $this->syncTerms($listing, $data['terms'] ?? []);
             $this->syncPriceTiers($listing, $data['price_tiers'] ?? []);
+            $this->syncDopOptions($listing, $data['dop_options'] ?? []);
 
-            return $listing->load(['terms', 'priceTiers']);
+            return $listing->load(['terms', 'priceTiers', 'dopOptions.car_option']);
         });
     }
 
@@ -96,6 +99,10 @@ class ListingService
 
             if (array_key_exists('price_tiers', $data)) {
                 $this->syncPriceTiers($listing, $data['price_tiers'] ?? []);
+            }
+
+            if (array_key_exists('dop_options', $data)) {
+                $this->syncDopOptions($listing, $data['dop_options'] ?? []);
             }
 
             return [
@@ -163,6 +170,26 @@ class ListingService
                     ? (int) $tier['max_days']
                     : null,
                 'price_per_day'          => $tier['price_per_day'],
+            ]);
+        }
+    }
+
+    /**
+     * Доп. опции хранятся как набор строк в pivot-таблице, а не M:N-связь
+     * напрямую: у PerformerTransportOption есть свои is_check и SoftDeletes.
+     * Простое delete+create — тот же приём, что и у ступеней цены.
+     */
+    private function syncDopOptions(PerformerTransport $listing, array $optionIds): void
+    {
+        PerformerTransportOption::where('performer_transport_id', $listing->id)
+            ->whereIn('option_id', CarOption::query()->whereNull('model')->pluck('id'))
+            ->delete();
+
+        foreach (array_unique($optionIds) as $optionId) {
+            PerformerTransportOption::create([
+                'performer_transport_id' => $listing->id,
+                'option_id'              => $optionId,
+                'is_check'               => true,
             ]);
         }
     }
