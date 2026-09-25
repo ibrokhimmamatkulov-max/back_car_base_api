@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\CarBrandController;
 use App\Http\Controllers\Api\CarCategoryController;
 use App\Http\Controllers\Api\CarClassController;
 use App\Http\Controllers\Api\CarConditionController;
-use App\Http\Controllers\Api\CarController;
 use App\Http\Controllers\Api\CarModelController;
 use App\Http\Controllers\Api\CarOptionController;
 use App\Http\Controllers\Api\CityController;
@@ -16,8 +15,6 @@ use App\Http\Controllers\Api\ColorCarController;
 use App\Http\Controllers\Api\GearboxController;
 use App\Http\Controllers\Api\PerformerTransportPhotoController;
 use App\Http\Controllers\Api\RentalApplicationController;
-use App\Http\Controllers\Api\RentalController;
-use App\Http\Controllers\Api\RentalStatusController;
 use App\Http\Controllers\Api\RentalTariffController;
 use App\Http\Controllers\Api\RoleController;
 // Гараж 2.0 — кабинет арендодателя и модерация
@@ -52,13 +49,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->group(function (){
 
-    Route::get('cars', [CarController::class, 'index'])->name('cars.index');
-    Route::post('cars', [CarController::class, 'store'])->name('cars.store');
-    Route::patch('cars/{id}', [CarController::class, 'update'])->name('cars.update');
-    Route::get('cars/{id}/show', [CarController::class, 'edit'])->name('cars.show');
-    Route::get('cars/fuel-types', [CarController::class, 'fuel_types']);
-    Route::get('cars/dop-options', [CarController::class, 'car_dop_options']);
-
     Route::get('rental-tariffs', [RentalTariffController::class, 'index']);
     Route::post('rental-tariffs', [RentalTariffController::class, 'store']);
     Route::get('rental-tariffs/{id}', [RentalTariffController::class, 'show']);
@@ -86,18 +76,6 @@ Route::middleware('auth:api')->group(function (){
     Route::get('car-photos/{car_id}', [PerformerTransportPhotoController::class, 'index']);
     Route::post('car-photos', [PerformerTransportPhotoController::class, 'store']);
     Route::delete('car-photos/{id}', [PerformerTransportPhotoController::class, 'destroy']);
-
-    Route::get('rental-statuses', [RentalStatusController::class, 'index']);
-    Route::post('rental-statuses', [RentalStatusController::class, 'store']);
-    Route::get('rental-statuses/{id}', [RentalStatusController::class, 'show']);
-    Route::put('rental-statuses/{id}', [RentalStatusController::class, 'update']);
-    Route::delete('rental-statuses/{id}', [RentalStatusController::class, 'destroy']);
-
-    Route::get('rentals', [RentalController::class, 'index']);
-    Route::post('rentals', [RentalController::class, 'store']);
-    Route::get('rentals/{id}', [RentalController::class, 'show']);
-    Route::put('rentals/{id}', [RentalController::class, 'update']);
-    Route::delete('rentals/{id}', [RentalController::class, 'destroy']);
 
     Route::get('rental-applications', [RentalApplicationController::class, 'index']);
     Route::get('rental-applications/summary', [RentalApplicationController::class, 'summary']);
